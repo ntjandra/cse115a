@@ -1,0 +1,255 @@
+/*
+    DEMO STYLE (clean up and remove stuff later)
+*/
+
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #006600;
+}
+
+p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 300;
+    line-height: 1.7em;
+}
+
+a,
+a:hover,
+a:focus {
+    color: inherit;
+    text-decoration: underline;
+    transition: all 0.3s;
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px dashed #ddd;
+    margin: 40px 0;
+}
+
+/* ---------------------------------------------------
+    HEADER + BANNER STYLE, WRAPPER STYLE
+----------------------------------------------------- */
+
+#header {
+    width: 100%;
+    height: 140px;
+    background-color: #33cc00;
+    padding: 10px 20px;
+    display: inline-block;
+}
+
+#header div {
+    /* display: inline-block; */
+}
+
+#banner-desktop {
+    /* width: 40%; */
+    width: 100%;
+    /* min-width: 360px; */
+}
+
+#banner-mobile {
+    display: none;
+}
+
+#banner-desktop img {
+    max-height: 80px;
+    height: 100%;
+    margin-right: 10px;
+}
+
+#header-profile {
+    text-align: right;
+}
+
+#header-container {
+    position: absolute;
+    width: 100%;
+}
+
+/* ---------------------------------------------------
+    SIDEBAR STYLE
+----------------------------------------------------- */
+
+#sidebar {
+    margin-top: 140px;
+    width: 250px;
+    margin-left: -174px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: 999;
+    background: #006600;
+    color: #000;
+    transition: all 0.3s;
+}
+
+#sidebarCollapse img {
+    float: right;
+    cursor: pointer;
+}
+
+.active #sidebarCollapse img {
+    transform: rotate(180deg);
+}
+
+
+#sidebarCollapseMobile {
+    display: none;
+}
+
+.sidebar-element {
+    width: 100%;
+    display: inline-block;
+}
+
+.sidebar-element:hover {
+    background-color: #33cc00;
+    cursor: pointer;
+}
+
+.sidebar-element div {
+    display: inline-block;
+}
+
+.sidebar-element img {
+    height: 50px;
+    width: 50px;
+    margin: 13px;
+    transition: all 0.3s;
+    float: right;
+}
+
+.sidebar-text {
+    height: 76px;
+    width: calc(100% - 76px);
+    line-height: 76px;
+    text-align: right;
+    font-size: 20px;
+}
+
+#sidebar.active {
+    margin-left: 0;
+}
+
+/* ---------------------------------------------------
+    CONTENT-CONTAINER, CONTENT STYLE
+----------------------------------------------------- */
+
+#content-container {
+    min-height: calc(100% - 140px);
+    position: absolute;
+    z-index: -1;
+    margin-top: 140px;
+    top: 0;
+    right: 0;
+    background-color: #ffefcc;
+}
+
+#content-container {
+    transition: all 0.3s;
+    margin-left: 76px;
+    width: calc(100% - 76px);
+}
+
+#content-container.active {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+}
+
+#content {
+    padding: 40px;
+}
+
+/* ---------------------------------------------------
+    FOOTER STYLE
+----------------------------------------------------- */
+
+#icon-license {
+    float: center;
+    font-size: 10px;
+    color: #333333
+}
+
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+
+ @media (max-width: 768px) {
+    
+    #sidebar {
+        margin-top: 0px;
+        position: fixed;
+        width: 100%;
+        margin-left: -100%;
+    }
+
+    #sidebar.active {
+        margin-left: 0px;
+    }
+
+    .sidebar-text {
+        width: auto;
+    }
+
+    .sidebar-element {
+        padding-left: 20px;
+    }
+
+    #content-container {
+        margin-left: 0px;
+        width: 100%;
+    }
+
+    #content-container.active {
+        margin-left: 0px;
+        width: 100%;
+    }
+    
+    #sidebarCollapseMobile {
+        /* width: 20%; */
+        margin-right: 10px;
+        padding-right: 10px;
+        border-right: 2px solid #000;
+        display: inline-block;
+    } 
+
+    #sidebarCollapseMobile img {
+        float: center;
+        cursor: pointer;
+        height: 80px;
+        width: 80px;
+        transition: all 0.3s;
+        /* transform: rotate(90deg); */
+    }
+    
+    .active #sidebarCollapseMobile img {
+        /* transform: rotate(270deg); */
+        transform: rotate(180deg);
+    }
+
+    #header-profile {
+        text-align: left;
+        margin-bottom: 5px;
+    }
+
+    #banner-desktop {
+        display: none;
+    }
+
+    #banner-mobile {
+        display: inline-block;
+        height: 80px;
+        width: 80px;
+    }
+
+    #banner-mobile img {
+        height: 80px;
+        width: 80px;
+    }
+}
