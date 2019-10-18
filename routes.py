@@ -9,16 +9,16 @@ from flaskblog.models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_mail import Message
 
+
 @app.route('/history')
 def archive():
     return render_template('archive.html', posts=posts)
 
-#Default page
-
+# Default page
 @app.route("/")
 @app.route("/home")
 def home():
-    #Paginate: Separate the pages
+    # Paginate: Separate the pages
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=2)
     return render_template('home.html', posts=posts)
@@ -168,7 +168,7 @@ def send_reset_email(user):
 
 If you did not make this request then ignore this email for no changes.
 '''
-    
+
 @app.route("/reset_password", methods=['GET', 'POST'])
 def reset_request():
     if current_user.is_authenticated:
@@ -197,8 +197,15 @@ def reset_token(token):
         flash('Your password has been changed! You are now able to log in', 'success')
         return redirect(url_for('login'))
     return render_template('reset_token.html', title='Reset Password', form=form)
+
+@app.route("/payment/")
+def payment_redirect():
+    if current_user.is_authenticated:
+        return redirect(url_for('paypal'))
+    return redirect(url_for('login'))
+
+
 # Page not found
-@app.route('/<name>')
+@app.route("/<name>")
 def index(name):
     return '<h1> Page {} not found! </h1>'.format(name)
-    
