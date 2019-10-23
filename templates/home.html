@@ -30,11 +30,11 @@
 
                 <div id="btn-register" class="col-sm-6 btn-home-container">
                     <button class="btn-home"
-                        onclick="window.location.href='{{ url_for(registerPage) }}'">Register</button>
+                        onclick="window.location.href='{{ url_for(register) }}'">Register</button>
                 </div>
 
                 <div id="btn-login" class="col-sm-6 btn-home-container">
-                    <button class="btn-home" onclick="window.location.href='{{ url_for(loginPage) }}'">Log In</button>
+                    <button class="btn-home" onclick="window.location.href='{{ url_for(login) }}'">Log In</button>
                 </div>
             </div>
             {% endif %}
@@ -74,38 +74,37 @@
 
                         <!-- Product image -->
                         <div class="col-md-2">
-                            <img class="recent-post-img" src="/static/images/illustration/post-example.jpg">
+                            <img class="recent-post-img" src="../../static/images/post-example.jpg">
                         </div>
                     </div>
                 </div>
 
                 <!-- Layout with Flask integration -->
-                {% for i in range(0, x) %} <!-- x is a placeholder -->
-                {% curr_post = posts[i] %} <!-- Placeholder, probably incorrect (assumes homepage.html is passed posts on init) -->
-                <div class="recent-post">
+                {% for post in post.items[:4] %}
+                    <div class="recent-post">
 
-                    <!-- Product name and link -->
-                    <a href="{{ url_for(postPage) }}">
-                        <h4>{{ curr_post.title }}</h4>
-                    </a>
+                        <!-- Product name and link -->
+                        <a href="{{ url_for(postPage) }}">
+                            <h4>{{ post.title }}</h4>
+                        </a>
 
-                    <div class="row recent-post-inner">
-                        <div class="col-md-9">
+                        <div class="row recent-post-inner">
+                            <div class="col-md-9">
 
-                            <!-- Product description -->
-                            <p class="recent-post-description">
-                                {{ curr_post.content }}
-                            </p>
-                        </div>
+                                <!-- Product description -->
+                                <p class="recent-post-description">
+                                    {{ post.content }}
+                                </p>
+                            </div>
 
-                        <div class="col-md-1"></div>
+                            <div class="col-md-1"></div>
 
-                        <!-- Product image -->
-                        <div class="col-md-2">
-                            <img class="recent-post-img" src="{{ curr_post.image }}"> <!-- Placeholder, probably incorrect -->
+                            <!-- Product image -->
+                            <div class="col-md-2">
+                                <img class="recent-post-img" src="{{ post.image }}"> <!-- Placeholder, probably incorrect -->
+                            </div>
                         </div>
                     </div>
-                </div>
                 {% endfor %}
 
             </div>
