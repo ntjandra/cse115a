@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Rent My Junk</title>
+    <link rel = "stylesheet" href = "/static/styling/payment.css">
+</head>
+<body>
+    <h1 id="title">Your Shopping Cart is empty.</h1>
+    <h1 id="desc">Your Shopping Cart lives to serve. Give it purpose - fill it with books, CD's, DVD's, toys, electronics, and more. <br> If you already have an account, <a href = " ">Sign In </a>to see your cart. Continue shopping on the <a href = " ">RentMyJunk homepage </a>.</h1>
+    <div id="paypal-button"></div>
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+    <script>
+        paypal.Button.render({
+            // Configure environment
+            env: 'sandbox',
+            client: {
+            sandbox: 'AfOk6DF3JktPJhIgkdWDCUprZcyRdp0BGjhxCaniNZ8OBfSXYzc9X7iNAWdEQz05f5TvQFo0S_94UG-I',
+            production: 'demo_production_client_id'
+            },
+            // Customize button (optional)
+            locale: 'en_US',
+            style: {
+            size: 'large', //can be 'responsive' to fit page
+            color: 'gold',
+            shape: 'pill',
+            },
+
+            // Enable Pay Now checkout flow (optional)
+            commit: true,
+
+            // Set up a payment
+            payment: function(data, actions) {
+            return actions.payment.create({
+                transactions: [{
+                amount: {
+                    total: '0.01',
+                    currency: 'USD'
+                }
+                }]
+            });
+            },
+            // Execute the payment
+            onAuthorize: function(data, actions) {
+            return actions.payment.execute().then(function() {
+                // Show a confirmation message to the buyer
+                window.alert('Thank you for your purchase!');
+            });
+            }
+        }, '#paypal-button');
+    </script>
+    <img id = img1 src = "/static/images/illustration/shoppingCart.jpg">
+    <button id = "signIn">Sign In</button>
+    <h1 id="customerNew">New Customer? <a href = " ">Start here </a>.</h1>
+</body>
+</html>
