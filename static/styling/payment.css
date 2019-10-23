@@ -1,5 +1,5 @@
 body {
-    background-image: url("image.gif");
+    background-image: url("/static/images/illustration/image.gif");
     background-repeat: no-repeat;
     background-size: 100% 110%;
 }
@@ -8,7 +8,6 @@ body {
     position: absolute;
     top: 40px;
     right: 200px;
-    
 }
 
 #title {
