@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../../static/styling/sidebar.css">
+    <link rel="stylesheet" href="../../static/styling/homepage.css">
+
+    <title>{{ title }}</title>
+</head>
+
+<body>
+    <div id="content-container">
+        <div id="content">
+            <!-- START Homepage Content -->
+
+            <!-- Welcome text -->
+            <h1 class="text-center">Welcome to Rent My Junk!</h1>
+
+            {% if not current_user.is_authenticated %}
+            <!-- Prompt to register/login -->
+            <div class="row">
+
+                <div id="btn-register" class="col-sm-6 btn-home-container">
+                    <button class="btn-home"
+                        onclick="window.location.href='{{ url_for(registerPage) }}'">Register</button>
+                </div>
+
+                <div id="btn-login" class="col-sm-6 btn-home-container">
+                    <button class="btn-home" onclick="window.location.href='{{ url_for(loginPage) }}'">Log In</button>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Recent Posts -->
+            <div id="recent-posts-container">
+                <h3>Recent Posts</h3>
+
+                <!-- Test layout for recent postings -->
+                <div class="recent-post">
+
+                    <!-- Product name and link -->
+                    <a href="{{ url_for(postPage) }}">
+                        <h4>Product Name 1</h4>
+                    </a>
+
+                    <div class="row recent-post-inner">
+                        <div class="col-md-9">
+
+                            <!-- Product description -->
+                            <p class="recent-post-description">
+                                This is the description for a product. Lorem ipsum dolor sit amet, consectetur
+                                adipiscing
+                                elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                                minim
+                                veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                                consequat.
+                                Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                                nulla
+                                pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                                deserunt
+                                mollit anim id est laborum.
+                            </p>
+                        </div>
+
+                        <div class="col-md-1"></div>
+
+                        <!-- Product image -->
+                        <div class="col-md-2">
+                            <img class="recent-post-img" src="../../static/images/post-example.jpg">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Layout with Flask integration -->
+                {% for i in range(0, x) %} <!-- x is a placeholder -->
+                {% curr_post = posts[i] %} <!-- Placeholder, probably incorrect (assumes homepage.html is passed posts on init) -->
+                <div class="recent-post">
+
+                    <!-- Product name and link -->
+                    <a href="{{ url_for(postPage) }}">
+                        <h4>{{ curr_post.title }}</h4>
+                    </a>
+
+                    <div class="row recent-post-inner">
+                        <div class="col-md-9">
+
+                            <!-- Product description -->
+                            <p class="recent-post-description">
+                                {{ curr_post.content }}
+                            </p>
+                        </div>
+
+                        <div class="col-md-1"></div>
+
+                        <!-- Product image -->
+                        <div class="col-md-2">
+                            <img class="recent-post-img" src="{{ curr_post.image }}"> <!-- Placeholder, probably incorrect -->
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+
+            <!-- END Homepage Content -->
+        </div>
+    </div>
+</body>
+
+</html>
