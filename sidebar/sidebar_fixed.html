@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="sidebar.css">
+    <!-- Scrollbar Custom CSS (probably unneeded?) -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css"> -->
+
+    <title>Flask Blog - {{ title }}</title>
+</head>
+
+<body>
+
+    <div id="header-container">
+
+        <!-- Header + Banner -->
+        <div id="header">
+
+            <!-- Profile/Register/Sign In-->
+            <div id="header-profile">
+                Welcome, <a href="./sidebar_fixed.html">user</a>.&nbsp;&nbsp;&nbsp;&nbsp;<a
+                    href="./sidebar_fixed.html">Msg Icon</a> / <a href="./sidebar_fixed.html">Log Out</a>
+            </div>
+
+            <!-- Banner -->
+            <div id="banner-desktop">
+                <img src="./logo_lowres_text.png">
+            </div>
+
+            <!-- Mobile Section -->
+            <div id="header-mobile-container">
+                <!-- Mobile sidebar toggle-->
+                <div id="sidebarCollapseMobile">
+                    <img src="./112154-web-navigation-line-craft/png/next-page.png">
+                </div>
+
+                <!-- Mobile banner -->
+                <div id="banner-mobile">
+                    <img src="./logo_lowres.png">
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+
+            <!-- Sidebar toggle -->
+            <a id="sidebarCollapse" class="sidebar-element" style="float: left">
+                <div class="sidebar-text">
+                    <!-- Empty -->
+                </div>
+                <div class="sidebar-image" style="float: right">
+                    <img src="./112154-web-navigation-line-craft/png/next-page.png">
+                </div>
+            </a>
+
+            <!-- Home -->
+            <a class="sidebar-element" href="url for home">
+                <div class="sidebar-text">
+                    Home
+                </div>
+                <img src="./112154-web-navigation-line-craft/png/home.png">
+            </a>
+
+            <!-- Create Post -->
+            <a class="sidebar-element" href="url for createpost">
+                <div class="sidebar-text">
+                    Create Post
+                </div>
+                <img src="./112154-web-navigation-line-craft/png/new-file.png">
+            </a>
+
+            <!-- My Profile -->
+            <a class="sidebar-element" href="url for myprofile">
+                <div class="sidebar-text">
+                    My Profile
+                </div>
+                <img src="./112154-web-navigation-line-craft/png/user.png">
+            </a>
+
+            <!-- About Us -->
+            <a class="sidebar-element" href="url for aboutus">
+                <div class="sidebar-text">
+                    About Us
+                </div>
+                <img src="./112154-web-navigation-line-craft/png/open-book.png">
+            </a>
+
+            <!-- Search -->
+            <a class="sidebar-element" href="url for search">
+                <div class="sidebar-text">
+                    Search
+                </div>
+                <img src="./112076-basic-set/png/search.png">
+            </a>
+
+            <!-- Search bar (appears only when expanded) -->
+
+        </nav>
+    </div>
+
+    <!-- Main content -->
+    <!-- Page Content Container -->
+    <div id="content-container">
+        <div id="content">
+            <h2>Lorem Ipsum Dolor</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+                et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                aliquip
+                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                dolore eu
+                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                deserunt mollit anim id est laborum.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+                et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                aliquip
+                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                dolore eu
+                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                deserunt mollit anim id est laborum.</p>
+
+            <div class="line"></div>
+
+            <h2>Lorem Ipsum Dolor</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+                et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                aliquip
+                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                dolore eu
+                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                deserunt mollit anim id est laborum.</p>
+
+            <div class="line"></div>
+
+            <h2>Lorem Ipsum Dolor</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+                et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                aliquip
+                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                dolore eu
+                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                deserunt mollit anim id est laborum.</p>
+
+            <div class="line"></div>
+
+            <h3>Lorem Ipsum Dolor</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+                et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                aliquip
+                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
+                dolore eu
+                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                deserunt mollit anim id est laborum.</p>
+
+            <!-- Footer NECESSARY FOR CREDITING FLATICON -->
+            <hr>
+            <div id="footer">
+                <div id="icon-license">
+                    Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a
+                        href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+        integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+        crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+        integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+        crossorigin="anonymous"></script>
+
+    <!-- jQuery Custom Scroller CDN -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // $("#sidebar").mCustomScrollbar({
+            //     theme: "minimal"
+            // });
+
+            $('#sidebarCollapse, #sidebarCollapseMobile').on('click', function () {
+                $('#sidebar, #content-container, #header').toggleClass('active');
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            });
+        });
+    </script>
+</body>
+
+</html>
