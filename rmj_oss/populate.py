@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-#Let’s import our Book and Base classes from our database_setup.py file
-from database_setup import Book, Base
+# Imports our RentPost and Base classes from our database_setup.py file
+from database_setup import RentPost, Base
 
 engine = create_engine('sqlite:///site.db')
 # Bind the engine to the metadata of the Base class so that the

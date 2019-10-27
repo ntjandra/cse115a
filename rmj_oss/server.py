@@ -1,4 +1,4 @@
-from database_setup import Base, Book
+from database_setup import Base, RentPost
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from flask import Flask, render_template, request, redirect, url_for
@@ -15,7 +15,7 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-
+# Home Route - Returns recent posts
 @app.route("/", methods=['GET', 'POST'])
 def home():
     if request.method == "POST":

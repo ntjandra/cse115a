@@ -14,18 +14,18 @@ from sqlalchemy import create_engine
 #create declarative_base instance
 Base = declarative_base()
 
-#we'll add classes here
-
-#creates a create_engine instance at the bottom of the file
-engine = create_engine('sqlite:///site.db')
-
-Base.metadata.create_all(engine)
-
-#we create the class Book and extend it from the Base Class.
-class Book(Base):
+# RentPost, extends the Base Class.
+class RentPost(Base):
    __tablename__ = 'book'
 
    id = Column(Integer, primary_key=True)
    title = Column(String(250), nullable=False)
-   author = Column(String(250), nullable=False)
-   genre = Column(String(250))
+   description = Column(String(250), nullable=False)
+   location = Column(String(250))
+   contactinfo = Column(String(250))
+   price = Column(String(250))
+
+# Creates a create_engine instance at the bottom of the file
+engine = create_engine('sqlite:///site.db')
+
+Base.metadata.create_all(engine)
