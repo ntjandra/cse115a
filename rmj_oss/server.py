@@ -23,6 +23,11 @@ def home():
     elif request.method == "GET":
         return "Received GET"
 
+@app.route("/api/form-submit", methods=['POST'])
+def create_post():
+    print("lol")
+    return "received form!"
+
 
 if __name__ == "__main__":
     app.run()
