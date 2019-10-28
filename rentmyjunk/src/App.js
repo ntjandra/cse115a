@@ -107,7 +107,7 @@ function Users() {
 function CreatePost() {
 
   return (
-    <div id="iwanttodie">
+    <div>
       <h2>Create Post</h2>
       <form>
         <div className="form-group">
