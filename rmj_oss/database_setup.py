@@ -16,7 +16,7 @@ Base = declarative_base()
 
 # RentPost, extends the Base Class.
 class RentPost(Base):
-   __tablename__ = 'book'
+   __tablename__ = 'rentpost'
 
    id = Column(Integer, primary_key=True)
    title = Column(String(250), nullable=False)
