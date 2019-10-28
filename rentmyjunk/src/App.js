@@ -74,7 +74,7 @@ function getData() {
     console.log("Request failed");
     console.log(xhr.status);
   };
-  
+
   console.log(xhr.response, "|", xhr.status);
   return xhr.response;
 }
