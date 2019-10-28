@@ -170,6 +170,10 @@ a:focus {
     FOOTER STYLE
 ----------------------------------------------------- */
 
+#footer {
+    padding: 20px;
+}
+
 #icon-license {
     float: center;
     font-size: 10px;

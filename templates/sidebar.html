@@ -10,7 +10,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="/static/styling/sidebar.css">
+    <link rel="stylesheet" href="../static/styling/sidebar.css">
+    <link rel="stylesheet" href="../static/styling/homepage.css">
+    <link rel="stylesheet" href="../static/styling/search.css">
+    <link rel="stylesheet" href="../static/styling/payment.css">
+    <link rel="stylesheet" href="../static/styling/profile.css">
 
     <title>{{ title }}</title>
 </head>
@@ -36,19 +40,19 @@
 
             <!-- Banner -->
             <div id="banner-desktop">
-                <img src="../../static/images/logos/logo_lowres_text.png">
+                <img src="../static/images/logos/logo_lowres_text.png">
             </div>
 
             <!-- Mobile Section -->
             <div id="header-mobile-container">
                 <!-- Mobile sidebar toggle-->
                 <div id="sidebarCollapseMobile">
-                    <img src="../../static/images/icons/next-page.png">
+                    <img src="../static/images/icons/next-page.png">
                 </div>
 
                 <!-- Mobile banner -->
                 <div id="banner-mobile">
-                    <img src="../../static/images/logos/logo_lowres.png">
+                    <img src="../static/images/logos/logo_lowres.png">
                 </div>
             </div>
 
@@ -63,7 +67,7 @@
                     <!-- Empty -->
                 </div>
                 <div class="sidebar-image" style="float: right">
-                    <img src="../../static/images/icons/next-page.png">
+                    <img src="../static/images/icons/next-page.png">
                 </div>
             </a>
 
@@ -72,7 +76,7 @@
                 <div class="sidebar-text">
                     Home
                 </div>
-                <img src="../../static/images/icons/home.png">
+                <img src="../static/images/icons/home.png">
             </a>
 
             <!-- Create Post -->
@@ -80,7 +84,7 @@
                 <div class="sidebar-text">
                     Create Post
                 </div>
-                <img src="../../static/images/icons/new-file.png">
+                <img src="../static/images/icons/new-file.png">
             </a>
 
             <!-- My Profile -->
@@ -88,7 +92,7 @@
                 <div class="sidebar-text">
                     My Profile
                 </div>
-                <img src="../../static/images/icons/user.png">
+                <img src="../static/images/icons/user.png">
             </a>
 
             <!-- About Us -->
@@ -96,7 +100,7 @@
                 <div class="sidebar-text">
                     About Us
                 </div>
-                <img src="../../static/images/icons/open-book.png">
+                <img src="../static/images/icons/open-book.png">
             </a>
 
             <!-- Search -->
@@ -104,7 +108,7 @@
                 <div class="sidebar-text">
                     Search
                 </div>
-                <img src="../../static/images/icons/search.png">
+                <img src="../static/images/icons/search.png">
             </a>
 
             <!-- Search bar (appears only when expanded) -->
@@ -116,22 +120,20 @@
     <!-- Page Content Container -->
     <div id="content-container">
         <div id="content">
-
             <!-- INSERT CONTENT: START-->
             <!-- HTML for specific pages will be inserted here -->
             <!-- INSERT CONTENT: STOP -->
+        </div>
 
-            <!-- Footer NECESSARY FOR CREDITING FLATICON -->
-            <hr>
-            <div id="footer">
-                <div id="icon-license">
-                    Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a
-                        href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
-                </div>
+        <!-- Footer NECESSARY FOR CREDITING FLATICON -->
+        <hr>
+        <div id="footer">
+            <div id="icon-license">
+                Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a
+                    href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
             </div>
         </div>
     </div>
-
 
     <!-- jQuery CDN - Slim version (=without AJAX) -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -152,10 +154,6 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            // $("#sidebar").mCustomScrollbar({
-            //     theme: "minimal"
-            // });
-
             $('#sidebarCollapse, #sidebarCollapseMobile').on('click', function () {
                 $('#sidebar, #content-container, #header').toggleClass('active');
                 $('.collapse.in').toggleClass('in');
@@ -163,6 +161,14 @@
             });
         });
     </script>
+
+    <!-- Load React -->
+    <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+    <script src="https://fb.me/react-0.14.3.js"></script>
+    <script src="https://fb.me/react-dom-0.14.3.js"></script>
+
+    <!-- Load React Components -->
+    <script src="../homepage.js"></script>
 </body>
 
 </html>
