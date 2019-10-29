@@ -47,12 +47,13 @@ def create_post():
     price = form['price']
 
     # Add post to database
-    new_post = RentPost(id=1, title=title, description=descr,
+    new_post = RentPost(title=title, description=descr,
                         contactinfo=contact, location=loc, price=price)
     print('ID: ' + str(new_post.id))
 
     session.add(new_post)
     session.commit()
+    print('ID: ' + str(new_post.id))
 
     return str(new_post.id)
 
