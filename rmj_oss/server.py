@@ -72,8 +72,10 @@ def get_post():
     if dne:
         return str('Error - Requested post ID does not exist.')
 
+    post = session.query(RentPost).filter_by(id=post_id)
+    title = post.title
     # TODO return post's values
-    return str('Post exists')
+    return str('Post exists, title is ') + str(title)
 
 
 if __name__ == "__main__":

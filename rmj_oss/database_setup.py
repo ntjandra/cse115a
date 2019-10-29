@@ -28,6 +28,16 @@ class RentPost(Base):
    contactinfo = Column(String(250))
    price = Column(String(250))
 
+   def serialize(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'location': self.location,
+            'contactinfo': self.contactinfo,
+            'price': self.price,
+        }
+
 # Creates a create_engine instance at the bottom of the file
 engine = create_engine('sqlite:///site.db')
 
