@@ -25,19 +25,25 @@ def home():
 
 @app.route("/api/create-post", methods=['POST'])
 def create_post():
+
     form = request.form
 
-    # data:
-    title = form[0][1]
-    description = form[1][1]
-    contact = form[2][1]
-    location = form[3][1]
-    price = form[4][1]
+    # Extract data from form
+    title = form['title']
+    print(title)
+    descr = form['description']
+    print(descr)
+    contact = form['contact']
+    print(contact)
+    loc = form['location']
+    print(loc)
+    price = form['price']
+    print(price)
 
-    # query:
-    # ...
+    # Add post to database
+    
 
-    return "not implemented"
+    return "Post added"
 
 
 if __name__ == "__main__":
