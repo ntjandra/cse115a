@@ -49,11 +49,10 @@ def create_post():
     # Add post to database
     new_post = RentPost(title=title, description=descr,
                         contactinfo=contact, location=loc, price=price)
-    print('ID: ' + str(new_post.id))
 
     session.add(new_post)
     session.commit()
-    print('ID: ' + str(new_post.id))
+    # print('ID: ' + str(new_post.id)) # Prints this post's ID
 
     return str(new_post.id)
 
@@ -72,7 +71,7 @@ def get_post():
     if dne:
         return str('Error - Requested post ID does not exist.')
 
-    post = session.query(RentPost).filter_by(id=post_id)
+    post = session.query(RentPost).filter_by(id=post_id).one()
     title = post.title
     # TODO return post's values
     return str('Post exists, title is ') + str(title)
