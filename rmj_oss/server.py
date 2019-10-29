@@ -23,10 +23,21 @@ def home():
     elif request.method == "GET":
         return "Received GET"
 
-@app.route("/api/form-submit", methods=['POST'])
+@app.route("/api/create-post", methods=['POST'])
 def create_post():
-    print("lol")
-    return "received form!"
+    form = request.form
+
+    # data:
+    title = form[0][1]
+    description = form[1][1]
+    contact = form[2][1]
+    location = form[3][1]
+    price = form[4][1]
+
+    # query:
+    # ...
+
+    return "not implemented"
 
 
 if __name__ == "__main__":
