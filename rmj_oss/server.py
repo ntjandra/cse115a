@@ -8,6 +8,15 @@ app = Flask(__name__)
 CORS(app)
 
 
+# Helper functions
+def representsInt(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
+
+
 # Connect to Database and create database session
 engine = create_engine('sqlite:///site.db')
 Base.metadata.bind = engine
@@ -23,6 +32,8 @@ def home():
     elif request.method == "GET":
         return "Received GET"
 
+
+# Adds new RentPosts to the database
 @app.route("/api/create-post", methods=['POST'])
 def create_post():
 
@@ -30,20 +41,39 @@ def create_post():
 
     # Extract data from form
     title = form['title']
-    print(title)
     descr = form['description']
-    print(descr)
     contact = form['contact']
-    print(contact)
     loc = form['location']
-    print(loc)
     price = form['price']
-    print(price)
 
     # Add post to database
-    
+    new_post = RentPost(id=1, title=title, description=descr,
+                        contactinfo=contact, location=loc, price=price)
+    print(new_post.title)
+    print(new_post.id)
 
-    return "Post added"
+    session.add(new_post)
+    session.commit()
+
+    return str(new_post.id)
+
+
+# Returns a post matching the given id, if post exists
+@app.route("/api/get-post", methods=['GET'])
+def get_post():
+    # Get post_id as an integer
+    post_id = request.form["post_id"]
+    if not representsInt(post_id):
+        return str('Error - Invalid post ID format. Must be an integer.')
+    post_id = int(post_id)
+
+    # Existence check
+    dne = session.query(RentPost).filter_by(id=post_id).scalar() is None
+    if dne:
+        return str('Error - Requested post ID does not exist.')
+
+    # TODO return post's values
+    return str('Post exists')
 
 
 if __name__ == "__main__":

@@ -8,6 +8,9 @@ from sqlalchemy.ext.declarative import declarative_base
 #for creating foreign key relationship between the tables
 from sqlalchemy.orm import relationship
 
+#for auto-incrementing id
+# from sqlalchemy.schema import Sequence
+
 #for configuration
 from sqlalchemy import create_engine
 
