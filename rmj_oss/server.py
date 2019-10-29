@@ -18,7 +18,7 @@ def representsInt(s):
 
 
 # Connect to Database and create database session
-engine = create_engine('sqlite:///site.db')
+engine = create_engine('sqlite:///site.db?check_same_thread=False')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -49,8 +49,7 @@ def create_post():
     # Add post to database
     new_post = RentPost(id=1, title=title, description=descr,
                         contactinfo=contact, location=loc, price=price)
-    print(new_post.title)
-    print(new_post.id)
+    print('ID: ' + str(new_post.id))
 
     session.add(new_post)
     session.commit()
@@ -59,7 +58,7 @@ def create_post():
 
 
 # Returns a post matching the given id, if post exists
-@app.route("/api/get-post", methods=['GET'])
+@app.route("/api/get-post", methods=['GET', 'POST'])
 def get_post():
     # Get post_id as an integer
     post_id = request.form["post_id"]
