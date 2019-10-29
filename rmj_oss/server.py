@@ -1,7 +1,7 @@
 from database_setup import Base, RentPost
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -76,6 +76,27 @@ def get_post():
     # TODO return post's values
     return str('Post exists, title is ') + str(title)
 
+# Returns a json contaiining the default of all posts.
+@app.route("/api/search/")
+def search():
+    # Get all posts
+    posts = session.query(RentPost)
+    return jsonify(search=[post.serialize() for post in posts])
+
+# Returns a json of posts that contain a filter
+# Returns all posts who have a particular address listed as one of their locations
+@app.route("/api/search/place/<string:location>")
+def search_place(location):
+    # the in_ method is the wildcard for contains anywhere.
+    posts = session.query(filter(RentPost.location.in_(location))) 
+    return jsonify(location=[post.serialize() for post in posts])
+
+# Returns all posts who have a particular word in their post title
+@app.route("/api/search/item/<string:title>")
+def search_item(title):
+    # the in_ method is the wildcard for contains anywhere.
+    posts = session.query(filter(RentPost.title.in_(title))) 
+    return jsonify(title=[post.serialize() for post in posts])
 
 if __name__ == "__main__":
     app.run()
