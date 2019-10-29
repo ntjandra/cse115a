@@ -117,16 +117,44 @@ function Users() {
   return <h2>Users</h2>;
 }
 
-/* Create Post Component */
+/**
+ * Create Post Component
+ */
 function CreatePost() {
   let form = new PostForm(local_host_url, '/api/create-post');
   return form.render();
 }
 
-/* Displays info for specific post, by ID */
+/**
+ * Displays info for specific post, by ID 
+ * 
+ * TODO Add styling
+ */
 function PostInfo() {
   let { post_id } = useParams();
-  return <h1>{post_id}</h1>
+
+  // Put post_id in XHR-sendable form
+  const data = new FormData();
+  data.set('post_id', post_id);
+  var post_data = xhrSend('POST', "api/get-post", data);
+
+  // If post doesn't exist, display error
+  if (post_data === "Error - Requested post ID does not exist.") {
+    return <h1>{post_data}</h1>
+  }
+
+  // Post exists
+  var post = JSON.parse(post_data);
+  console.log(post)
+  return (
+    <div>
+      <h1>{post.title}</h1>
+      <p>{post.description}</p>
+      <p>Contact Info: {post.contactinfo}</p>
+      <p>Location: {post.location}</p>
+      <p>Price: {post.price}</p>
+    </div>
+  );
 }
 
 
@@ -139,7 +167,7 @@ function PostInfo() {
  *
  * @param {String} type - Type of connection (POST, GET, etc)
  * @param {String} route - Route in database where request will be made
- * @param {*} data - Data to be sent to the database within xhr
+ * @param {FormData} data - Data to be sent to the database within xhr
  * 
  * TODO Revise at some point in the future if needed
  */
