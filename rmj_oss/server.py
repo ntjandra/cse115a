@@ -77,7 +77,7 @@ def get_post():
     return str('Post exists, title is ') + str(title)
 
 # Returns a json contaiining the default of all posts.
-@app.route("/api/search/")
+@app.route("/api/search/", methods=['GET'])
 def search():
     # Get all posts
     posts = session.query(RentPost)
@@ -85,20 +85,33 @@ def search():
 
 # Returns a json of posts that contain a filter
 # Returns all posts who have a particular address listed as one of their locations
-@app.route("/api/search/place/<string:place>")
+@app.route("/api/search/place/<string:place>", methods=['GET'])
 def search_place(place):
     # the in_ method is the wildcard for contains anywhere.
     places = session.query(RentPost).filter_by(location=place).order_by(RentPost.id).all() 
     return jsonify(place=[post.serialize() for post in places])
 
 # Returns all posts who have a particular word in their post title
-@app.route("/api/search/item/<string:item>")
+@app.route("/api/search/item/<string:item>", methods=['GET'])
 def search_item(item):
     # the in_ method is the wildcard for contains anywhere.
+    #  items = session.query(RentPost).filter_by(title=item).order_by(RentPost.id).all() 
     # Testing lenience
     items = session.query(RentPost).filter(RentPost.title.contains(item))
 
     return jsonify(item=[post.serialize() for post in items])
 
-if __name__ == "__main__":
+# Add DRY here to do (column, search)
+""" Untested DANGEROUS 
+@app.route("/api/search/<string:column>/<string:value>", methods=['GET'])
+def searchPost(self, search):
+    # WANT TO HAVE A REDIRECT IF COLUMN DNE
+    if column dne:
+        return redirect(url_for('home'))
+
+    results = sesssion.query(RentPost).filter(RentPost.column.contains(value))
+    return jsonify(results=[post.serialize() for post in results)
+"""
+
+ if __name__ == "__main__":
     app.run()
