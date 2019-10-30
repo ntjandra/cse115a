@@ -1,12 +1,7 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-var local_host_url = 'http://127.0.0.1:5000/';
+var local_host_url = "http://127.0.0.1:5000/";
 
 export default function App() {
   return (
@@ -26,6 +21,9 @@ export default function App() {
             <li>
               <Link to="/createpost">Create</Link>
             </li>
+            <li>
+              <Link to="/editpost">Edit</Link>
+            </li>
           </ul>
         </nav>
 
@@ -41,6 +39,9 @@ export default function App() {
           <Route path="/createpost">
             <CreatePost />
           </Route>
+          <Route path="/editpost">
+            <EditPost />
+          </Route>
           <Route path="/">
             <Home />
           </Route>
@@ -55,22 +56,24 @@ function getData() {
   let xhr = new XMLHttpRequest();
 
   // 2. Configure it: GET-request for the URL /article/.../load
-  xhr.open('POST', local_host_url, false);
+  xhr.open("POST", local_host_url, false);
 
   // 3. Send the request over the network
   xhr.send();
 
   // 4. This will be called after the response is received
-  xhr.onload = function () {
-    if (xhr.status !== 200) { // analyze HTTP status of the response
+  xhr.onload = function() {
+    if (xhr.status !== 200) {
+      // analyze HTTP status of the response
       console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
-    } else { // show the result
+    } else {
+      // show the result
       console.log(`Done, got ${xhr.response.length} bytes`); // responseText is the server
-      console.log(xhr.response)
+      console.log(xhr.response);
     }
   };
 
-  xhr.onerror = function () {
+  xhr.onerror = function() {
     console.log("Request failed");
     console.log(xhr.status);
   };
@@ -80,14 +83,13 @@ function getData() {
 }
 
 function Home() {
-
   var myStatus = getData();
 
   return (
     <div>
       <h2>Homes</h2>
       <div>
-        { myStatus }
+        {myStatus}
         <br />
         Woah
       </div>
@@ -105,7 +107,6 @@ function Users() {
 
 /* Create Post Component */
 function CreatePost() {
-
   return (
     <div id="iwanttodie">
       <h2>Create Post</h2>
@@ -131,9 +132,46 @@ function CreatePost() {
           <input type="text" className="form-control" />
         </div>
         <div className="form-group">
-          <input type="submit" value="Create Post" className="btn btn-primary" />
+          <input
+            type="submit"
+            value="Create Post"
+            className="btn btn-primary"
+          />
         </div>
       </form>
     </div>
+  );
+}
+
+function EditPost() {
+  return (
+    <form>
+      <div>
+        <h1>
+          <font face="Trebuchet MS">
+            <b>Edit Post</b>
+          </font>
+        </h1>
+        <p>Product Title:</p>
+        <input type="text" />
+        <p>Product Description:</p>
+        <textarea name="comment" type="text" />
+        <p>Contact Information:</p>
+        <input type="text" />
+        <p>Location:</p>
+        <input type="text" />
+        <p>Price:</p>
+        <input type="text" />
+        <br></br>
+        <br></br>
+        <div className="form-group">
+          <input
+            type="submit"
+            value="Save Changes"
+            className="btn btn-primary"
+          />
+        </div>
+      </div>
+    </form>
   );
 }
