@@ -24,6 +24,9 @@ export default function App() {
             <li>
               <Link to="/search">Search</Link>
             </li>
+            <li>
+              <Link to="/delete">Delete</Link>
+            </li>
           </ul>
         </nav>
 
@@ -41,6 +44,9 @@ export default function App() {
           </Route>
           <Route path="/search">
             <Search />
+          </Route>
+          <Route path="/delete">
+            <Delete />
           </Route>
           <Route path="/">
             <Home />
@@ -107,6 +113,10 @@ function Search() {
       </form>
     </div>
   );
+}
+
+function Delete() {
+  return <button id="delete">Delete Post</button>;
 }
 
 function About() {
