@@ -153,6 +153,7 @@ function PostInfo() {
       <p>Contact Info: {post.contactinfo}</p>
       <p>Location: {post.location}</p>
       <p>Price: {post.price}</p>
+      {/* <button onClick={deletePost}>Delete Post</button> */}
     </div>
   );
 }
@@ -198,4 +199,14 @@ function xhrSend(type, route, data) {
 
   console.log(xhr.response, "|", xhr.status);
   return xhr.response;
+}
+
+/**
+ *  Calls xhr for deleting posts 
+ * @param {Integer} post_id - Integer, correlates to an existing RentPost's id
+ */
+function deletePost(post_id) {
+  const data = new FormData();
+  data.set('post_id', post_id);
+  return xhrSend('POST', 'api/deletepost', data)
 }

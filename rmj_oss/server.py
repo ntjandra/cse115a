@@ -54,7 +54,7 @@ def create_post():
 
     session.add(new_post)
     session.commit()
-    print('New ID: ' + str(new_post.id)) # Prints this post's ID
+    print('New ID: ' + str(new_post.id))  # Prints this post's ID
 
     return str(new_post.id)
 
@@ -77,6 +77,22 @@ def get_post():
     # Return post's values
     post = session.query(RentPost).filter_by(id=post_id).one()
     return jsonify(post.serialize())
+
+# Given a post's id, checks for existence and then deletes post
+@app.route("/api/delete-post", methods=['POST'])
+def deletepost():
+    post_id = request.form["post_id"]
+
+    # Existence check
+    dne = session.query(RentPost).filter_by(id=post_id).scalar() is None
+    if dne:
+        return str('Error - Requested post ID does not exist.')
+
+    post_to_delete = session.query(RentPost).filter_by(id=post_id).one()
+    post_title = post_to_delete.title
+    session.delete(post_to_delete)
+    session.commit()
+    return "Deleted ID: " + post_id + ", TITLE: " + post_title
 
 
 if __name__ == "__main__":
