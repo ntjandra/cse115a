@@ -85,18 +85,20 @@ def search():
 
 # Returns a json of posts that contain a filter
 # Returns all posts who have a particular address listed as one of their locations
-@app.route("/api/search/place/<string:location>")
-def search_place(location):
+@app.route("/api/search/place/<string:place>")
+def search_place(place):
     # the in_ method is the wildcard for contains anywhere.
-    posts = session.query(filter(RentPost.location.in_(location))) 
-    return jsonify(location=[post.serialize() for post in posts])
+    places = session.query(RentPost).filter_by(location=place).order_by(RentPost.id).all() 
+    return jsonify(place=[post.serialize() for post in places])
 
 # Returns all posts who have a particular word in their post title
-@app.route("/api/search/item/<string:title>")
-def search_item(title):
+@app.route("/api/search/item/<string:item>")
+def search_item(item):
     # the in_ method is the wildcard for contains anywhere.
-    posts = session.query(filter(RentPost.title.in_(title))) 
-    return jsonify(title=[post.serialize() for post in posts])
+    # Testing lenience
+    items = session.query(RentPost).filter(RentPost.title.contains(item))
+
+    return jsonify(item=[post.serialize() for post in items])
 
 if __name__ == "__main__":
     app.run()
