@@ -130,71 +130,10 @@ function CreatePost() {
  * TODO Add styling
  */
 function PostInfo() {
-  let { post_id } = useParams();
-
-  // Put post_id in XHR-sendable form
-  const data = new FormData();
-  data.set('post_id', post_id);
-  var post_data = xhrSend('POST', "api/get-post", data);
-
-  // If post doesn't exist, display error
-  if (post_data === "Error - Requested post ID does not exist.") {
-    return <h1>{post_data}</h1>
-  }
-
-  // Post exists
-  var post = JSON.parse(post_data);
-  console.log(post)
-  return (
-    <div>
-      <h1>{post.title}</h1>
-      <p>{post.description}</p>
-      <p>Contact Info: {post.contactinfo}</p>
-      <p>Location: {post.location}</p>
-      <p>Price: {post.price}</p>
-    </div>
-  );
+  return <h1>Not implemented</h1>
 }
 
 
 /* -------------------------------
    XHR Functions
 ------------------------------- */
-
-/**
- * Makes generic xhr, defined by parameters.
- *
- * @param {String} type - Type of connection (POST, GET, etc)
- * @param {String} route - Route in database where request will be made
- * @param {FormData} data - Data to be sent to the database within xhr
- * 
- * TODO Revise at some point in the future if needed
- */
-function xhrSend(type, route, data) {
-  // Create a new XMLHttpRequest object
-  let xhr = new XMLHttpRequest();
-
-  // Configure xhr by parameters
-  xhr.open(type, local_host_url + route, false);
-
-  // Send the request over the network
-  xhr.send(data);
-
-  // This will be called after the response is received
-  xhr.onload = function () {
-    if (xhr.status !== 200) { // analyze HTTP status of the response
-      console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
-    } else { // show the result
-      console.log(`Done, got ${xhr.response.length} bytes`); // responseText is the server
-      console.log(xhr.response)
-    }
-  };
-
-  xhr.onerror = function () {
-    console.log("Request failed");
-    console.log(xhr.status);
-  };
-
-  console.log(xhr.response, "|", xhr.status);
-  return xhr.response;
-}
