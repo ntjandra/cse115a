@@ -36,27 +36,7 @@ def home():
 # Adds new RentPosts to the database
 @app.route("/api/create-post", methods=['POST'])
 def create_post():
-
-    form = request.form
-
-    print(form)
-
-    # Extract data from form
-    title = form['title']
-    descr = form['description']
-    contact = form['contact']
-    loc = form['location']
-    price = form['price']
-
-    # Add post to database
-    new_post = RentPost(title=title, description=descr,
-                        contactinfo=contact, location=loc, price=price)
-
-    session.add(new_post)
-    session.commit()
-    print('New ID: ' + str(new_post.id)) # Prints this post's ID
-
-    return str(new_post.id)
+    return None
 
 
 # Returns a post matching the given id, if post exists

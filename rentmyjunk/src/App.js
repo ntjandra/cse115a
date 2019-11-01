@@ -121,8 +121,7 @@ function Users() {
  * Create Post Component
  */
 function CreatePost() {
-  let form = new PostForm(local_host_url, '/api/create-post');
-  return form.render();
+  return <h1>Not Implemented</h1>
 }
 
 /**
