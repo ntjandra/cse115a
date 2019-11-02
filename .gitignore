@@ -5,6 +5,7 @@
 /rmj_oss/__pycache__
 
 # dependencies
+/.vscode
 /.pnp
 .pnp.js
 

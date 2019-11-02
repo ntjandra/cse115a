@@ -34,9 +34,6 @@ def home():
 
 
 # Adds new RentPosts to the database
-@app.route("/api/create-post", methods=['POST'])
-def create_post():
-    return None
 
 
 # Returns a post matching the given id, if post exists

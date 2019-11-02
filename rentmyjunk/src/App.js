@@ -121,16 +121,8 @@ function Users() {
  * Create Post Component
  */
 function CreatePost() {
-  return <h1>Not Implemented</h1>
-}
-
-/**
- * Displays info for specific post, by ID 
- * 
- * TODO Add styling
- */
-function PostInfo() {
-  return <h1>Not implemented</h1>
+  let form = new PostForm(local_host_url, '/api/create-post');
+  return form.render();
 }
 
 
