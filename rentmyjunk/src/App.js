@@ -3,12 +3,17 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  useParams
 } from "react-router-dom";
 
 import PostForm from "./components/PostForm"
 
 var local_host_url = 'http://127.0.0.1:5000/';
+
+/* -------------------------------
+   HTML Components
+------------------------------- */
 
 export default function App() {
   return (
@@ -43,6 +48,10 @@ export default function App() {
           <Route path="/createpost">
             <CreatePost />
           </Route>
+          <Route path="/post:post_id">
+            <PostInfo />
+          </Route>
+
           <Route path="/">
             <Home />
           </Route>
@@ -52,6 +61,9 @@ export default function App() {
   );
 }
 
+/**
+ * Just for testing purposes
+ */
 function getData() {
   // 1. Create a new XMLHttpRequest object
   let xhr = new XMLHttpRequest();
@@ -89,7 +101,7 @@ function Home() {
     <div>
       <h2>Homes</h2>
       <div>
-        { myStatus }
+        {myStatus}
         <br />
         Woah
       </div>
@@ -105,8 +117,15 @@ function Users() {
   return <h2>Users</h2>;
 }
 
-/* Create Post Component */
+/**
+ * Create Post Component
+ */
 function CreatePost() {
   let form = new PostForm(local_host_url, '/api/create-post');
   return form.render();
 }
+
+
+/* -------------------------------
+   XHR Functions
+------------------------------- */

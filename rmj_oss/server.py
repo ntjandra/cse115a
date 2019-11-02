@@ -1,7 +1,7 @@
 from database_setup import Base, RentPost
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -60,7 +60,8 @@ def create_post():
 @app.route("/api/get-post", methods=['GET', 'POST'])
 def get_post():
     # Get post_id as an integer
-    post_id = request.form["post_id"]
+    print(request.form)
+    post_id = request.form['post_id']
     if not representsInt(post_id):
         return str('Error - Invalid post ID format. Must be an integer.')
     post_id = int(post_id)
@@ -70,10 +71,9 @@ def get_post():
     if dne:
         return str('Error - Requested post ID does not exist.')
 
+    # Return post's values
     post = session.query(RentPost).filter_by(id=post_id).one()
-    title = post.title
-    # TODO return post's values
-    return str('Post exists, title is ') + str(title)
+    return jsonify(post.serialize())
 
 
 if __name__ == "__main__":
