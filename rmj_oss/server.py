@@ -59,7 +59,21 @@ def create_post():
 # Returns a post matching the given id, if post exists
 @app.route("/api/get-post", methods=['GET', 'POST'])
 def get_post():
-    return None
+        # Get post_id as an integer
+    print(request.form)
+    post_id = request.form['post_id']
+    if not representsInt(post_id):
+        return str('Error - Invalid post ID format. Must be an integer.')
+    post_id = int(post_id)
+
+    # Existence check
+    dne = session.query(RentPost).filter_by(id=post_id).scalar() is None
+    if dne:
+        return str('Error - Requested post ID does not exist.')
+
+    # Return post's values
+    post = session.query(RentPost).filter_by(id=post_id).one()
+    return jsonify(post.serialize())
 
 
 if __name__ == "__main__":
