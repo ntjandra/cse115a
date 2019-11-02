@@ -6,6 +6,8 @@ import {
   Link
 } from "react-router-dom";
 
+import PostForm from "./components/PostForm"
+
 var local_host_url = 'http://127.0.0.1:5000/';
 
 export default function App() {
@@ -105,35 +107,5 @@ function Users() {
 
 /* Create Post Component */
 function CreatePost() {
-
-  return (
-    <div>
-      <h2>Create Post</h2>
-      <form>
-        <div className="form-group">
-          <label>Product Title: </label>
-          <input type="text" className="form-control" />
-        </div>
-        <div className="form-group">
-          <label>Product Description: </label>
-          <input type="text" className="form-control" />
-        </div>
-        <div className="form-group">
-          <label>Contact Information: </label>
-          <input type="text" className="form-control" />
-        </div>
-        <div className="form-group">
-          <label>Location: </label>
-          <input type="text" className="form-control" />
-        </div>
-        <div className="form-group">
-          <label>Price: </label>
-          <input type="text" className="form-control" />
-        </div>
-        <div className="form-group">
-          <input type="submit" value="Create Post" className="btn btn-primary" />
-        </div>
-      </form>
-    </div>
-  );
+  return <h1>Not Implemented</h1>
 }
