@@ -56,7 +56,6 @@ def create_post():
 
     return str(new_post.id)
 
-
 # Returns a post matching the given id, if post exists
 @app.route("/api/get-post", methods=['GET', 'POST'])
 def get_post():
@@ -70,7 +69,6 @@ def get_post():
     dne = session.query(RentPost).filter_by(id=post_id).scalar() is None
     if dne:
         return str('Error - Requested post ID does not exist.')
-
     post = session.query(RentPost).filter_by(id=post_id).one()
     title = post.title
     # TODO return post's values
@@ -102,7 +100,6 @@ def search_item(item):
     return jsonify(item=[post.serialize() for post in items])
 
 # Add DRY here to do (column, search)
-# """ Untested DANGEROUS 
 @app.route("/api/search/<string:column>/<string:value>", methods=['GET'])
 def searchPost(column, value):
     # WANT TO HAVE A REDIRECT IF COLUMN DNE
@@ -119,6 +116,6 @@ def searchPost(column, value):
         return jsonify(post=result.serialize())
     else:
         return "404-Page not Found" 
-# """
+
 if __name__ == "__main__":
     app.run()

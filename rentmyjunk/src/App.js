@@ -3,12 +3,17 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  useParams
 } from "react-router-dom";
 
 import PostForm from "./components/PostForm"
 
 var local_host_url = 'http://127.0.0.1:5000/';
+
+/* -------------------------------
+   HTML Components
+------------------------------- */
 
 export default function App() {
   return (
@@ -43,6 +48,10 @@ export default function App() {
           <Route path="/createpost">
             <CreatePost />
           </Route>
+          <Route path="/post:post_id">
+            <PostInfo />
+          </Route>
+
           <Route path="/">
             <Home />
           </Route>
@@ -52,6 +61,9 @@ export default function App() {
   );
 }
 
+/**
+ * Just for testing purposes
+ */
 function getData() {
   // 1. Create a new XMLHttpRequest object
   let xhr = new XMLHttpRequest();
@@ -89,7 +101,7 @@ function Home() {
     <div>
       <h2>Homes</h2>
       <div>
-        { myStatus }
+        {myStatus}
         <br />
         Woah
       </div>
@@ -105,36 +117,47 @@ function Users() {
   return <h2>Users</h2>;
 }
 
-/* Create Post Component */
+/**
+ * Create Post Component
+ */
 function CreatePost() {
+  let form = new PostForm(local_host_url, '/api/create-post');
+  return form.render();
+}
+
+/**
+ * Displays info for specific post, by ID 
+ * 
+ * TODO Add styling
+ */
+function PostInfo() {
+  let { post_id } = useParams();
+
+  // Put post_id in XHR-sendable form
+  const data = new FormData();
+  data.set('post_id', post_id);
+  var post_data = xhrSend('POST', "api/get-post", data);
+
+  // If post doesn't exist, display error
+  if (post_data === "Error - Requested post ID does not exist.") {
+    return <h1>{post_data}</h1>
+  }
+
+  // Post exists
+  var post = JSON.parse(post_data);
+  console.log(post)
   return (
     <div>
-      <h2>Create Post</h2>
-      <form>
-        <div className="form-group">
-          <label>Product Title: </label>
-          <input type="text" className="form-control" />
-        </div>
-        <div className="form-group">
-          <label>Product Description: </label>
-          <input type="text" className="form-control" />
-        </div>
-        <div className="form-group">
-          <label>Contact Information: </label>
-          <input type="text" className="form-control" />
-        </div>
-        <div className="form-group">
-          <label>Location: </label>
-          <input type="text" className="form-control" />
-        </div>
-        <div className="form-group">
-          <label>Price: </label>
-          <input type="text" className="form-control" />
-        </div>
-        <div className="form-group">
-          <input type="submit" value="Create Post" className="btn btn-primary" />
-        </div>
-      </form>
+      <h1>{post.title}</h1>
+      <p>{post.description}</p>
+      <p>Contact Info: {post.contactinfo}</p>
+      <p>Location: {post.location}</p>
+      <p>Price: {post.price}</p>
     </div>
   );
 }
+
+
+/* -------------------------------
+   XHR Functions
+------------------------------- */
