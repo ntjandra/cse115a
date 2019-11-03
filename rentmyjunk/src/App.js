@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 
 import EditForm from "./components/EditForm";
+import PostForm from "./components/PostForm"
 
 var local_host_url = "http://127.0.0.1:5000/";
 
@@ -113,6 +114,9 @@ function Home() {
   );
 }
 
+/**
+ * About Component
+ */
 function About() {
   return <h2>About</h2>;
 }
@@ -122,17 +126,25 @@ function Users() {
 }
 
 /**
- * Create Post Component
+ * Edit Post Component
  */
-
 function EditPost() {
   let form = new EditForm(local_host_url, "/api/edit-post");
   return form.render();
 }
 
+
 /**
- * Displays info for specific post, by ID
- *
+ * Create Post Component
+ */
+function CreatePost() {
+  let form = new PostForm(local_host_url, '/api/create-post');
+  return form.render();
+}
+
+/**
+ * Displays info for specific post, by ID 
+ * 
  * TODO Add styling
  */
 function PostInfo() {
@@ -150,7 +162,7 @@ function PostInfo() {
 
   // Post exists
   var post = JSON.parse(post_data);
-  console.log(post);
+  // console.log(post);
   return (
     <div>
       <h1>{post.title}</h1>
