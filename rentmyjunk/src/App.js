@@ -7,9 +7,10 @@ import {
   useParams
 } from "react-router-dom";
 
+import EditForm from "./components/EditForm";
 import PostForm from "./components/PostForm"
 
-var local_host_url = 'http://127.0.0.1:5000/';
+var local_host_url = "http://127.0.0.1:5000/";
 
 /* -------------------------------
    HTML Components
@@ -33,6 +34,9 @@ export default function App() {
             <li>
               <Link to="/createpost">Create</Link>
             </li>
+            <li>
+              <Link to="/editpost">Edit</Link>
+            </li>
           </ul>
         </nav>
 
@@ -45,8 +49,8 @@ export default function App() {
           <Route path="/users">
             <Users />
           </Route>
-          <Route path="/createpost">
-            <CreatePost />
+          <Route path="/editpost">
+            <EditPost />
           </Route>
           <Route path="/post:post_id">
             <PostInfo />
@@ -69,22 +73,24 @@ function getData() {
   let xhr = new XMLHttpRequest();
 
   // 2. Configure it: GET-request for the URL /article/.../load
-  xhr.open('POST', local_host_url, false);
+  xhr.open("POST", local_host_url, false);
 
   // 3. Send the request over the network
   xhr.send();
 
   // 4. This will be called after the response is received
-  xhr.onload = function () {
-    if (xhr.status !== 200) { // analyze HTTP status of the response
+  xhr.onload = function() {
+    if (xhr.status !== 200) {
+      // analyze HTTP status of the response
       console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
-    } else { // show the result
+    } else {
+      // show the result
       console.log(`Done, got ${xhr.response.length} bytes`); // responseText is the server
-      console.log(xhr.response)
+      console.log(xhr.response);
     }
   };
 
-  xhr.onerror = function () {
+  xhr.onerror = function() {
     console.log("Request failed");
     console.log(xhr.status);
   };
@@ -94,7 +100,6 @@ function getData() {
 }
 
 function Home() {
-
   var myStatus = getData();
 
   return (
@@ -109,6 +114,9 @@ function Home() {
   );
 }
 
+/**
+ * About Component
+ */
 function About() {
   return <h2>About</h2>;
 }
@@ -116,6 +124,15 @@ function About() {
 function Users() {
   return <h2>Users</h2>;
 }
+
+/**
+ * Edit Post Component
+ */
+function EditPost() {
+  let form = new EditForm(local_host_url, "/api/edit-post");
+  return form.render();
+}
+
 
 /**
  * Create Post Component
@@ -135,17 +152,17 @@ function PostInfo() {
 
   // Put post_id in XHR-sendable form
   const data = new FormData();
-  data.set('post_id', post_id);
-  var post_data = xhrSend('POST', "api/get-post", data);
+  data.set("post_id", post_id);
+  var post_data = xhrSend("POST", "api/get-post", data);
 
   // If post doesn't exist, display error
   if (post_data === "Error - Requested post ID does not exist.") {
-    return <h1>{post_data}</h1>
+    return <h1>{post_data}</h1>;
   }
 
   // Post exists
   var post = JSON.parse(post_data);
-  console.log(post)
+  // console.log(post);
   return (
     <div>
       <h1>{post.title}</h1>
@@ -153,11 +170,51 @@ function PostInfo() {
       <p>Contact Info: {post.contactinfo}</p>
       <p>Location: {post.location}</p>
       <p>Price: {post.price}</p>
+      {/* <button onClick={deletePost}>Delete Post</button> */}
     </div>
   );
 }
 
-
 /* -------------------------------
    XHR Functions
 ------------------------------- */
+
+/**
+ * Makes generic xhr, defined by parameters.
+ *
+ * @param {String} type - Type of connection (POST, GET, etc)
+ * @param {String} route - Route in database where request will be made
+ * @param {FormData} data - Data to be sent to the database within xhr
+ *
+ * TODO Revise at some point in the future if needed
+ */
+function xhrSend(type, route, data) {
+  // Create a new XMLHttpRequest object
+  let xhr = new XMLHttpRequest();
+
+  // Configure xhr by parameters
+  xhr.open(type, local_host_url + route, false);
+
+  // Send the request over the network
+  xhr.send(data);
+
+  // This will be called after the response is received
+  xhr.onload = function() {
+    if (xhr.status !== 200) {
+      // analyze HTTP status of the response
+      console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
+    } else {
+      // show the result
+      console.log(`Done, got ${xhr.response.length} bytes`); // responseText is the server
+      console.log(xhr.response);
+    }
+  };
+
+  xhr.onerror = function() {
+    console.log("Request failed");
+    console.log(xhr.status);
+  };
+
+  console.log(xhr.response, "|", xhr.status);
+  return xhr.response;
+}
