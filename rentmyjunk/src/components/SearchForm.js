@@ -6,7 +6,7 @@ class SearchForm extends Form {
         return (
             <div>
               <h2>Search</h2>
-              <form>
+              <form onSubmit={this.handleSubmit}>
                 <input type="text" name="search" placeholder="Search.." />
                 <input type="submit" value="Search" />
               </form>
