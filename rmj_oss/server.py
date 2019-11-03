@@ -60,8 +60,7 @@ def create_post():
 @app.route("/api/get-post", methods=['GET', 'POST'])
 def get_post():
     # Get post_id as an integer
-    print(request.form)
-    post_id = request.form['post_id']
+    post_id = request.form["post_id"]
     if not representsInt(post_id):
         return str('Error - Invalid post ID format. Must be an integer.')
     post_id = int(post_id)
@@ -70,11 +69,53 @@ def get_post():
     dne = session.query(RentPost).filter_by(id=post_id).scalar() is None
     if dne:
         return str('Error - Requested post ID does not exist.')
-
-    # Return post's values
     post = session.query(RentPost).filter_by(id=post_id).one()
-    return jsonify(post.serialize())
+    title = post.title
+    # TODO return post's values
+    return str('Post exists, title is ') + str(title)
 
+# Returns a json contaiining the default of all posts.
+@app.route("/api/search/", methods=['GET'])
+def search():
+    # Get all posts
+    posts = session.query(RentPost)
+    return jsonify(search=[post.serialize() for post in posts])
+
+# Returns a json of posts that contain a filter
+# Returns all posts who have a particular address listed as one of their locations
+@app.route("/api/search/place/<string:place>", methods=['GET'])
+def search_place(place):
+    # the in_ method is the wildcard for contains anywhere.
+    places = session.query(RentPost).filter_by(location=place).order_by(RentPost.id).all() 
+    return jsonify(place=[post.serialize() for post in places])
+
+# Returns all posts who have a particular word in their post title
+@app.route("/api/search/item/<string:item>", methods=['GET'])
+def search_item(item):
+    # the in_ method is the wildcard for contains anywhere.
+    #  items = session.query(RentPost).filter_by(title=item).order_by(RentPost.id).all() 
+    # Testing lenience
+    items = session.query(RentPost).filter(RentPost.title.contains(item))
+
+    return jsonify(item=[post.serialize() for post in items])
+
+# Add DRY here to do (column, search)
+@app.route("/api/search/<string:column>/<string:value>", methods=['GET'])
+def searchPost(column, value):
+    # WANT TO HAVE A REDIRECT IF COLUMN DNE
+    #  if column dne:
+        #  return redirect(url_for('home'))
+    if (column == "description"):
+        results = session.query(RentPost).filter(RentPost.description.contains(value)).all()
+        return jsonify(results=[post.serialize() for post in results])
+
+    elif (column == "id"):
+        result = session.query(RentPost).filter_by(id=value).first()  # Single page by ID
+        if result == None:  # Special Error Handling for Keys
+            return "404-Page Result not found"
+        return jsonify(post=result.serialize())
+    else:
+        return "404-Page not Found" 
 
 if __name__ == "__main__":
     app.run()
