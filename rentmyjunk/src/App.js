@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import SearchForm from "./components/SearchForm.js"
 
 var local_host_url = "http://127.0.0.1:5000/";
 
@@ -104,15 +105,8 @@ function Home() {
 }
 
 function Search() {
-  return (
-    <div>
-      <h2>Search</h2>
-      <form>
-        <input type="text" name="search" placeholder="Search.." />
-        <input type="submit" value="Search" />
-      </form>
-    </div>
-  );
+  let form = new SearchForm(local_host_url, '/api/search');
+  return form.render();
 }
 
 function Delete() {

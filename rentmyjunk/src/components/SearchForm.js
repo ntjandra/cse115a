@@ -15,4 +15,4 @@ class SearchForm extends Form {
     }
 }
 
-export default PostForm;
+export default SearchForm;
