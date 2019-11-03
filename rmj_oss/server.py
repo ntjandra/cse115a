@@ -59,7 +59,7 @@ def create_post():
 # Returns a post matching the given id, if post exists
 @app.route("/api/get-post", methods=['GET', 'POST'])
 def get_post():
-        # Get post_id as an integer
+    # Get post_id as an integer
     print(request.form)
     post_id = request.form['post_id']
     if not representsInt(post_id):
