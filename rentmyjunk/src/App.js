@@ -105,7 +105,7 @@ function Home() {
 }
 
 function Search() {
-  let form = new SearchForm(local_host_url, '/api/search');
+  let form = new SearchForm(local_host_url);
   return form.render();
 }
 
