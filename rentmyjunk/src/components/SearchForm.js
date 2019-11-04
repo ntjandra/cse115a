@@ -1,13 +1,12 @@
-import React from 'react'
-import Form from './Form'
+import React from "react";
+import Form from "./Form";
 
 class SearchForm extends Form {
-
   /**
    * @param {string} url base url of the server (API),
    */
   constructor(url) {
-    super(url, "unset")
+    super(url, "unset");
   }
 
   handleSubmit(event) {
@@ -19,16 +18,16 @@ class SearchForm extends Form {
     this.route = "/api/search/item/" + content;
     var xhr = new XMLHttpRequest();
     // Listeners
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            if(xhr.status  === 200) {
-                // success
-                contentResult = xhr.responseText;
-            } else {
-                // fail
-                contentResult = xhr.statusText;
-            }
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          // success
+          contentResult = xhr.responseText;
+        } else {
+          // fail
+          contentResult = xhr.statusText;
         }
+      }
     };
     xhr.open(this.method, this.baseUrl + this.route, true);
     xhr.send(data);
@@ -36,19 +35,19 @@ class SearchForm extends Form {
     // Second request
     let placeResult = "";
     const place = data.get("place");
-    if(place !== "") {
+    if (place !== "") {
       this.route = "/api/search/place/" + place;
       xhr = new XMLHttpRequest();
       // Listeners
-      xhr.onreadystatechange = function () {
+      xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
-            if(xhr.status  === 200) {
-                // success
-                placeResult = xhr.responseText;
-            } else {
-                // fail
-                placeResult = xhr.statusText;
-            }
+          if (xhr.status === 200) {
+            // success
+            placeResult = xhr.responseText;
+          } else {
+            // fail
+            placeResult = xhr.statusText;
+          }
         }
       };
       xhr.open(this.method, this.baseUrl + this.route, true);
@@ -62,16 +61,16 @@ class SearchForm extends Form {
   }
 
   render() {
-      return (
-          <div>
-            <h2>Search</h2>
-            <form onSubmit={this.handleSubmit}>
-              <input type="text" name="search" placeholder="Search..." required />
-              <input type="text" name="place" placeholder="Place..." />
-              <input type="submit" value="Search" />
-            </form>
-          </div>
-        );
+    return (
+      <div>
+        <h2>Search</h2>
+        <form onSubmit={this.handleSubmit}>
+          <input type="text" name="search" placeholder="Search..." required />
+          <input type="text" name="place" placeholder="Place..." />
+          <input type="submit" value="Search" />
+        </form>
+      </div>
+    );
   }
 }
 
