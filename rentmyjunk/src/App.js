@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 
 import EditForm from "./components/EditForm";
-import PostForm from "./components/PostForm";
+import PostForm from "./components/CreateForm";
 import SearchForm from "./components/SearchForm.js";
 
 var local_host_url = "http://127.0.0.1:5000/";
