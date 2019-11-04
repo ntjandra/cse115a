@@ -8,6 +8,8 @@ import {
 } from "react-router-dom";
 
 import EditForm from "./components/EditForm";
+import PostForm from "./components/PostForm";
+import SearchForm from "./components/SearchForm.js";
 
 var local_host_url = "http://127.0.0.1:5000/";
 
@@ -34,6 +36,12 @@ export default function App() {
               <Link to="/createpost">Create</Link>
             </li>
             <li>
+              <Link to="/search">Search</Link>
+            </li>
+            <li>
+              <Link to="/delete">Delete</Link>
+            </li>
+            <li>
               <Link to="/editpost">Edit</Link>
             </li>
           </ul>
@@ -54,7 +62,15 @@ export default function App() {
           <Route path="/post:post_id">
             <PostInfo />
           </Route>
-
+          <Route path="/createpost">
+            <CreatePost />
+          </Route>
+          <Route path="/search">
+            <Search />
+          </Route>
+          <Route path="/delete">
+            <Delete />
+          </Route>
           <Route path="/">
             <Home />
           </Route>
@@ -113,6 +129,18 @@ function Home() {
   );
 }
 
+function Search() {
+  let form = new SearchForm(local_host_url);
+  return form.render();
+}
+
+function Delete() {
+  return <button id="delete">Delete Post</button>;
+}
+
+/**
+ * About Component
+ */
 function About() {
   return <h2>About</h2>;
 }
@@ -122,17 +150,24 @@ function Users() {
 }
 
 /**
- * Create Post Component
+ * Edit Post Component
  */
-
 function EditPost() {
   let form = new EditForm(local_host_url, "/api/edit-post");
   return form.render();
 }
 
 /**
- * Displays info for specific post, by ID
- *
+ * Create Post Component
+ */
+function CreatePost() {
+  let form = new PostForm(local_host_url, '/api/create-post');
+  return form.render();
+}
+
+/**
+ * Displays info for specific post, by ID 
+ * 
  * TODO Add styling
  */
 function PostInfo() {
@@ -150,7 +185,7 @@ function PostInfo() {
 
   // Post exists
   var post = JSON.parse(post_data);
-  console.log(post);
+  // console.log(post);
   return (
     <div>
       <h1>{post.title}</h1>
@@ -205,4 +240,14 @@ function xhrSend(type, route, data) {
 
   console.log(xhr.response, "|", xhr.status);
   return xhr.response;
+}
+
+/**
+ *  Calls xhr for deleting posts 
+ * @param {Integer} post_id - Integer, correlates to an existing RentPost's id
+ */
+function deletePost(post_id) {
+  const data = new FormData();
+  data.set('post_id', post_id);
+  return xhrSend('POST', 'api/deletepost', data)
 }
