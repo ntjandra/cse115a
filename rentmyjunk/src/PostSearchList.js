@@ -11,11 +11,13 @@ class PostList extends Component {
                 <h1> Search Results </h1>
                 { PostData.map((result, index) => {
                     return <div>
-                        <h1> { RentPost.title } </h1>
-                        <p> { RentPost.description } </p>
+                        <h1> { result.title } </h1>
+                        <p> { result.description } </p>
                     </div>
                 })}
             </div>
         )
     }
 }
+
+export default RentPost
