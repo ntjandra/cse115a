@@ -20,4 +20,4 @@ class PostList extends Component {
     }
 }
 
-export default RentPost
+export default PostList
