@@ -55,7 +55,9 @@ export default function App() {
           <Route path="/post:post_id">
             <PostInfo />
           </Route>
-
+          <Route path="/createpost">
+            <CreatePost />
+          </Route>
           <Route path="/">
             <Home />
           </Route>
