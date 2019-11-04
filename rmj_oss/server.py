@@ -33,12 +33,7 @@ def home():
         return "Received POST"
     elif request.method == "GET":
 	    return "Received GET"
-		
-# Returns a post matching the given id, if post exists
-@app.route("/api/get-post", methods=['GET', 'POST'])
-def get_post():
-    return None
-	
+
 # Given a post's id, checks for existence and then updates all fields w/ the new info 
 @app.route("/api/edit-post", methods=['GET', 'POST'])
 def editpost():
@@ -90,7 +85,7 @@ def get_post():
         return str('Error - Requested post ID does not exist.')
     post = session.query(RentPost).filter_by(id=post_id).one()
     return jsonify(post.serialize())
-    
+
 # Returns a json contaiining the default of all posts.
 @app.route("/api/search/", methods=['GET'])
 def search():
@@ -103,14 +98,14 @@ def search():
 @app.route("/api/search/place/<string:place>", methods=['GET'])
 def search_place(place):
     # the in_ method is the wildcard for contains anywhere.
-    places = session.query(RentPost).filter_by(location=place).order_by(RentPost.id).all() 
+    places = session.query(RentPost).filter_by(location=place).order_by(RentPost.id).all()
     return jsonify(place=[post.serialize() for post in places])
 
 # Returns all posts who have a particular word in their post title
 @app.route("/api/search/item/<string:item>", methods=['GET'])
 def search_item(item):
     # the in_ method is the wildcard for contains anywhere.
-    #  items = session.query(RentPost).filter_by(title=item).order_by(RentPost.id).all() 
+    #  items = session.query(RentPost).filter_by(title=item).order_by(RentPost.id).all()
     # Testing lenience
     items = session.query(RentPost).filter(RentPost.title.contains(item))
 
@@ -132,7 +127,7 @@ def searchPost(column, value):
             return "404-Page Result not found"
         return jsonify(post=result.serialize())
     else:
-        return "404-Page not Found" 
+        return "404-Page not Found"
 
 # Given a post's id, checks for existence and then deletes post
 @app.route("/api/delete-post", methods=['POST'])
