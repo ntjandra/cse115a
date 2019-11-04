@@ -3,9 +3,11 @@ import React from 'react'
 class Form extends React.Component {
     /**
      * @param {string} url base url of the server (API),
-     * @param {*} route route where the request should be sent.
+     * @param {string} route route where the request should be sent,
+     * @param {boolean} get False by default. If true, the request
+     *      method used will be GET, POST otherwise.
      */
-    constructor(url, route) {
+    constructor(url, route, get = false) {
         super();
         this.handleSubmit = this.handleSubmit.bind(this);
 
@@ -18,6 +20,8 @@ class Form extends React.Component {
         if(!route.startsWith("/")) {
             this.route = "/" + route
         }
+
+        this.method = get ? "GET" : "POST"
     }
 
     /**
@@ -59,7 +63,7 @@ class Form extends React.Component {
             }
         };
 
-        xhr.open('POST', this.baseUrl + this.route, true);
+        xhr.open(this.method, this.baseUrl + this.route, true);
         xhr.send(data);
     }
 
