@@ -77,10 +77,8 @@ def get_post():
     if dne:
         return str('Error - Requested post ID does not exist.')
     post = session.query(RentPost).filter_by(id=post_id).one()
-    title = post.title
-    # TODO return post's values
-    return str('Post exists, title is ') + str(title)
-
+    return jsonify(post.serialize())
+    
 # Returns a json contaiining the default of all posts.
 @app.route("/api/search/", methods=['GET'])
 def search():
@@ -123,6 +121,22 @@ def searchPost(column, value):
         return jsonify(post=result.serialize())
     else:
         return "404-Page not Found" 
+
+# Given a post's id, checks for existence and then deletes post
+@app.route("/api/delete-post", methods=['POST'])
+def deletepost():
+    post_id = request.form["post_id"]
+
+    # Existence check
+    dne = session.query(RentPost).filter_by(id=post_id).scalar() is None
+    if dne:
+        return str('Error - Requested post ID does not exist.')
+
+    post_to_delete = session.query(RentPost).filter_by(id=post_id).one()
+    post_title = post_to_delete.title
+    session.delete(post_to_delete)
+    session.commit()
+    return "Deleted ID: " + post_id + ", TITLE: " + post_title
 
 if __name__ == "__main__":
     app.run()
