@@ -157,7 +157,6 @@ function EditPost() {
   return form.render();
 }
 
-
 /**
  * Create Post Component
  */

@@ -29,16 +29,28 @@ session = DBSession()
 # Home Route - Returns recent posts
 @app.route("/api/edit-post", methods=['GET', 'POST'])
 def home():
-#    print('hello world', file=sys.stderr)
-#    sys.stdout.flush()
     if request.method == "POST":
-#        print(request.form['price'])
-        print(request.values)
-        sys.stdout.flush()
         return "Received POST"
     elif request.method == "GET":
 	    return "Received GET"
-
+		
+# Returns a post matching the given id, if post exists
+@app.route("/api/get-post", methods=['GET', 'POST'])
+def get_post():
+    return None
+	
+# Given a post's id, checks for existence and then updates all fields w/ the new info 
+@app.route("/api/edit-post", methods=['GET', 'POST'])
+def editpost():
+    post_id = request.form["postid"]
+    post_to_edit              = session.query(RentPost).filter_by(id=post_id).one()
+    post_to_edit.title        = request.form['title']
+    post_to_edit.description  = request.form['descr']
+    post_to_edit.location     = request.form['location']
+    post_to_edit.contactinfo  = request.form['contact']
+    post_to_edit.price        = request.form['price']
+    session.commit()
+    return "Edited ID: " + post_id + ", TITLE: " + post_to_edit.title
 
 # Adds new RentPosts to the database
 @app.route("/api/create-post", methods=['POST'])
@@ -126,12 +138,10 @@ def searchPost(column, value):
 @app.route("/api/delete-post", methods=['POST'])
 def deletepost():
     post_id = request.form["post_id"]
-
     # Existence check
     dne = session.query(RentPost).filter_by(id=post_id).scalar() is None
     if dne:
         return str('Error - Requested post ID does not exist.')
-
     post_to_delete = session.query(RentPost).filter_by(id=post_id).one()
     post_title = post_to_delete.title
     session.delete(post_to_delete)
