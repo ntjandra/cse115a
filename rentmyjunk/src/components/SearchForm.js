@@ -15,7 +15,6 @@ class SearchForm extends Form {
     let contentResult = "";
     const content = data.get("search");
     this.route = "/api/search/item/" + content;
-
     var xhr = new XMLHttpRequest();
     // Listeners
     xhr.onreadystatechange = function() {
