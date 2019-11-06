@@ -48,7 +48,7 @@ class Account(Base):
 
     email = Column(String(250), primary_key=True)
     name = Column(String(250), nullable=False)
-    contactinfo = Column(String(250), nullable=False)
+    description = Column(String, nullable=False)
     location = Column(String(250), nullable=False)
     password = Column(String(20), nullable=False)
 
