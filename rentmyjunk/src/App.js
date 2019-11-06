@@ -196,7 +196,7 @@ function PostInfo() {
       <p>Contact Info: {post.contactinfo}</p>
       <p>Location: {post.location}</p>
       <p>Price: {post.price}</p>
-      { deleteBtn.render }
+      { deleteBtn.render() }
     </div>
   );
 }
