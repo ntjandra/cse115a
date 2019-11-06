@@ -1,4 +1,4 @@
-from database_setup import Base, RentPost
+from database_setup import Base, RentPost, Account
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from flask import Flask, render_template, request, redirect, url_for, jsonify
