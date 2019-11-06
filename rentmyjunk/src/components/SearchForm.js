@@ -6,7 +6,7 @@ class SearchForm extends Form {
    * @param {string} url base url of the server (API),
    */
   constructor(url) {
-    super(url, "unset");
+    super(url, "unset", true);
   }
 
   handleSubmit(event) {
