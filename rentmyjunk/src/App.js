@@ -244,19 +244,3 @@ function xhrSend(type, route, data) {
   console.log(xhr.response, "|", xhr.status);
   return xhr.response;
 }
-
-/**
- *  Calls xhr for deleting posts 
- * @param {Integer} post_id - Integer, correlates to an existing RentPost's id
- */
-function deletePost(post_id) {
-  // Set up and call to delete post
-  const data = new FormData();
-  data.set('post_id', post_id);
-  // var response = xhrSend('POST', 'api/deletepost', data);
-  var response = 'test';
-
-  // Redirect and return response
-  // history.pushState(null, '');
-  return response;
-}
