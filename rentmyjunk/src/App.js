@@ -86,7 +86,11 @@ export default function App() {
           <Route path="/profile:profile_id">
             <ProfilePage />
           </Route>
+          <Route path="/editprofile:profile_id">
+            <EditProfile />
+          </Route>
 
+          {/* Home */}
           <Route path="/">
             <Home />
           </Route>
