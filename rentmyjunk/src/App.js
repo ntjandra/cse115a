@@ -10,7 +10,7 @@ import {
 import EditForm from "./components/EditForm";
 import PostForm from "./components/PostForm";
 import SearchForm from "./components/SearchForm.js";
-import DeleteButton from "./components/delete-post-button/DeletePostButton"
+import DeletePostButton from "./components/delete-post-button/DeletePostButton"
 
 var local_host_url = "http://127.0.0.1:5000/";
 
