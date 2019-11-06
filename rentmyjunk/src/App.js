@@ -10,7 +10,7 @@ import {
 import EditForm from "./components/EditForm";
 import PostForm from "./components/PostForm";
 import SearchForm from "./components/SearchForm.js";
-import DeleteButton from "./components/delete-button/DeleteButton"
+import DeleteButton from "./components/delete-post-button/DeletePostButton"
 
 var local_host_url = "http://127.0.0.1:5000/";
 
@@ -40,9 +40,6 @@ export default function App() {
               <Link to="/search">Search</Link>
             </li>
             <li>
-              <Link to="/delete">Delete</Link>
-            </li>
-            <li>
               <Link to="/editpost">Edit</Link>
             </li>
           </ul>
@@ -68,9 +65,6 @@ export default function App() {
           </Route>
           <Route path="/search">
             <Search />
-          </Route>
-          <Route path="/delete">
-            <Delete />
           </Route>
           <Route path="/">
             <Home />
@@ -135,10 +129,6 @@ function Search() {
   return form.render();
 }
 
-function Delete() {
-  return <button id="delete">Delete Post</button>;
-}
-
 /**
  * About Component
  */
@@ -174,7 +164,7 @@ function CreatePost() {
  */
 function PostInfo() {
   let { post_id } = useParams();
-  let deleteBtn = new DeleteButton(post_id, local_host_url);
+  let deletePostBtn = new DeletePostButton(post_id, local_host_url);
 
   // Put post_id in XHR-sendable form
   const data = new FormData();
@@ -196,7 +186,7 @@ function PostInfo() {
       <p>Contact Info: {post.contactinfo}</p>
       <p>Location: {post.location}</p>
       <p>Price: {post.price}</p>
-      { deleteBtn.render() }
+      { deletePostBtn.render() }
     </div>
   );
 }

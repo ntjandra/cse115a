@@ -1,6 +1,6 @@
 import React from 'react'
 
-class DeleteButton extends React.Component {
+class DeletePostButton extends React.Component {
 
     /**
      * @param {Integer} post_id The post ID to be deleted
@@ -72,4 +72,4 @@ class DeleteButton extends React.Component {
     }
 }
 
-export default DeleteButton
+export default DeletePostButton
