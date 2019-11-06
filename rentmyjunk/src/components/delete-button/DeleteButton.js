@@ -59,16 +59,16 @@ class DeleteButton extends React.Component {
         // Set up and call to delete post
         const data = new FormData();
         data.set('post_id', this.post_id);
-        // var response = xhrSend('POST', 'api/deletepost', data);
-        var response = 'test';
+        var response = this.xhrSend('POST', 'api/delete-post', data);
 
         // Redirect and return response
-        this.history.pushState(null, '');
+        window.location.pathname = "/";
+        console.log(response)
         return response;
     }
 
     render() {
-        return <button onClick={() => console.log("test")}>Delete Post</button>
+        return <button onClick={() => this.deletePost()}>Delete Post</button>
     }
 }
 

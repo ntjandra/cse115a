@@ -126,6 +126,7 @@ def searchPost(column, value):
 @app.route("/api/delete-post", methods=['POST'])
 def deletepost():
     post_id = request.form["post_id"]
+    print(post_id)
 
     # Existence check
     dne = session.query(RentPost).filter_by(id=post_id).scalar() is None
