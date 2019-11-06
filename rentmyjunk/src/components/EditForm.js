@@ -12,6 +12,8 @@ class EditForm extends Form {
         </h1>
         <form onSubmit={this.handleSubmit}>
           <p>Product Title:</p>
+          {/* hard coded an ID w/ value 1 for testing */}
+          <input type="hidden" name="postid" value="1" />
           <input type="text" name="title" />
           <p>Product Description:</p>
           <textarea name="comment" type="text" name="descr" />

@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 
 import EditForm from "./components/EditForm";
-import PostForm from "./components/PostForm";
+import PostForm from "./components/CreateForm";
 import SearchForm from "./components/SearchForm.js";
 
 var local_host_url = "http://127.0.0.1:5000/";
@@ -135,15 +135,11 @@ function getData() {
 }
 
 function Home() {
-  var myStatus = getData();
-
   return (
     <div>
       <h2>Homes</h2>
       <div>
-        {myStatus}
-        <br />
-        Woah
+        content
       </div>
     </div>
   );
@@ -177,7 +173,6 @@ function EditPost() {
   return form.render();
 }
 
-
 /**
  * Create Post Component
  */
@@ -187,8 +182,8 @@ function CreatePost() {
 }
 
 /**
- * Displays info for specific post, by ID 
- * 
+ * Displays info for specific post, by ID
+ *
  * TODO Add styling
  */
 function PostInfo() {
