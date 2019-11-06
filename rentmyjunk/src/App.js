@@ -83,6 +83,9 @@ export default function App() {
           <Route path="/logout">
             <LogOut />
           </Route>
+          <Route path="/profile:profile_id">
+            <ProfilePage />
+          </Route>
 
           <Route path="/">
             <Home />
