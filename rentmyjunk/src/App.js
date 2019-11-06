@@ -10,6 +10,7 @@ import {
 import EditForm from "./components/EditForm";
 import PostForm from "./components/PostForm";
 import SearchForm from "./components/SearchForm.js";
+import DeleteButton from "./components/delete-button/DeleteButton"
 
 var local_host_url = "http://127.0.0.1:5000/";
 
@@ -173,6 +174,7 @@ function CreatePost() {
  */
 function PostInfo() {
   let { post_id } = useParams();
+  let deleteBtn = new DeleteButton(post_id, local_host_url);
 
   // Put post_id in XHR-sendable form
   const data = new FormData();
@@ -194,7 +196,7 @@ function PostInfo() {
       <p>Contact Info: {post.contactinfo}</p>
       <p>Location: {post.location}</p>
       <p>Price: {post.price}</p>
-      <button onClick={() => deletePost(post_id)}>Delete Post</button>
+      { deleteBtn.render }
     </div>
   );
 }
@@ -255,6 +257,6 @@ function deletePost(post_id) {
   var response = 'test';
 
   // Redirect and return response
-  history.pushState(null, '');
+  // history.pushState(null, '');
   return response;
 }
