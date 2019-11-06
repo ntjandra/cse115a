@@ -194,7 +194,7 @@ function PostInfo() {
       <p>Contact Info: {post.contactinfo}</p>
       <p>Location: {post.location}</p>
       <p>Price: {post.price}</p>
-      {/* <button onClick={deletePost}>Delete Post</button> */}
+      <button onClick={() => deletePost(post_id)}>Delete Post</button>
     </div>
   );
 }
@@ -248,7 +248,13 @@ function xhrSend(type, route, data) {
  * @param {Integer} post_id - Integer, correlates to an existing RentPost's id
  */
 function deletePost(post_id) {
+  // Set up and call to delete post
   const data = new FormData();
   data.set('post_id', post_id);
-  return xhrSend('POST', 'api/deletepost', data)
+  // var response = xhrSend('POST', 'api/deletepost', data);
+  var response = 'test';
+
+  // Redirect and return response
+  history.pushState(null, '');
+  return response;
 }

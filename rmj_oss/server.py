@@ -59,7 +59,7 @@ def create_post():
 
     session.add(new_post)
     session.commit()
-    # print('ID: ' + str(new_post.id)) # Prints this post's ID
+    print('ID: ' + str(new_post.id)) # Prints this post's ID
 
     return str(new_post.id)
 
