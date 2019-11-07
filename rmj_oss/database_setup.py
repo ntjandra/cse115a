@@ -28,7 +28,7 @@ class RentPost(Base):
     description = Column(String(250), nullable=False)
     location = Column(String(250))
     contactinfo = Column(String(250))
-    price = Column(String(250))
+    price = Column(Integer)
 
     def serialize(self):
         return {
@@ -51,6 +51,15 @@ class Account(Base):
     description = Column(String, nullable=False)
     location = Column(String(250), nullable=False)
     password = Column(String(20), nullable=False)
+    
+    def serialize(self):
+        return {
+            'email': self.email,
+            'name': self.name,
+            'description': self.description,
+            'location': self.location,
+            'password': self.password,
+        }
 
 
 # Creates a create_engine instance at the bottom of the file
