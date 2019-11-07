@@ -1,0 +1,19 @@
+matrix:
+  include:
+    - language: python
+      python:
+        - 3.3
+      install:
+        - pip install -r tests/requirements.txt
+      script:
+        - python tests/pep8_style_check.sh # pep 8 style check
+
+    - language: node_js
+      node_js:
+        - 4.8
+      before_install:
+        - cd rentmyjunk
+      install:
+        - npm install
+      script:
+        - npm start
