@@ -42,12 +42,12 @@ def edit_post(post_id):
     form = request.form
     old_post = session.query(RentPost).filter_by(id=post_id).first()
     # Edit Data from form
-    old_post.title        = form['title']
-    old_post.description  = form['description']
-    old_post.location     = form['location']
-    old_post.contactinfo  = form['contact']
-    old_post.price        = form['price']
-    
+    old_post.title = form['title']
+    old_post.description = form['description']
+    old_post.location = form['location']
+    old_post.contactinfo = form['contact']
+    old_post.price = form['price']
+
     session.commit()
     return "Edited ID: " + str(post_id) + ", TITLE: " + old_post.title
 
