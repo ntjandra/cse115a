@@ -32,13 +32,13 @@ class RentPost(Base):
 
     def serialize(self):
         return {
-           'id': self.id,
-           'title': self.title,
-           'description': self.description,
-           'location': self.location,
-           'contactinfo': self.contactinfo,
-           'price': self.price,
-       }
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'location': self.location,
+            'contactinfo': self.contactinfo,
+            'price': self.price,
+        }
 
 
 # Account class
