@@ -1,7 +1,7 @@
 from database_setup import Base, RentPost
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -38,23 +38,23 @@ def home():
 def edit_post(post_id):
 
     form = request.form
-
+    old_post = session.query(RentPost).filter_by(id=post_id).first()
     # Edit Data from form
-    post_to_edit              = session.query(RentPost).filter_by(id=post_id).first()
-    post_to_edit.title        = form['title']
-    post_to_edit.description  = form['descr']
-    post_to_edit.location     = form['location']
-    post_to_edit.contactinfo  = form['contact']
-    post_to_edit.price        = form['price']
+    old_post.title        = form['title']
+    old_post.description  = form['description']
+    old_post.location     = form['location']
+    old_post.contactinfo  = form['contact']
+    old_post.price        = form['price']
     
     session.commit()
-    return "Edited ID: " + post_id + ", TITLE: " + post_to_edit.title
+    return "Edited ID: " + str(post_id) + ", TITLE: " + old_post.title
 
 # Adds new RentPosts to the database
 @app.route("/api/post/new", methods=['POST'])
 def create_post():
 
     # The Backend should be Detached from the Frontend
+    form = request.form
 
     # Extract data from form
     title = form['title']
@@ -71,7 +71,7 @@ def create_post():
     session.commit()
     # print('ID: ' + str(new_post.id)) # Prints this post's ID
 
-    return str(new_post.id + "200 OK Success")
+    return str(new_post.id) + " 200 OK Success"
 
 # Returns a json contaiining the default of all posts.
 @app.route("/api/search/", methods=['GET'])
@@ -117,9 +117,8 @@ def searchPost(column, value):
         return "404-Page not Found"
 
 # Given a post's id, checks for existence and then deletes post
-@app.route("/api/delete-post", methods=['POST'])
-def deletepost():
-    post_id = request.form["post_id"]
+@app.route("/api/post/delete/<int:post_id>", methods=['POST'])
+def deletepost(post_id):
     # Existence check
     dne = session.query(RentPost).filter_by(id=post_id).scalar() is None
     if dne:
@@ -128,7 +127,7 @@ def deletepost():
     post_title = post_to_delete.title
     session.delete(post_to_delete)
     session.commit()
-    return "Deleted ID: " + post_id + ", TITLE: " + post_title
+    return "Deleted ID: " + str(post_id) + ", TITLE: " + post_title
 
 if __name__ == "__main__":
     app.run()
