@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 
 import EditForm from "./components/EditForm";
-import PostForm from "./components/PostForm";
+import PostForm from "./components/CreateForm";
 import SearchForm from "./components/SearchForm.js";
 
 var local_host_url = "http://127.0.0.1:5000/";
@@ -80,50 +80,12 @@ export default function App() {
   );
 }
 
-/**
- * Just for testing purposes
- */
-function getData() {
-  // 1. Create a new XMLHttpRequest object
-  let xhr = new XMLHttpRequest();
-
-  // 2. Configure it: GET-request for the URL /article/.../load
-  xhr.open("POST", local_host_url, false);
-
-  // 3. Send the request over the network
-  xhr.send();
-
-  // 4. This will be called after the response is received
-  xhr.onload = function() {
-    if (xhr.status !== 200) {
-      // analyze HTTP status of the response
-      console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
-    } else {
-      // show the result
-      console.log(`Done, got ${xhr.response.length} bytes`); // responseText is the server
-      console.log(xhr.response);
-    }
-  };
-
-  xhr.onerror = function() {
-    console.log("Request failed");
-    console.log(xhr.status);
-  };
-
-  console.log(xhr.response, "|", xhr.status);
-  return xhr.response;
-}
-
 function Home() {
-  var myStatus = getData();
-
   return (
     <div>
       <h2>Homes</h2>
       <div>
-        {myStatus}
-        <br />
-        Woah
+        content
       </div>
     </div>
   );
@@ -157,7 +119,6 @@ function EditPost() {
   return form.render();
 }
 
-
 /**
  * Create Post Component
  */
@@ -167,8 +128,8 @@ function CreatePost() {
 }
 
 /**
- * Displays info for specific post, by ID 
- * 
+ * Displays info for specific post, by ID
+ *
  * TODO Add styling
  */
 function PostInfo() {

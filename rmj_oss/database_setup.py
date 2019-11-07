@@ -22,13 +22,13 @@ Base = declarative_base()
 
 class RentPost(Base):
     __tablename__ = 'rentpost'
-
-    id = Column(Integer, autoincrement=True, primary_key=True)
-    title = Column(String(250), nullable=False)
-    description = Column(String(250), nullable=False)
-    location = Column(String(250))
-    contactinfo = Column(String(250))
-    price = Column(Integer)
+    
+   id = Column(Integer, autoincrement=True, primary_key=True)
+   title = Column(String(250), nullable=False)
+   description = Column(String(250), nullable=False)
+   location = Column(String(250))
+   contactinfo = Column(String(250))
+   price = Column(Integer())
 
     def serialize(self):
         return {

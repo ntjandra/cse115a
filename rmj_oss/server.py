@@ -29,16 +29,23 @@ session = DBSession()
 # Home Route - Returns recent posts
 @app.route("/api/edit-post", methods=['GET', 'POST'])
 def home():
-#    print('hello world', file=sys.stderr)
-#    sys.stdout.flush()
     if request.method == "POST":
-#        print(request.form['price'])
-        print(request.values)
-        sys.stdout.flush()
         return "Received POST"
     elif request.method == "GET":
 	    return "Received GET"
 
+# Given a post's id, checks for existence and then updates all fields w/ the new info 
+@app.route("/api/edit-post", methods=['GET', 'POST'])
+def editpost():
+    post_id = request.form["postid"]
+    post_to_edit              = session.query(RentPost).filter_by(id=post_id).one()
+    post_to_edit.title        = request.form['title']
+    post_to_edit.description  = request.form['descr']
+    post_to_edit.location     = request.form['location']
+    post_to_edit.contactinfo  = request.form['contact']
+    post_to_edit.price        = request.form['price']
+    session.commit()
+    return "Edited ID: " + post_id + ", TITLE: " + post_to_edit.title
 
 # Adds new RentPosts to the database
 @app.route("/api/create-post", methods=['POST'])
@@ -78,7 +85,7 @@ def get_post():
         return str('Error - Requested post ID does not exist.')
     post = session.query(RentPost).filter_by(id=post_id).one()
     return jsonify(post.serialize())
-    
+
 # Returns a json contaiining the default of all posts.
 @app.route("/api/search/", methods=['GET'])
 def search():
@@ -91,14 +98,14 @@ def search():
 @app.route("/api/search/place/<string:place>", methods=['GET'])
 def search_place(place):
     # the in_ method is the wildcard for contains anywhere.
-    places = session.query(RentPost).filter_by(location=place).order_by(RentPost.id).all() 
+    places = session.query(RentPost).filter_by(location=place).order_by(RentPost.id).all()
     return jsonify(place=[post.serialize() for post in places])
 
 # Returns all posts who have a particular word in their post title
 @app.route("/api/search/item/<string:item>", methods=['GET'])
 def search_item(item):
     # the in_ method is the wildcard for contains anywhere.
-    #  items = session.query(RentPost).filter_by(title=item).order_by(RentPost.id).all() 
+    #  items = session.query(RentPost).filter_by(title=item).order_by(RentPost.id).all()
     # Testing lenience
     items = session.query(RentPost).filter(RentPost.title.contains(item))
 
@@ -120,18 +127,16 @@ def searchPost(column, value):
             return "404-Page Result not found"
         return jsonify(post=result.serialize())
     else:
-        return "404-Page not Found" 
+        return "404-Page not Found"
 
 # Given a post's id, checks for existence and then deletes post
 @app.route("/api/delete-post", methods=['POST'])
 def deletepost():
     post_id = request.form["post_id"]
-
     # Existence check
     dne = session.query(RentPost).filter_by(id=post_id).scalar() is None
     if dne:
         return str('Error - Requested post ID does not exist.')
-
     post_to_delete = session.query(RentPost).filter_by(id=post_id).one()
     post_title = post_to_delete.title
     session.delete(post_to_delete)
