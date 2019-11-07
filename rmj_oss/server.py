@@ -98,15 +98,14 @@ def search_item(item):
 # Add DRY here to do (column, search)
 @app.route("/api/search/<string:column>/<string:value>", methods=['GET'])
 def searchPost(column, value):
-    # WANT TO HAVE A REDIRECT IF COLUMN DNE
-    #  if column dne:
-        #  return redirect(url_for('home'))
     if (column == "description"):
-        results = session.query(RentPost).filter(RentPost.description.contains(value)).all()
+        results = session.query(RentPost).filter
+        (RentPost.description.contains(value)).all()
         return jsonify(results=[post.serialize() for post in results])
 
     elif (column == "id"):
-        result = session.query(RentPost).filter_by(id=value).first()  # Single page by ID
+        result = session.query(RentPost)
+        .filter_by(id=value).first()  # Single page by ID
         if result is None:  # Special Error Handling for Keys
             return "404-Page Result not found"
         return jsonify(post=result.serialize())
