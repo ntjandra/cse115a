@@ -20,6 +20,5 @@ if ! python -m pycodestyle "${THIS_DIR}/../rmj_oss/database_setup.py" ; then
 fi
 
 echo "no issue"
-sleep 2
-exit 1
+exit 0
 
