@@ -1,4 +1,4 @@
-from database_setup import Base, RentPost
+from database_setup import Base, RentPost, Account
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from flask import Flask, jsonify, request
@@ -33,7 +33,7 @@ def home():
         return "Received GET"
     return "Invalid Method"
 
-# Given a post's id, checks for existence and then updates all fields w/ the new info
+# Given a post's id, checks for existence and then updates all fields
 @app.route("/api/post/update/<int:post_id>", methods=['GET', 'POST'])
 def edit_post(post_id):
     dne = session.query(RentPost).filter_by(id=post_id).scalar() is None
@@ -83,36 +83,32 @@ def search():
     return jsonify(search=[post.serialize() for post in posts])
 
 # Returns a json of posts that contain a filter
-# Returns all posts who have a particular address listed as one of their locations
+# Returns all posts who have a particular address
 @app.route("/api/search/place/<string:place>", methods=['GET'])
 def search_place(place):
     # the in_ method is the wildcard for contains anywhere.
-    places = session.query(RentPost).filter_by(location=place).order_by(RentPost.id).all()
+    places = session.query(RentPost).filter_by(location=place)
+    .order_by(RentPost.id).all()
     return jsonify(place=[post.serialize() for post in places])
 
 # Returns all posts who have a particular word in their post title
 @app.route("/api/search/item/<string:item>", methods=['GET'])
 def search_item(item):
-    # the in_ method is the wildcard for contains anywhere.
-    #  items = session.query(RentPost).filter_by(title=item).order_by(RentPost.id).all()
-    # Testing lenience
     items = session.query(RentPost).filter(RentPost.title.contains(item))
-
     return jsonify(item=[post.serialize() for post in items])
 
 # Add DRY here to do (column, search)
 @app.route("/api/search/<string:column>/<string:value>", methods=['GET'])
 def searchPost(column, value):
-    # WANT TO HAVE A REDIRECT IF COLUMN DNE
-    #  if column dne:
-        #  return redirect(url_for('home'))
     if (column == "description"):
-        results = session.query(RentPost).filter(RentPost.description.contains(value)).all()
+        results = session.query(RentPost).filter
+        (RentPost.description.contains(value)).all()
         return jsonify(results=[post.serialize() for post in results])
 
     elif (column == "id"):
-        result = session.query(RentPost).filter_by(id=value).first()  # Single page by ID
-        if result == None:  # Special Error Handling for Keys
+        result = session.query(RentPost)
+        .filter_by(id=value).first()  # Single page by ID
+        if result is None:  # Special Error Handling for Keys
             return "404-Page Result not found"
         return jsonify(post=result.serialize())
     else:
@@ -130,6 +126,7 @@ def deletepost(post_id):
     session.delete(post_to_delete)
     session.commit()
     return "Deleted ID: " + str(post_id) + ", TITLE: " + post_title
+
 
 if __name__ == "__main__":
     app.run()
