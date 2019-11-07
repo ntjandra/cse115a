@@ -50,6 +50,7 @@ export default function App() {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
+          {/* Pages related to posts */}
           <Route path="/about">
             <About />
           </Route>
@@ -71,6 +72,25 @@ export default function App() {
           <Route path="/delete">
             <Delete />
           </Route>
+
+          {/* Pages related to accounts */}
+          <Route path="/register">
+            <Register />
+          </Route>
+          <Route path="/login">
+            <SignIn />
+          </Route>
+          <Route path="/logout">
+            <LogOut />
+          </Route>
+          <Route path="/profile:profile_id">
+            <ProfilePage />
+          </Route>
+          <Route path="/editprofile:profile_id">
+            <EditProfile />
+          </Route>
+
+          {/* Home */}
           <Route path="/">
             <Home />
           </Route>
@@ -184,7 +204,7 @@ function xhrSend(type, route, data) {
   xhr.send(data);
 
   // This will be called after the response is received
-  xhr.onload = function() {
+  xhr.onload = function () {
     if (xhr.status !== 200) {
       // analyze HTTP status of the response
       console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
@@ -195,7 +215,7 @@ function xhrSend(type, route, data) {
     }
   };
 
-  xhr.onerror = function() {
+  xhr.onerror = function () {
     console.log("Request failed");
     console.log(xhr.status);
   };
