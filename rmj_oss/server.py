@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_login import (LoginManager, login_user, current_user,
-logout_user, login_required)
+                        logout_user, login_required)
 from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
@@ -95,7 +95,8 @@ def search():
 @app.route("/api/search/place/<string:place>", methods=['GET'])
 def search_place(place):
     # the in_ method is the wildcard for contains anywhere.
-    places = session.query(RentPost).filter_by(location=place).order_by(RentPost.id).all()
+    places = (session.query(RentPost).filter_by(location=place)
+            .order_by(RentPost.id).all())
     return jsonify(place=[post.serialize() for post in places])
 
 # Returns all posts who have a particular word in their post title
@@ -111,9 +112,8 @@ def searchPost(column, value):
         results = session.query(RentPost).filter
         (RentPost.description.contains(value)).all()
         return jsonify(results=[post.serialize() for post in results])
-
     elif (column == "id"):
-        result = session.query(RentPost).filter_by(id=value).first()  # Single page by ID
+        result = session.query(RentPost).filter_by(id=value).first()
         if result is None:  # Special Error Handling for Keys
             return "404-Page Result not found"
         return jsonify(post=result.serialize())
@@ -138,7 +138,7 @@ def deletepost(post_id):
 Login Manager creates a session cookie for the user/caller
 It does not store their account_id
 Using Flask Login allows us to check the cookie with
-current_user, which is created upon access 
+current_user, which is created upon access
 Methods
 is_authenticated : Checks if current user is logged in
 is_active : Handles the ban hammer
@@ -148,6 +148,7 @@ Can do some neat stuff like
 if post.author != current_user:
     # Cannot edit file
 """
+
 
 # Route to handle registration
 @app.route("/api/account/register", methods=['GET', 'POST'])
@@ -162,23 +163,22 @@ def register():
     dne = session.query(Account).filter_by(id=user).scalar() is None
     if (dne):
         # Never store passwords in plain text
-        hashed_password = bcrypt.generate_password_hash(form['password']).decode('utf-8')
-        
+        hashed_password = (bcrypt.generate_password_hash(form['password'])
+                            .decode('utf-8'))
+
         # Extract data from form
         username = form['name']
-        password = hashed_password
 
         # Optional Elements
         loc = form['location']
         bio = form['description']
-        
+
         # Add Basic User to database
         user = Account(email=user, name=username, password=hashed_password)
         db.session.add(user)
         db.session.commit()
         return ("200 - OK : Account has been created!")
-    else:
-        return ("404 - OK : Email is Taken")
+    return ("404 - OK : Email is Taken")
 
 
 # Route to handle User Login
@@ -188,7 +188,7 @@ def login():
         return ("Error - User is already logged in")
     form = request.form
     
-    user = Account.query.filter_by(email=form['email']).first()
+    user = session.query(Account).filter_by(email=form['email']).first()
     # Account Authenthication
     if user and bcrypt.check_password_hash(user.password, form['password']):
         login_user(user, remember=form.remember.data)
