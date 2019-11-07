@@ -16,4 +16,4 @@ matrix:
       install:
         - npm install
       script:
-        - npm start
+        - npm run-script build
