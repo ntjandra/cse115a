@@ -26,7 +26,7 @@ class RentPost(Base):
    description = Column(String(250), nullable=False)
    location = Column(String(250))
    contactinfo = Column(String(250))
-   price = Column(String(250))
+   price = Column(Integer())
 
    def serialize(self):
         return {
