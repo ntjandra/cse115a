@@ -16,7 +16,7 @@ class EditForm extends Form {
           <input type="hidden" name="postid" value="1" />
           <input type="text" name="title" />
           <p>Product Description:</p>
-          <textarea name="comment" type="text" name="descr" />
+          <textarea type="text" name="description" />
           <p>Contact Information:</p>
           <input type="text" name="contact" />
           <p>Location:</p>
