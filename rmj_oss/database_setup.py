@@ -30,7 +30,7 @@ class RentPost(Base):
    contactinfo = Column(String(250))
    price = Column(Integer())
 
-   def serialize(self):
+    def serialize(self):
        return {
            'id': self.id,
            'title': self.title,
@@ -41,8 +41,6 @@ class RentPost(Base):
        }
 
 # Account class
-
-
 class Account(Base):
     __tablename__ = 'account'
 
