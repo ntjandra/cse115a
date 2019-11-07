@@ -100,40 +100,6 @@ export default function App() {
   );
 }
 
-/**
- * Just for testing purposes
- */
-function getData() {
-  // 1. Create a new XMLHttpRequest object
-  let xhr = new XMLHttpRequest();
-
-  // 2. Configure it: GET-request for the URL /article/.../load
-  xhr.open("POST", local_host_url, false);
-
-  // 3. Send the request over the network
-  xhr.send();
-
-  // 4. This will be called after the response is received
-  xhr.onload = function () {
-    if (xhr.status !== 200) {
-      // analyze HTTP status of the response
-      console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
-    } else {
-      // show the result
-      console.log(`Done, got ${xhr.response.length} bytes`); // responseText is the server
-      console.log(xhr.response);
-    }
-  };
-
-  xhr.onerror = function () {
-    console.log("Request failed");
-    console.log(xhr.status);
-  };
-
-  console.log(xhr.response, "|", xhr.status);
-  return xhr.response;
-}
-
 function Home() {
   return (
     <div>
