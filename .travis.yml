@@ -6,7 +6,7 @@ matrix:
       install:
         - pip install -r rmj_oss/requirements.txt
       script:
-        - python tests/pep8_style_check.sh # pep 8 style check
+        - bash tests/pep8_style_check.sh # pep 8 style check
 
     - language: node_js
       node_js:
