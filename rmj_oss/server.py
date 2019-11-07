@@ -36,7 +36,9 @@ def home():
 # Given a post's id, checks for existence and then updates all fields w/ the new info
 @app.route("/api/post/update/<int:post_id>", methods=['GET', 'POST'])
 def edit_post(post_id):
-
+    dne = session.query(RentPost).filter_by(id=post_id).scalar() is None
+    if dne:
+        return str('Error - Requested post ID does not exist.')
     form = request.form
     old_post = session.query(RentPost).filter_by(id=post_id).first()
     # Edit Data from form
