@@ -30,15 +30,15 @@ class RentPost(Base):
    contactinfo = Column(String(250))
    price = Column(Integer())
 
-    def serialize(self):
-        return {
-            'id': self.id,
-            'title': self.title,
-            'description': self.description,
-            'location': self.location,
-            'contactinfo': self.contactinfo,
-            'price': self.price,
-        }
+   def serialize(self):
+       return {
+           'id': self.id,
+           'title': self.title,
+           'description': self.description,
+           'location': self.location,
+           'contactinfo': self.contactinfo,
+           'price': self.price,
+       }
 
 # Account class
 
