@@ -11,6 +11,12 @@ import EditForm from "./components/EditForm";
 import PostForm from "./components/CreateForm";
 import SearchForm from "./components/SearchForm.js";
 
+import RegisterAccount from "./components/RegisterAccount"
+import LogIn from "./components/LogIn"
+import LogOut from "./components/LogOut"
+import ProfilePage from "./components/ProfilePage"
+import EditProfile from "./components/EditProfile"
+
 var local_host_url = "http://127.0.0.1:5000/";
 
 /* -------------------------------
@@ -75,19 +81,19 @@ export default function App() {
 
           {/* Pages related to accounts */}
           <Route path="/register">
-            <Register />
+            <RegisterRoute />
           </Route>
           <Route path="/login">
-            <SignIn />
+            <LogInRoute />
           </Route>
           <Route path="/logout">
-            <LogOut />
+            <LogOutRoute />
           </Route>
           <Route path="/profile:profile_id">
-            <ProfilePage />
+            <ProfileRoute />
           </Route>
           <Route path="/editprofile:profile_id">
-            <EditProfile />
+            <EditProfileRoute />
           </Route>
 
           {/* Home */}
@@ -178,6 +184,34 @@ function PostInfo() {
       {/* <button onClick={deletePost}>Delete Post</button> */}
     </div>
   );
+}
+
+/* -------------------------------
+ * Account Pages
+ ------------------------------- */
+ function RegisterRoute() {
+   let registerAct = new RegisterAccount();
+   return registerAct.render();
+ }
+
+ function LogInRoute() {
+   let logIn = new LogIn();
+   return logIn.render();
+ }
+
+ function LogOutRoute() {
+  let logOut = new LogOut();
+  return logOut.render();
+}
+
+function ProfileRoute() {
+  let profilePage = new ProfilePage();
+  return profilePage.render();
+}
+
+function EditProfileRoute() {
+  let editProfile = new EditProfile();
+  return EditProfile.render();
 }
 
 /* -------------------------------
