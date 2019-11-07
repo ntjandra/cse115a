@@ -39,7 +39,8 @@ def home():
         return "Received POST"
     elif request.method == "GET":
         return "Received GET"
-    return "Invalid Method"
+    else:
+        return "Invalid Method"
 
 # Given a post's id, checks for existence and then updates all fields
 @app.route("/api/post/update/<int:post_id>", methods=['GET', 'POST'])
@@ -133,6 +134,7 @@ def deletepost(post_id):
     session.commit()
     return "Deleted ID: " + str(post_id) + ", TITLE: " + post_title
 
+
 # Login API Begins here
 """
 Login Manager creates a session cookie for the user/caller
@@ -149,9 +151,8 @@ if post.author != current_user:
     # Cannot edit file
 """
 
-
 # Route to handle registration
-@app.route("/api/account/register", methods=['GET', 'POST'])
+@app.route("/api/account/register", methods=['POST'])
 def register():
     if current_user.is_authenticated:
         return ("Error - User is already logged in")
@@ -160,7 +161,7 @@ def register():
     user = form['email']
 
     # Need to check for unique email.
-    dne = session.query(Account).filter_by(id=user).scalar() is None
+    dne = session.query(Account).filter_by(user_id=user).scalar() is None
     if (dne):
         # Never store passwords in plain text
         hashed_password = (bcrypt.generate_password_hash(form['password'])
@@ -168,20 +169,34 @@ def register():
 
         # Extract data from form
         username = form['name']
-
-        # Optional Elements
         loc = form['location']
         bio = form['description']
 
         # Add Basic User to database
-        user = Account(email=user, name=username, password=hashed_password)
-        db.session.add(user)
-        db.session.commit()
+        user = Account(email=user, name=username, password=hashed_password,
+                location=loc, description=bio)
+        session.add(user)
+        session.commit()
         return ("200 - OK : Account has been created!")
     return ("404 - OK : Email is Taken")
 
 
 # Route to handle User Login
+"""
+From Flask Login
+flask_login.login_user(user, remember=False, duration=None, force=False, fresh=True)[source]¶
+Logs a user in. You should pass the actual user object to this. If the user’s is_active property is False, they will not be logged in unless force is True.
+
+This will return True if the log in attempt succeeds, and False if it fails (i.e. because the user is inactive).
+
+Parameters:	
+user (object) – The user object to log in.
+remember (bool) – Whether to remember the user after their session expires. Defaults to False.
+duration (datetime.timedelta) – The amount of time before the remember cookie expires. If None the value set in the settings is used. Defaults to None.
+force (bool) – If the user is inactive, setting this to True will log them in regardless. Defaults to False.
+fresh (bool) – setting this to False will log in the user with a session marked as not “fresh”. Defaults to True.
+"""
+
 @app.route("/api/account/login", methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -191,12 +206,11 @@ def login():
     user = session.query(Account).filter_by(email=form['email']).first()
     # Account Authenthication
     if user and bcrypt.check_password_hash(user.password, form['password']):
-        login_user(user, remember=form.remember.data)
-        next_page = request.args.get('next')
+        login_user(user) # Remember me remember=form['remember'])
+        # next_page = request.args.get('next')
         # The next_page sends back a request token that it passed auth
         return ('Login Successful')
-    else:
-        return ('Login Unsuccessful. Please check email and password')
+    return ('Login Unsuccessful. Please check email and password')
 
 # Route to Logout User
 @app.route("/api/account/logout")
@@ -204,6 +218,15 @@ def logout():
     # Handled by Flask-Login, Deletes Session Cookie
     logout_user()
     return "200 OK-- Logged out"
+
+# Route to see if user is logged
+@app.route("/api/account/auth/")
+@login_required
+def isLoggedin():
+    if current_user.is_authenticated:
+        return ("User logged in")
+    return("Please log in")
+
 
 if __name__ == "__main__":
     app.run()
