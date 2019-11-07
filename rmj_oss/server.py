@@ -1,10 +1,8 @@
 from database_setup import Base, RentPost
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, jsonify
 from flask_cors import CORS
-import sys
-import pprint
 
 app = Flask(__name__)
 CORS(app)
@@ -27,31 +25,36 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 # Home Route - Returns recent posts
-@app.route("/api/edit-post", methods=['GET', 'POST'])
+@app.route("/api/default", methods=['GET', 'POST'])
 def home():
     if request.method == "POST":
         return "Received POST"
     elif request.method == "GET":
-	    return "Received GET"
+        return "Received GET"
+    return "Invalid Method"
 
-# Given a post's id, checks for existence and then updates all fields w/ the new info 
-@app.route("/api/edit-post", methods=['GET', 'POST'])
-def editpost():
-    post_id = request.form["postid"]
-    post_to_edit              = session.query(RentPost).filter_by(id=post_id).one()
-    post_to_edit.title        = request.form['title']
-    post_to_edit.description  = request.form['descr']
-    post_to_edit.location     = request.form['location']
-    post_to_edit.contactinfo  = request.form['contact']
-    post_to_edit.price        = request.form['price']
+# Given a post's id, checks for existence and then updates all fields w/ the new info
+@app.route("/api/post/update/<int:post_id>", methods=['GET', 'POST'])
+def edit_post(post_id):
+
+    form = request.form
+
+    # Edit Data from form
+    post_to_edit              = session.query(RentPost).filter_by(id=post_id).first()
+    post_to_edit.title        = form['title']
+    post_to_edit.description  = form['descr']
+    post_to_edit.location     = form['location']
+    post_to_edit.contactinfo  = form['contact']
+    post_to_edit.price        = form['price']
+    
     session.commit()
     return "Edited ID: " + post_id + ", TITLE: " + post_to_edit.title
 
 # Adds new RentPosts to the database
-@app.route("/api/create-post", methods=['POST'])
+@app.route("/api/post/new", methods=['POST'])
 def create_post():
 
-    form = request.form
+    # The Backend should be Detached from the Frontend
 
     # Extract data from form
     title = form['title']
@@ -68,23 +71,7 @@ def create_post():
     session.commit()
     # print('ID: ' + str(new_post.id)) # Prints this post's ID
 
-    return str(new_post.id)
-
-# Returns a post matching the given id, if post exists
-@app.route("/api/get-post", methods=['GET', 'POST'])
-def get_post():
-    # Get post_id as an integer
-    post_id = request.form["post_id"]
-    if not representsInt(post_id):
-        return str('Error - Invalid post ID format. Must be an integer.')
-    post_id = int(post_id)
-
-    # Existence check
-    dne = session.query(RentPost).filter_by(id=post_id).scalar() is None
-    if dne:
-        return str('Error - Requested post ID does not exist.')
-    post = session.query(RentPost).filter_by(id=post_id).one()
-    return jsonify(post.serialize())
+    return str(new_post.id + "200 OK Success")
 
 # Returns a json contaiining the default of all posts.
 @app.route("/api/search/", methods=['GET'])

@@ -19,16 +19,16 @@ Base = declarative_base()
 
 # RentPost, extends the Base Class.
 class RentPost(Base):
-    __tablename__ = 'rentpost'
+   __tablename__ = 'rentpost'
 
-    id = Column(Integer, autoincrement=True, primary_key=True)
-    title = Column(String(250), nullable=False)
-    description = Column(String(250), nullable=False)
-    location = Column(String(250))
-    contactinfo = Column(String(250))
-    price = Column(Integer())
-    
-    def serialize(self):
+   id = Column(Integer, autoincrement=True, primary_key=True)
+   title = Column(String(250), nullable=False)
+   description = Column(String(250), nullable=False)
+   location = Column(String(250))
+   contactinfo = Column(String(250))
+   price = Column(Integer())
+
+   def serialize(self):
         return {
             'id': self.id,
             'title': self.title,
