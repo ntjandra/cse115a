@@ -1,5 +1,7 @@
 ## cse115a
 
+![travis build](https://travis-ci.org/ntjandra/cse115a.svg?branch=master)
+
 ### First run
 
 Go to rentmyjunk/ and run `npm install`. It should generate node_modules directory.
