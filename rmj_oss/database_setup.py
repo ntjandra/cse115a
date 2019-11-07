@@ -47,9 +47,9 @@ class Account(Base):
 
     email = Column(String(250), primary_key=True)
     name = Column(String(250), nullable=False)
-    description = Column(String, nullable=False)
-    location = Column(String(250), nullable=False)
-    password = Column(String(20), nullable=False)
+    description = Column(String, nullable=True)
+    location = Column(String(250), nullable=True)
+    password = Column(String(32), nullable=False)
 
     def serialize(self):
         return {
@@ -59,7 +59,25 @@ class Account(Base):
             'location': self.location,
             'password': self.password,
         }
-
+    # Session Token for 2 Factor with expiry
+    """
+    # Required Import
+    from itsdangerous import 
+    TimedJSONWebSignatureSerializer as Serializer
+    
+    def get_reset_token(self, expires_sec=1800):
+    s = Serializer(app.config['SECRET_KEY'], expires_sec)
+    return s.dumps({'user_id': self.id}).decode('utf-8')
+    
+    @staticmethod
+    def verify_reset_token(token):
+        s = Serializer(app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token)['user_id']
+        except:
+            return None
+        return User.query.get(user_id)
+    """
 
 # Creates a create_engine instance at the bottom of the file
 engine = create_engine('sqlite:///site.db')
