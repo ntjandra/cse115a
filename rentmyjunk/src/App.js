@@ -153,10 +153,7 @@ function PostInfo() {
   let { post_id } = useParams();
   let deletePostBtn = new DeletePostButton(post_id, local_host_url);
 
-  // Put post_id in XHR-sendable form
-  const data = new FormData();
-  data.set("post_id", post_id);
-  var post_data = xhrSend("GET", "api/search/id/" + post_id, data);
+  var post_data = xhrSend("GET", "api/search/id/" + post_id, null);
 
   // If post doesn't exist, display error
   if (post_data === "404-Page Result not found") {
@@ -173,7 +170,7 @@ function PostInfo() {
       <p>Contact Info: {post.contactinfo}</p>
       <p>Location: {post.location}</p>
       <p>Price: {post.price}</p>
-      { deletePostBtn.render() }
+      {deletePostBtn.render()}
     </div>
   );
 }
@@ -181,17 +178,17 @@ function PostInfo() {
 /* -------------------------------
  * Account Pages
  ------------------------------- */
- function RegisterRoute() {
-   let registerAct = new RegisterAccount();
-   return registerAct.render();
- }
+function RegisterRoute() {
+  let registerAct = new RegisterAccount();
+  return registerAct.render();
+}
 
- function LogInRoute() {
-   let logIn = new LogIn();
-   return logIn.render();
- }
+function LogInRoute() {
+  let logIn = new LogIn();
+  return logIn.render();
+}
 
- function LogOutRoute() {
+function LogOutRoute() {
   let logOut = new LogOut();
   return logOut.render();
 }
