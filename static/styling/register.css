@@ -1,0 +1,47 @@
+body {
+  background-color: #ffefcc;
+}
+
+form {
+  margin: 8px 5px 5px 545px;
+  font-family: "sans-serif";
+}
+
+.form-group {
+  margin: 0px 0px 10px 0px;
+}
+
+.buttonSign {
+  background-color: #4caf50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0 0 675px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.g-recaptcha {
+  margin: 8px 0 0 50px;
+}
+
+input[type="text"] {
+  background-color: white;
+  width: 50%;
+  border-radius: 5px 0 0 5px;
+  padding: 12px 40px;
+}
+
+input[type="email"] {
+  background-color: white;
+  width: 50%;
+  border-radius: 5px 0 0 5px;
+  padding: 12px 53px;
+}
+
+input[type="password"] {
+  background-color: white;
+  width: 50%;
+  border-radius: 5px 0 0 5px;
+  padding: 12px;
+}

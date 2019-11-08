@@ -1,59 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>Register Page</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <head>
+    <title>Register Page</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/static/styling/register.css" />
+    <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script-->
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-</head>
-<style>
-.center_div{
-    margin: 0 auto;
-    width:30% /* value of your choice which suits your alignment */
-}
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  </head>
 
-button {
-  background-color: #4CAF50;
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-}
-</style>
-<body>
-
-<div class="container center_div">
-  <h1 align="center"><font face="Trebuchet MS"><b>Create An Account</b></font></h1>
-  <br>
-  <form action="/action_page.php">
-    <div class="form-group">
-      <label for="usrname">Username:</label>
-      <input type="text" class="form-control" id="usrname" placeholder="Enter username" style="width: 250px" name="usrname">
+  <body>
+    <div class="container_center_div">
+      <h1 align="center">
+        <font face="Trebuchet MS"><b>Create An Account</b></font>
+      </h1>
+      <br />
+      <form action="/action_page.php">
+        <div class="form-group">
+          <label for="usrname">Username:</label>
+          <input
+            type="text"
+            class="form-control"
+            id="usrname"
+            placeholder="Enter username"
+            style="width: 250px"
+            name="usrname"
+          />
+        </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            placeholder="Enter email"
+            style="width: 250px"
+            name="email"
+          />
+        </div>
+        <div class="form-group">
+          <label for="pwd">Password:</label>
+          <input
+            type="password"
+            class="form-control"
+            id="pwd"
+            placeholder="Enter password"
+            style="width: 250px"
+            name="pwd"
+          />
+        </div>
+        <div class="form-group">
+          <label for="pwdConf">Confirm Password:</label>
+          <input
+            type="password"
+            class="form-control"
+            id="pwdConf"
+            placeholder="Confirm password"
+            style="width: 250px"
+            name="pwdConf"
+          />
+        </div>
+        <form action="?" method="POST">
+          <div
+            class="g-recaptcha"
+            data-sitekey="6Lf0_b4UAAAAAKZX3E_Ec_bqVre6B6Xpn_3Vfd-b"
+          ></div>
+          <br />
+        </form>
+        <button class="buttonSign" type="submit" style="width:150px">
+          Sign Up
+        </button>
+      </form>
     </div>
-    <div class="form-group">
-      <label for="email">Email:</label>
-      <input type="email" class="form-control" id="email" placeholder="Enter email" style="width: 250px" name="email">
-    </div>
-    <div class="form-group">
-      <label for="pwd">Password:</label>
-      <input type="password" class="form-control" id="pwd" placeholder="Enter password" style="width: 250px" name="pwd">
-    </div>
-    <div class="form-group">
-      <label for="pwdConf">Confirm Password:</label>
-      <input type="password" class="form-control" id="pwdConf" placeholder="Confirm password" style="width: 250px" name="pwdConf">
-    </div>
-	<form action="?" method="POST">
-      <div class="g-recaptcha" data-sitekey="6Lf0_b4UAAAAAKZX3E_Ec_bqVre6B6Xpn_3Vfd-b"></div>
-      <br/>
-    </form>
-    <button type="submit" style="width:150px">Sign Up</button>
-  </form>
-</div>
-
-</body>
+  </body>
 </html>
