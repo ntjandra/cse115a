@@ -45,9 +45,6 @@ export default function App() {
               <Link to="/search">Search</Link>
             </li>
             <li>
-              <Link to="/delete">Delete</Link>
-            </li>
-            <li>
               <Link to="/editpost">Edit</Link>
             </li>
           </ul>
@@ -74,9 +71,6 @@ export default function App() {
           </Route>
           <Route path="/search">
             <Search />
-          </Route>
-          <Route path="/delete">
-            <Delete />
           </Route>
 
           {/* Pages related to accounts */}
@@ -122,10 +116,6 @@ function Search() {
   return form.render();
 }
 
-function Delete() {
-  return <button id="delete">Delete Post</button>;
-}
-
 /**
  * About Component
  */
@@ -149,7 +139,7 @@ function EditPost() {
  * Create Post Component
  */
 function CreatePost() {
-  let form = new PostForm(local_host_url, '/api/create-post');
+  let form = new PostForm(local_host_url, '/api/post/new');
   return form.render();
 }
 
@@ -160,20 +150,18 @@ function CreatePost() {
  */
 function PostInfo() {
   let { post_id } = useParams();
+  let editPostBtn = new EditPostButton(post_id, local_host_url);
 
-  // Put post_id in XHR-sendable form
-  const data = new FormData();
-  data.set("post_id", post_id);
-  var post_data = xhrSend("POST", "api/get-post", data);
+  var post_data = xhrSend("GET", "api/search/id/" + post_id, null);
 
   // If post doesn't exist, display error
-  if (post_data === "Error - Requested post ID does not exist.") {
+  if (post_data === "404-Page Result not found") {
     return <h1>{post_data}</h1>;
   }
 
-  // Post exists
-  var post = JSON.parse(post_data);
-  // console.log(post);
+  // // Post exists
+  var post = JSON.parse(post_data).post;
+  console.log(post);
   return (
     <div>
       <h1>{post.title}</h1>
@@ -181,6 +169,7 @@ function PostInfo() {
       <p>Contact Info: {post.contactinfo}</p>
       <p>Location: {post.location}</p>
       <p>Price: {post.price}</p>
+      { editPostBtn.render() }
     </div>
   );
 }
@@ -256,4 +245,3 @@ function xhrSend(type, route, data) {
   console.log(xhr.response, "|", xhr.status);
   return xhr.response;
 }
-
