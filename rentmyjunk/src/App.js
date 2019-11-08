@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 
 import EditForm from "./components/EditForm";
-import CreateForm from "./components/CreateForm";
+import PostForm from "./components/CreateForm";
 import SearchForm from "./components/SearchForm.js";
 import RegisterForm from "./components/RegisterForm.js";
 
@@ -168,7 +168,7 @@ function EditPost() {
  * Create Post Component
  */
 function CreatePost() {
-  let form = new CreateForm(local_host_url, "/api/create-post");
+  let form = new PostForm(local_host_url, "/api/create-post");
   return form.render();
 }
 
