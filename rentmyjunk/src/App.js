@@ -130,7 +130,7 @@ function Users() {
  */
 function EditPost() {
   let { post_id } = useParams();
-  let form = new EditForm(local_host_url, "/api/post/update/" + post_id);
+  let form = new EditForm(post_id, local_host_url, "/api/post/update/" + post_id);
   return form.render();
 }
 

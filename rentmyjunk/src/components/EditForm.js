@@ -4,6 +4,19 @@ import Form from "./Form";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class EditForm extends Form {
+
+  /**
+   * @param {Integer} post_id ID of the post to be edited
+   * @param {string} url base url of the server (API),
+   * @param {string} route route where the request should be sent,
+   * @param {boolean} get False by default. If true, the request
+   *      method used will be GET, POST otherwise.
+   */
+  constructor(post_id, url, route, get = false) {
+    super(url, route);
+    this.post_id = post_id;
+  }
+
   render() {
     return (
       <div className="col-lg-6 offset-2">
@@ -35,6 +48,13 @@ class EditForm extends Form {
         </form>
       </div>
     );
+  }
+
+  /**
+   * Redirects to newly created post page upon a successful post creation
+   */
+  onSuccessResponse(xhr) {
+    window.location.pathname = "/post" + this.post_id;
   }
 }
 
