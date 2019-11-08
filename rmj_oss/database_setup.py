@@ -41,7 +41,7 @@ class Account(Base, UserMixin):  # Need to add UserMixin
 
     # Overload UserMixin
     def get_id(self):
-           return (self.user_id)
+        return (self.user_id)
 
     # Session Token for 2 Factor with expiry
     """

@@ -37,10 +37,9 @@ session = DBSession()
 def home():
     if request.method == "POST":
         return "Received POST"
-    elif request.method == "GET":
+    if request.method == "GET":
         return "Received GET"
-    else:
-        return "Invalid Method"
+    return "Invalid Method"
 
 # Given a post's id, checks for existence and then updates all fields
 @app.route("/api/post/update/<int:post_id>", methods=['GET', 'POST'])
@@ -113,13 +112,12 @@ def searchPost(column, value):
         results = session.query(RentPost).filter
         (RentPost.description.contains(value)).all()
         return jsonify(results=[post.serialize() for post in results])
-    elif (column == "id"):
+    if (column == "id"):
         result = session.query(RentPost).filter_by(id=value).first()
         if result is None:  # Special Error Handling for Keys
             return "404-Page Result not found"
         return jsonify(post=result.serialize())
-    else:
-        return "404-Page not Found"
+    return "404-Page not Found"
 
 # Given a post's id, checks for existence and then deletes post
 @app.route("/api/post/delete/<int:post_id>", methods=['POST'])
