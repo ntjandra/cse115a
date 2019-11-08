@@ -73,9 +73,6 @@ export default function App() {
           <Route path="/search">
             <Search />
           </Route>
-          <Route path="/delete">
-            <Delete />
-          </Route>
 
           {/* Pages related to accounts */}
           <Route path="/register">
@@ -143,7 +140,7 @@ function EditPost() {
  * Create Post Component
  */
 function CreatePost() {
-  let form = new PostForm(local_host_url, '/api/create-post');
+  let form = new PostForm(local_host_url, '/api/post/new');
   return form.render();
 }
 
@@ -159,16 +156,16 @@ function PostInfo() {
   // Put post_id in XHR-sendable form
   const data = new FormData();
   data.set("post_id", post_id);
-  var post_data = xhrSend("POST", "api/get-post", data);
+  var post_data = xhrSend("GET", "api/search/id/" + post_id, data);
 
   // If post doesn't exist, display error
-  if (post_data === "Error - Requested post ID does not exist.") {
+  if (post_data === "404-Page Result not found") {
     return <h1>{post_data}</h1>;
   }
 
-  // Post exists
-  var post = JSON.parse(post_data);
-  // console.log(post);
+  // // Post exists
+  var post = JSON.parse(post_data).post;
+  console.log(post);
   return (
     <div>
       <h1>{post.title}</h1>
