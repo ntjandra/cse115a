@@ -1,0 +1,5 @@
+pep8
+flask
+flask_cors
+sqlalchemy
+pycodestyle

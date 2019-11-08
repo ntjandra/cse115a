@@ -12,6 +12,12 @@ import PostForm from "./components/CreateForm";
 import SearchForm from "./components/SearchForm.js";
 import DeletePostButton from "./components/delete-post-button/DeletePostButton"
 
+import RegisterAccount from "./components/RegisterAccount"
+import LogIn from "./components/LogIn"
+import LogOut from "./components/LogOut"
+import ProfilePage from "./components/ProfilePage"
+import EditProfile from "./components/EditProfile"
+
 var local_host_url = "http://127.0.0.1:5000/";
 
 /* -------------------------------
@@ -48,6 +54,7 @@ export default function App() {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
+          {/* Pages related to posts */}
           <Route path="/about">
             <About />
           </Route>
@@ -66,6 +73,28 @@ export default function App() {
           <Route path="/search">
             <Search />
           </Route>
+          <Route path="/delete">
+            <Delete />
+          </Route>
+
+          {/* Pages related to accounts */}
+          <Route path="/register">
+            <RegisterRoute />
+          </Route>
+          <Route path="/login">
+            <LogInRoute />
+          </Route>
+          <Route path="/logout">
+            <LogOutRoute />
+          </Route>
+          <Route path="/profile:profile_id">
+            <ProfileRoute />
+          </Route>
+          <Route path="/editprofile:profile_id">
+            <EditProfileRoute />
+          </Route>
+
+          {/* Home */}
           <Route path="/">
             <Home />
           </Route>
@@ -153,6 +182,34 @@ function PostInfo() {
 }
 
 /* -------------------------------
+ * Account Pages
+ ------------------------------- */
+ function RegisterRoute() {
+   let registerAct = new RegisterAccount();
+   return registerAct.render();
+ }
+
+ function LogInRoute() {
+   let logIn = new LogIn();
+   return logIn.render();
+ }
+
+ function LogOutRoute() {
+  let logOut = new LogOut();
+  return logOut.render();
+}
+
+function ProfileRoute() {
+  let profilePage = new ProfilePage();
+  return profilePage.render();
+}
+
+function EditProfileRoute() {
+  let editProfile = new EditProfile();
+  return editProfile.render();
+}
+
+/* -------------------------------
    XHR Functions
 ------------------------------- */
 
@@ -176,7 +233,7 @@ function xhrSend(type, route, data) {
   xhr.send(data);
 
   // This will be called after the response is received
-  xhr.onload = function() {
+  xhr.onload = function () {
     if (xhr.status !== 200) {
       // analyze HTTP status of the response
       console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
@@ -187,7 +244,7 @@ function xhrSend(type, route, data) {
     }
   };
 
-  xhr.onerror = function() {
+  xhr.onerror = function () {
     console.log("Request failed");
     console.log(xhr.status);
   };

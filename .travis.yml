@@ -1,0 +1,20 @@
+matrix:
+  include:
+    - language: python
+      python:
+        - 3.6
+      install:
+        - pip install -r rmj_oss/requirements.txt
+      script:
+        - bash tests/pep8_style_check.sh # pep 8 style check
+
+    - language: node_js
+      node_js:
+        - 12.13
+      before_install:
+        - cd rentmyjunk
+      install:
+        - npm install
+        - npm install react-bootstrap bootstrap
+      script:
+        - npm run-script build

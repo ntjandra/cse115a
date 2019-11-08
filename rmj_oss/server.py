@@ -1,10 +1,8 @@
-from database_setup import Base, RentPost
+from database_setup import Base, RentPost, Account
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
-import sys
-import pprint
 
 app = Flask(__name__)
 CORS(app)
@@ -27,30 +25,37 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 # Home Route - Returns recent posts
-@app.route("/api/edit-post", methods=['GET', 'POST'])
+@app.route("/api/default", methods=['GET', 'POST'])
 def home():
     if request.method == "POST":
         return "Received POST"
     elif request.method == "GET":
-	    return "Received GET"
+        return "Received GET"
+    return "Invalid Method"
 
-# Given a post's id, checks for existence and then updates all fields w/ the new info 
-@app.route("/api/edit-post", methods=['GET', 'POST'])
-def editpost():
-    post_id = request.form["postid"]
-    post_to_edit              = session.query(RentPost).filter_by(id=post_id).one()
-    post_to_edit.title        = request.form['title']
-    post_to_edit.description  = request.form['descr']
-    post_to_edit.location     = request.form['location']
-    post_to_edit.contactinfo  = request.form['contact']
-    post_to_edit.price        = request.form['price']
+# Given a post's id, checks for existence and then updates all fields
+@app.route("/api/post/update/<int:post_id>", methods=['GET', 'POST'])
+def edit_post(post_id):
+    dne = session.query(RentPost).filter_by(id=post_id).scalar() is None
+    if dne:
+        return str('Error - Requested post ID does not exist.')
+    form = request.form
+    old_post = session.query(RentPost).filter_by(id=post_id).first()
+    # Edit Data from form
+    old_post.title = form['title']
+    old_post.description = form['description']
+    old_post.location = form['location']
+    old_post.contactinfo = form['contact']
+    old_post.price = form['price']
+
     session.commit()
-    return "Edited ID: " + post_id + ", TITLE: " + post_to_edit.title
+    return "Edited ID: " + str(post_id) + ", TITLE: " + old_post.title
 
 # Adds new RentPosts to the database
-@app.route("/api/create-post", methods=['POST'])
+@app.route("/api/post/new", methods=['POST'])
 def create_post():
 
+    # The Backend should be Detached from the Frontend
     form = request.form
 
     # Extract data from form
@@ -68,23 +73,7 @@ def create_post():
     session.commit()
     print('ID: ' + str(new_post.id)) # Prints this post's ID
 
-    return str(new_post.id)
-
-# Returns a post matching the given id, if post exists
-@app.route("/api/get-post", methods=['GET', 'POST'])
-def get_post():
-    # Get post_id as an integer
-    post_id = request.form["post_id"]
-    if not representsInt(post_id):
-        return str('Error - Invalid post ID format. Must be an integer.')
-    post_id = int(post_id)
-
-    # Existence check
-    dne = session.query(RentPost).filter_by(id=post_id).scalar() is None
-    if dne:
-        return str('Error - Requested post ID does not exist.')
-    post = session.query(RentPost).filter_by(id=post_id).one()
-    return jsonify(post.serialize())
+    return str(new_post.id) + " 200 OK Success"
 
 # Returns a json contaiining the default of all posts.
 @app.route("/api/search/", methods=['GET'])
@@ -94,46 +83,40 @@ def search():
     return jsonify(search=[post.serialize() for post in posts])
 
 # Returns a json of posts that contain a filter
-# Returns all posts who have a particular address listed as one of their locations
+# Returns all posts who have a particular address
 @app.route("/api/search/place/<string:place>", methods=['GET'])
 def search_place(place):
     # the in_ method is the wildcard for contains anywhere.
-    places = session.query(RentPost).filter_by(location=place).order_by(RentPost.id).all()
+    places = session.query(RentPost).filter_by(location=place)
+    .order_by(RentPost.id).all()
     return jsonify(place=[post.serialize() for post in places])
 
 # Returns all posts who have a particular word in their post title
 @app.route("/api/search/item/<string:item>", methods=['GET'])
 def search_item(item):
-    # the in_ method is the wildcard for contains anywhere.
-    #  items = session.query(RentPost).filter_by(title=item).order_by(RentPost.id).all()
-    # Testing lenience
     items = session.query(RentPost).filter(RentPost.title.contains(item))
-
     return jsonify(item=[post.serialize() for post in items])
 
 # Add DRY here to do (column, search)
 @app.route("/api/search/<string:column>/<string:value>", methods=['GET'])
 def searchPost(column, value):
-    # WANT TO HAVE A REDIRECT IF COLUMN DNE
-    #  if column dne:
-        #  return redirect(url_for('home'))
     if (column == "description"):
-        results = session.query(RentPost).filter(RentPost.description.contains(value)).all()
+        results = session.query(RentPost).filter
+        (RentPost.description.contains(value)).all()
         return jsonify(results=[post.serialize() for post in results])
 
     elif (column == "id"):
-        result = session.query(RentPost).filter_by(id=value).first()  # Single page by ID
-        if result == None:  # Special Error Handling for Keys
+        result = session.query(RentPost)
+        .filter_by(id=value).first()  # Single page by ID
+        if result is None:  # Special Error Handling for Keys
             return "404-Page Result not found"
         return jsonify(post=result.serialize())
     else:
         return "404-Page not Found"
 
 # Given a post's id, checks for existence and then deletes post
-@app.route("/api/delete-post", methods=['POST'])
-def deletepost():
-    post_id = request.form["post_id"]
-    
+@app.route("/api/post/delete/<int:post_id>", methods=['POST'])
+def deletepost(post_id):
     # Existence check
     dne = session.query(RentPost).filter_by(id=post_id).scalar() is None
     if dne:
@@ -142,7 +125,8 @@ def deletepost():
     post_title = post_to_delete.title
     session.delete(post_to_delete)
     session.commit()
-    return "Deleted ID: " + post_id + ", TITLE: " + post_title
+    return "Deleted ID: " + str(post_id) + ", TITLE: " + post_title
+
 
 if __name__ == "__main__":
     app.run()
