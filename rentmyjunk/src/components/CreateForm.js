@@ -42,7 +42,6 @@ class PostForm extends Form {
      * Redirects to newly created post page upon a successful post creation
      */
     onSuccessResponse(xhr) {
-        console.log("overwritten")
         window.location.pathname = "/post" + xhr.responseText;
     }
 }
