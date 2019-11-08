@@ -73,7 +73,7 @@ def create_post():
     session.commit()
     print('ID: ' + str(new_post.id)) # Prints this post's ID
 
-    return str(new_post.id) + " 200 OK Success"
+    return str(new_post.id)
 
 # Returns a json contaiining the default of all posts.
 @app.route("/api/search/", methods=['GET'])
