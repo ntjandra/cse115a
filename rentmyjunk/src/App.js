@@ -8,14 +8,9 @@ import {
 } from "react-router-dom";
 
 import EditForm from "./components/EditForm";
-import PostForm from "./components/CreateForm";
+import CreateForm from "./components/CreateForm";
 import SearchForm from "./components/SearchForm.js";
-
-import RegisterAccount from "./components/RegisterAccount"
-import LogIn from "./components/LogIn"
-import LogOut from "./components/LogOut"
-import ProfilePage from "./components/ProfilePage"
-import EditProfile from "./components/EditProfile"
+import RegisterForm from "./components/RegisterForm.js";
 
 var local_host_url = "http://127.0.0.1:5000/";
 
@@ -50,13 +45,15 @@ export default function App() {
             <li>
               <Link to="/editpost">Edit</Link>
             </li>
+            <li>
+              <Link to="/register">Register</Link>
+            </li>
           </ul>
         </nav>
 
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          {/* Pages related to posts */}
           <Route path="/about">
             <About />
           </Route>
@@ -75,28 +72,12 @@ export default function App() {
           <Route path="/search">
             <Search />
           </Route>
+          <Route path="/register">
+            <Register />
+          </Route>
           <Route path="/delete">
             <Delete />
           </Route>
-
-          {/* Pages related to accounts */}
-          <Route path="/register">
-            <RegisterRoute />
-          </Route>
-          <Route path="/login">
-            <LogInRoute />
-          </Route>
-          <Route path="/logout">
-            <LogOutRoute />
-          </Route>
-          <Route path="/profile:profile_id">
-            <ProfileRoute />
-          </Route>
-          <Route path="/editprofile:profile_id">
-            <EditProfileRoute />
-          </Route>
-
-          {/* Home */}
           <Route path="/">
             <Home />
           </Route>
@@ -106,12 +87,50 @@ export default function App() {
   );
 }
 
+/**
+ * Just for testing purposes
+ */
+function getData() {
+  // 1. Create a new XMLHttpRequest object
+  let xhr = new XMLHttpRequest();
+
+  // 2. Configure it: GET-request for the URL /article/.../load
+  xhr.open("POST", local_host_url, false);
+
+  // 3. Send the request over the network
+  xhr.send();
+
+  // 4. This will be called after the response is received
+  xhr.onload = function() {
+    if (xhr.status !== 200) {
+      // analyze HTTP status of the response
+      console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
+    } else {
+      // show the result
+      console.log(`Done, got ${xhr.response.length} bytes`); // responseText is the server
+      console.log(xhr.response);
+    }
+  };
+
+  xhr.onerror = function() {
+    console.log("Request failed");
+    console.log(xhr.status);
+  };
+
+  console.log(xhr.response, "|", xhr.status);
+  return xhr.response;
+}
+
 function Home() {
+  var myStatus = getData();
+
   return (
     <div>
       <h2>Homes</h2>
       <div>
-        content
+        {myStatus}
+        <br />
+        Woah
       </div>
     </div>
   );
@@ -149,10 +168,14 @@ function EditPost() {
  * Create Post Component
  */
 function CreatePost() {
-  let form = new PostForm(local_host_url, '/api/create-post');
+  let form = new CreateForm(local_host_url, "/api/create-post");
   return form.render();
 }
 
+function Register() {
+  let form = new RegisterForm(local_host_url, "/api/account/register");
+  return form.render();
+}
 /**
  * Displays info for specific post, by ID
  *
@@ -181,36 +204,9 @@ function PostInfo() {
       <p>Contact Info: {post.contactinfo}</p>
       <p>Location: {post.location}</p>
       <p>Price: {post.price}</p>
+      {/* <button onClick={deletePost}>Delete Post</button> */}
     </div>
   );
-}
-
-/* -------------------------------
- * Account Pages
- ------------------------------- */
- function RegisterRoute() {
-   let registerAct = new RegisterAccount();
-   return registerAct.render();
- }
-
- function LogInRoute() {
-   let logIn = new LogIn();
-   return logIn.render();
- }
-
- function LogOutRoute() {
-  let logOut = new LogOut();
-  return logOut.render();
-}
-
-function ProfileRoute() {
-  let profilePage = new ProfilePage();
-  return profilePage.render();
-}
-
-function EditProfileRoute() {
-  let editProfile = new EditProfile();
-  return editProfile.render();
 }
 
 /* -------------------------------
@@ -237,7 +233,7 @@ function xhrSend(type, route, data) {
   xhr.send(data);
 
   // This will be called after the response is received
-  xhr.onload = function () {
+  xhr.onload = function() {
     if (xhr.status !== 200) {
       // analyze HTTP status of the response
       console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
@@ -248,7 +244,7 @@ function xhrSend(type, route, data) {
     }
   };
 
-  xhr.onerror = function () {
+  xhr.onerror = function() {
     console.log("Request failed");
     console.log(xhr.status);
   };
@@ -257,3 +253,12 @@ function xhrSend(type, route, data) {
   return xhr.response;
 }
 
+/**
+ *  Calls xhr for deleting posts
+ * @param {Integer} post_id - Integer, correlates to an existing RentPost's id
+ */
+function deletePost(post_id) {
+  const data = new FormData();
+  data.set("post_id", post_id);
+  return xhrSend("POST", "api/deletepost", data);
+}
