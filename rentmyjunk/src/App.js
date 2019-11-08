@@ -10,6 +10,7 @@ import {
 import EditForm from "./components/EditForm";
 import PostForm from "./components/CreateForm";
 import SearchForm from "./components/SearchForm.js";
+import EditPostButton from "./components/edit-post-button/EditPostButton";
 
 import RegisterAccount from "./components/RegisterAccount"
 import LogIn from "./components/LogIn"
@@ -44,9 +45,6 @@ export default function App() {
             <li>
               <Link to="/search">Search</Link>
             </li>
-            <li>
-              <Link to="/editpost">Edit</Link>
-            </li>
           </ul>
         </nav>
 
@@ -60,7 +58,7 @@ export default function App() {
           <Route path="/users">
             <Users />
           </Route>
-          <Route path="/editpost">
+          <Route path="/editpost:post_id">
             <EditPost />
           </Route>
           <Route path="/post:post_id">
@@ -131,7 +129,8 @@ function Users() {
  * Edit Post Component
  */
 function EditPost() {
-  let form = new EditForm(local_host_url, "/api/edit-post");
+  let { post_id } = useParams();
+  let form = new EditForm(local_host_url, "/api/post/update/" + post_id);
   return form.render();
 }
 
@@ -150,7 +149,7 @@ function CreatePost() {
  */
 function PostInfo() {
   let { post_id } = useParams();
-  let editPostBtn = new EditPostButton(post_id, local_host_url);
+  let editPostBtn = new EditPostButton(post_id);
 
   var post_data = xhrSend("GET", "api/search/id/" + post_id, null);
 
