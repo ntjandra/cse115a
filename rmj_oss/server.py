@@ -71,9 +71,9 @@ def create_post():
 
     session.add(new_post)
     session.commit()
-    # print('ID: ' + str(new_post.id)) # Prints this post's ID
+    print('ID: ' + str(new_post.id))  # Prints this post's ID
 
-    return str(new_post.id) + " 200 OK Success"
+    return str(new_post.id)
 
 # Returns a json contaiining the default of all posts.
 @app.route("/api/search/", methods=['GET'])
@@ -87,8 +87,8 @@ def search():
 @app.route("/api/search/place/<string:place>", methods=['GET'])
 def search_place(place):
     # the in_ method is the wildcard for contains anywhere.
-    places = session.query(RentPost).filter_by(location=place).\
-             order_by(RentPost.id).all()
+    places = session.query(RentPost).filter_by(
+        location=place).order_by(RentPost.id).all()
     return jsonify(place=[post.serialize() for post in places])
 
 # Returns all posts who have a particular word in their post title
@@ -106,8 +106,8 @@ def searchPost(column, value):
         return jsonify(results=[post.serialize() for post in results])
 
     elif (column == "id"):
-        # Single page by ID
-        result = session.query(RentPost).filter_by(id=value).first()
+        result = session.query(RentPost).filter_by(
+            id=value).first()  # Single page by ID
         if result is None:  # Special Error Handling for Keys
             return "404-Page Result not found"
         return jsonify(post=result.serialize())
