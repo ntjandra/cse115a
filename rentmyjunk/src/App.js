@@ -10,6 +10,7 @@ import {
 import EditForm from "./components/EditForm";
 import PostForm from "./components/CreateForm";
 import SearchForm from "./components/SearchForm.js";
+import RegisterForm from "./components/RegisterForm.js"
 
 import RegisterAccount from "./components/RegisterAccount"
 import LogIn from "./components/LogIn"
@@ -50,6 +51,9 @@ export default function App() {
             <li>
               <Link to="/editpost">Edit</Link>
             </li>
+            <li>
+              <Link to="/registerAccount">Register</Link>
+            </li>
           </ul>
         </nav>
 
@@ -82,6 +86,9 @@ export default function App() {
           {/* Pages related to accounts */}
           <Route path="/register">
             <RegisterRoute />
+          </Route>
+          <Route path="/registerAccount">
+            <Register />
           </Route>
           <Route path="/login">
             <LogInRoute />
@@ -150,6 +157,11 @@ function EditPost() {
  */
 function CreatePost() {
   let form = new PostForm(local_host_url, '/api/create-post');
+  return form.render();
+}
+
+function Register() {
+  let form = new RegisterForm(local_host_url, "/api/account/register");
   return form.render();
 }
 
