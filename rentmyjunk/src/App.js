@@ -19,6 +19,11 @@ import LogOut from "./components/LogOut"
 import ProfilePage from "./components/ProfilePage"
 import EditProfile from "./components/EditProfile"
 
+import './css_styling/sidebar.css';
+import images from "./ImageLoader";
+import DesktopToggleButton from "./components/sidebar-toggle/DesktopToggleButton";
+import MobileToggleButton from "./components/sidebar-toggle/MobileToggleButton";
+
 var local_host_url = "http://127.0.0.1:5000/";
 
 /* -------------------------------
@@ -26,76 +31,135 @@ var local_host_url = "http://127.0.0.1:5000/";
 ------------------------------- */
 
 export default function App() {
+  let desktopToggleButton = new DesktopToggleButton(images["arrow"]);
+  let mobileToggleButton = new MobileToggleButton(images["arrow"]);
+
   return (
-    <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-            <li>
-              <Link to="/users">Users</Link>
-            </li>
-            <li>
-              <Link to="/createpost">Create</Link>
-            </li>
-            <li>
-              <Link to="/search">Search</Link>
-            </li>
-          </ul>
-        </nav>
 
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-        <Switch>
-          {/* Pages related to posts */}
-          <Route path="/about">
-            <About />
-          </Route>
-          <Route path="/users">
-            <Users />
-          </Route>
-          <Route path="/editpost:post_id">
-            <EditPost />
-          </Route>
-          <Route path="/post:post_id">
-            <PostInfo />
-          </Route>
-          <Route path="/createpost">
-            <CreatePost />
-          </Route>
-          <Route path="/search">
-            <Search />
-          </Route>
+    <div id="page-container">
 
-          {/* Pages related to accounts */}
-          <Route path="/register">
-            <RegisterRoute />
-          </Route>
-          <Route path="/login">
-            <LogInRoute />
-          </Route>
-          <Route path="/logout">
-            <LogOutRoute />
-          </Route>
-          <Route path="/profile:profile_id">
-            <ProfileRoute />
-          </Route>
-          <Route path="/editprofile:profile_id">
-            <EditProfileRoute />
-          </Route>
+      <Router>
+        <div id="header-container">
 
-          {/* Home */}
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
+          {/* Header + Banner */}
+          <div id="header">
+
+            {/* Profile/Register/Sign In */}
+            <div id="header-profile">
+              <div id="logged-in">
+                Welcome, <a href="url for profile">user</a>.&nbsp;&nbsp;&nbsp;&nbsp;<a href="url for inbox">Msg
+            Icon</a> / <a href="logout">Log Out</a>
+              </div>
+
+              {/* <div id="logged-out" style={{ display: 'none' }}>
+                Welcome! <a href="url for register">Register</a>/<a href="url for login">Log In</a>
+              </div> */}
+            </div>
+
+            {/* Banner */}
+            <div id="banner-desktop">
+              <img src={images["desktop_logo"]} alt="desktop banner"></img>
+            </div>
+
+            {/* Mobile Section */}
+            <div id="header-mobile-container">
+
+              {/* Mobile sidebar toggle */}
+              {/* <div id="sidebarCollapseMobile">
+                <img src={images["arrow"]} alt="toggle"></img>
+              </div> */}
+              { mobileToggleButton.render() }
+
+              {/* Mobile banner */}
+              <div id="banner-mobile">
+                <img src={images["mobile_logo"]} alt="banner"></img>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Sidebar */}
+          <nav id="sidebar">
+
+            {/* Sidebar toggle, NOT a Link */}
+            { desktopToggleButton.render() }
+
+            {/* Home */}
+            <Link className="sidebar-element" to="/">
+              <div className="sidebar-text">
+                Home
       </div>
-    </Router>
+              <img src={images["home"]} alt="home"></img>
+            </Link>
+
+            {/* Create Post */}
+            <Link className="sidebar-element" to="createpost">
+              <div className="sidebar-text">
+                Create Post
+      </div>
+              <img src={images["create_post"]} alt="new post"></img>
+            </Link>
+
+            {/* My Profile */}
+            <Link className="sidebar-element" to="profile">
+              <div className="sidebar-text">
+                My Profile
+      </div>
+              <img src={images["profile"]} alt="profile"></img>
+            </Link>
+
+            {/* About Us */}
+            <Link className="sidebar-element" to="aboutus">
+              <div className="sidebar-text">
+                About Us
+      </div>
+              <img src={images["about_us"]} alt="about us"></img>
+            </Link>
+
+            {/* Search */}
+            <Link className="sidebar-element" to="search">
+              <div className="sidebar-text">
+                Search
+      </div>
+              <img src={images["search"]} alt="search"></img>
+            </Link>
+
+          </nav>
+        </div>
+
+        {/* Main Content */}
+        <div id="content-container">
+          <div id="content">
+            {/* INSERT CONTENT */}
+            <Switch>
+              <Route path="/about">
+                <About />
+              </Route>
+              <Route path="/users">
+                <Users />
+              </Route>
+              <Route path="/createpost">
+                <CreatePost />
+              </Route>
+              <Route path="/">
+                <Home />
+              </Route>
+            </Switch>
+            {/* /INSERT CONTENT */}
+          </div>
+
+          {/* Footer NECESSARY FOR CREDITING FLATICON */}
+          <hr />
+          <div id="footer">
+            <div id="icon-license">
+              Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a
+                href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+            </div>
+          </div>
+        </div>
+      </Router>
+
+    </div>
   );
 }
 
