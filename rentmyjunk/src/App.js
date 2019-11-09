@@ -11,6 +11,7 @@ import EditForm from "./components/EditForm";
 import PostForm from "./components/CreateForm";
 import SearchForm from "./components/SearchForm.js";
 import EditPostButton from "./components/edit-post-button/EditPostButton";
+import DeletePostButton from "./components/delete-post-button/DeletePostButton"
 
 import RegisterAccount from "./components/RegisterAccount"
 import LogIn from "./components/LogIn"
@@ -150,6 +151,7 @@ function CreatePost() {
 function PostInfo() {
   let { post_id } = useParams();
   let editPostBtn = new EditPostButton(post_id);
+  let deletePostBtn = new DeletePostButton(post_id, local_host_url);
 
   var post_data = xhrSend("GET", "api/search/id/" + post_id, null);
 
@@ -165,10 +167,11 @@ function PostInfo() {
     <div>
       <h1>{post.title}</h1>
       <p>{post.description}</p>
-      <p>Contact Info: {post.contactinfo}</p>
-      <p>Location: {post.location}</p>
-      <p>Price: {post.price}</p>
+      <p><strong>Contact Info:</strong> {post.contactinfo}</p>
+      <p><strong>Location:</strong> {post.location}</p>
+      <p><strong>Price:</strong> ${post.price}</p>
       { editPostBtn.render() }
+      { deletePostBtn.render() }
     </div>
   );
 }
@@ -176,17 +179,17 @@ function PostInfo() {
 /* -------------------------------
  * Account Pages
  ------------------------------- */
- function RegisterRoute() {
-   let registerAct = new RegisterAccount();
-   return registerAct.render();
- }
+function RegisterRoute() {
+  let registerAct = new RegisterAccount();
+  return registerAct.render();
+}
 
- function LogInRoute() {
-   let logIn = new LogIn();
-   return logIn.render();
- }
+function LogInRoute() {
+  let logIn = new LogIn();
+  return logIn.render();
+}
 
- function LogOutRoute() {
+function LogOutRoute() {
   let logOut = new LogOut();
   return logOut.render();
 }
