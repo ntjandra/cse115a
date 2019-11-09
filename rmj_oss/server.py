@@ -13,6 +13,11 @@ bcrypt = Bcrypt(app)  # Security
 login_manager = LoginManager(app)  # Flask-Login
 login_manager.login_view = 'login'
 
+# Secret Key shenanigans TODO: make sure I'm doing this right
+import os
+app.secret_key = os.urandom(24)
+
+
 # Secure Login Sessions by encryption
 
 
