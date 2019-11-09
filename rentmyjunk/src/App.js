@@ -280,8 +280,8 @@ function PostInfo() {
  * Account Pages
  ------------------------------- */
 function RegisterRoute() {
-  let registerAct = new RegisterAccount();
-  return registerAct.render();
+  let form = new RegisterAccount(local_host_url, "/api/account/register", "POST");
+  return form.render();
 }
 
 function LogInRoute() {
