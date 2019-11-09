@@ -23,7 +23,7 @@ def load_user(user_id):
 class Account(Base, UserMixin):  # Need to add UserMixin
     __tablename__ = 'account'
 
-    user_id = Column(Integer(), primary_key=True)
+    user_id = Column(Integer(), autoincrement=True, primary_key=True)
     email = Column(String(250), nullable=False)
     name = Column(String(250), nullable=False)
     description = Column(String, nullable=True, default="No bio")
