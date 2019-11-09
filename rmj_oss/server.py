@@ -1,3 +1,4 @@
+import os
 from database_setup import Base, RentPost, Account
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
@@ -13,8 +14,13 @@ bcrypt = Bcrypt(app)  # Security
 login_manager = LoginManager(app)  # Flask-Login
 login_manager.login_view = 'login'
 
+# Fix from internet - seems to work TODO verify this is ok
+@login_manager.user_loader
+def load_user(user_id):
+    return None
+
+
 # Secret Key shenanigans TODO: make sure I'm doing this right
-import os
 app.secret_key = os.urandom(24)
 
 
@@ -177,20 +183,22 @@ def register():
     if not dne_name:
         fail_register = True
         fail_msg = fail_msg + " Username is already in use,"
-    
+
     # Fail if non-unique username or email
     if fail_register:
         return fail_msg
 
     # Never store passwords in plain text
-    hashed_password = (bcrypt.generate_password_hash(form['password']).decode('utf-8'))
+    hashed_password = (bcrypt.generate_password_hash(
+        form['password']).decode('utf-8'))
 
     # Extract data from form
     loc = form['location']
     bio = form['description']
 
     # Add Basic User to database
-    user = Account(email=email, name=name, password=hashed_password, location=loc, description=bio)
+    user = Account(email=email, name=name,
+                   password=hashed_password, location=loc, description=bio)
     session.add(user)
     session.commit()
     return str(user.user_id)
@@ -231,7 +239,7 @@ def login():
 def logout():
     # Handled by Flask-Login, Deletes Session Cookie
     logout_user()
-    return "200 OK-- Logged out"
+    return "Logged out"
 
 # Route to see if user is logged
 @app.route("/api/account/auth/")
