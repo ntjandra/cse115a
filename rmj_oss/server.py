@@ -21,7 +21,7 @@ def load_user(user_id):
 
 
 # Secret Key TODO change when env vars work
-app.secret_key = os.urandom(24)
+app.secret_key = os.environ.get('RMJ_KEY')
 
 
 # Secure Login Sessions by encryption
