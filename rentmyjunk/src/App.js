@@ -68,7 +68,7 @@ export default function App() {
               {/* <div id="sidebarCollapseMobile">
                 <img src={images["arrow"]} alt="toggle"></img>
               </div> */}
-              { mobileToggleButton.render() }
+              {mobileToggleButton.render()}
 
               {/* Mobile banner */}
               <div id="banner-mobile">
@@ -82,7 +82,7 @@ export default function App() {
           <nav id="sidebar">
 
             {/* Sidebar toggle, NOT a Link */}
-            { desktopToggleButton.render() }
+            {desktopToggleButton.render()}
 
             {/* Home */}
             <Link className="sidebar-element" to="/">
@@ -131,16 +131,47 @@ export default function App() {
         <div id="content-container">
           <div id="content">
             {/* INSERT CONTENT */}
+            {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
             <Switch>
+              {/* Pages related to posts */}
               <Route path="/about">
                 <About />
               </Route>
               <Route path="/users">
                 <Users />
               </Route>
+              <Route path="/editpost:post_id">
+                <EditPost />
+              </Route>
+              <Route path="/post:post_id">
+                <PostInfo />
+              </Route>
               <Route path="/createpost">
                 <CreatePost />
               </Route>
+              <Route path="/search">
+                <Search />
+              </Route>
+
+              {/* Pages related to accounts */}
+              <Route path="/register">
+                <RegisterRoute />
+              </Route>
+              <Route path="/login">
+                <LogInRoute />
+              </Route>
+              <Route path="/logout">
+                <LogOutRoute />
+              </Route>
+              <Route path="/profile:profile_id">
+                <ProfileRoute />
+              </Route>
+              <Route path="/editprofile:profile_id">
+                <EditProfileRoute />
+              </Route>
+
+              {/* Home */}
               <Route path="/">
                 <Home />
               </Route>
@@ -234,8 +265,8 @@ function PostInfo() {
       <p><strong>Contact Info:</strong> {post.contactinfo}</p>
       <p><strong>Location:</strong> {post.location}</p>
       <p><strong>Price:</strong> ${post.price}</p>
-      { editPostBtn.render() }
-      { deletePostBtn.render() }
+      {editPostBtn.render()}
+      {deletePostBtn.render()}
     </div>
   );
 }
