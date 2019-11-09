@@ -17,10 +17,10 @@ login_manager.login_view = 'login'
 # Fix from internet - seems to work TODO verify this is ok
 @login_manager.user_loader
 def load_user(user_id):
-    return None
+    return session.query(Account).filter_by(user_id=user_id).first()
 
 
-# Secret Key shenanigans TODO: make sure I'm doing this right
+# Secret Key TODO change when env vars work
 app.secret_key = os.urandom(24)
 
 
@@ -228,22 +228,24 @@ def login():
     user = session.query(Account).filter_by(email=form['email']).first()
     # Account Authenthication
     if user and bcrypt.check_password_hash(user.password, form['password']):
-        login_user(user)  # Remember me remember=form['remember'])
+        login_user(user, remember=True)  # Remember me remember=form['remember'])
         # next_page = request.args.get('next')
         # The next_page sends back a request token that it passed auth
         return ('Login Successful')
     return ('Login Unsuccessful. Please check email and password')
 
 # Route to Logout User
-@app.route("/api/account/logout")
+@app.route("/api/account/logout", methods=['GET'])
 def logout():
     # Handled by Flask-Login, Deletes Session Cookie
-    logout_user()
-    return "Logged out"
+    if current_user.is_authenticated:
+        logout_user()
+        return "Logged out"
+    return("Cannot logout - No user logged in")
 
 # Route to see if user is logged
-@app.route("/api/account/auth/")
-@login_required
+@app.route("/api/account/auth", methods=['GET', 'POST'])
+# @login_required
 def isLoggedin():
     if current_user.is_authenticated:
         return ("User logged in")
