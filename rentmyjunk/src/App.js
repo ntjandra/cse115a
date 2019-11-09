@@ -7,13 +7,17 @@ import {
   useParams
 } from "react-router-dom";
 
+// Multipart form-data
 import EditForm from "./components/EditForm";
 import PostForm from "./components/CreateForm";
 import SearchForm from "./components/SearchForm.js";
 
 import RegisterAccount from "./components/RegisterAccount"
+// Add to Side Bar Login/Logout
 import LogIn from "./components/LogIn"
 import LogOut from "./components/LogOut"
+
+// View and Edit Profile
 import ProfilePage from "./components/ProfilePage"
 import EditProfile from "./components/EditProfile"
 
@@ -39,47 +43,48 @@ export default function App() {
               <Link to="/users">Users</Link>
             </li>
             <li>
-              <Link to="/createpost">Create</Link>
+              <Link to="/create-post">Create</Link>
             </li>
             <li>
               <Link to="/search">Search</Link>
             </li>
             <li>
-              <Link to="/delete">Delete</Link>
+              <Link to="/post:postid/delete">Delete</Link>
             </li>
             <li>
-              <Link to="/editpost">Edit</Link>
+              <Link to="/post:postid/update">Edit</Link>
             </li>
           </ul>
         </nav>
 
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
+        { /* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */ }
         <Switch>
-          {/* Pages related to posts */}
+          { /* Pages related to Sidebar */ }
           <Route path="/about">
             <About />
           </Route>
           <Route path="/users">
             <Users />
           </Route>
-          <Route path="/editpost">
-            <EditPost />
-          </Route>
+          { /* Pages Relating to Post CRUD */ }
           <Route path="/post:post_id">
             <PostInfo />
           </Route>
-          <Route path="/createpost">
+          <Route path="/create-post">
             <CreatePost />
           </Route>
           <Route path="/search">
             <Search />
+          { /* These routes are linked from the prior Post */ }
           </Route>
-          <Route path="/delete">
+          <Route path="/post:postid/update">
+            <EditPost />
+          </Route>
+          <Route path="/post:postid/delete">
             <Delete />
           </Route>
-
-          {/* Pages related to accounts */}
+          { /* Pages related to accounts */ }
           <Route path="/register">
             <RegisterRoute />
           </Route>
@@ -92,10 +97,9 @@ export default function App() {
           <Route path="/profile:profile_id">
             <ProfileRoute />
           </Route>
-          <Route path="/editprofile:profile_id">
+          <Route path="/profile:profile_id/edit">
             <EditProfileRoute />
           </Route>
-
           {/* Home */}
           <Route path="/">
             <Home />
@@ -124,6 +128,7 @@ function Search() {
 
 function Delete() {
   return <button id="delete">Delete Post</button>;
+  // Should add additional confirmation.
 }
 
 /**
@@ -133,6 +138,7 @@ function About() {
   return <h2>About</h2>;
 }
 
+// What is Users?
 function Users() {
   return <h2>Users</h2>;
 }
@@ -141,7 +147,7 @@ function Users() {
  * Edit Post Component
  */
 function EditPost() {
-  let form = new EditForm(local_host_url, "/api/edit-post");
+  let form = new EditForm(local_host_url, "/api/post/postid:update");
   return form.render();
 }
 
@@ -149,7 +155,7 @@ function EditPost() {
  * Create Post Component
  */
 function CreatePost() {
-  let form = new PostForm(local_host_url, '/api/create-post');
+  let form = new PostForm(local_host_url, '/api/post/new');
   return form.render();
 }
 
@@ -164,7 +170,9 @@ function PostInfo() {
   // Put post_id in XHR-sendable form
   const data = new FormData();
   data.set("post_id", post_id);
-  var post_data = xhrSend("POST", "api/get-post", data);
+
+  // Pass variable through XHR-request
+  var post_data = xhrSend("GET", "api/search/post/" + post_id, data);
 
   // If post doesn't exist, display error
   if (post_data === "Error - Requested post ID does not exist.") {
@@ -256,4 +264,3 @@ function xhrSend(type, route, data) {
   console.log(xhr.response, "|", xhr.status);
   return xhr.response;
 }
-
