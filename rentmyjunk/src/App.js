@@ -241,7 +241,7 @@ function CreatePost() {
 /**
  * Displays info for specific post, by ID
  *
- * TODO Add styling
+ * TODO Finalize styling
  */
 function PostInfo() {
   let { post_id } = useParams();
@@ -265,7 +265,9 @@ function PostInfo() {
       <p><strong>Contact Info:</strong> {post.contactinfo}</p>
       <p><strong>Location:</strong> {post.location}</p>
       <p><strong>Price:</strong> ${post.price}</p>
+      <br />
       {editPostBtn.render()}
+      <br /><br />
       {deletePostBtn.render()}
     </div>
   );

@@ -19,7 +19,7 @@ class EditForm extends Form {
 
   render() {
     return (
-      <div className="col-lg-6 offset-2">
+      <div className="col-lg-6">
         <h2>Edit a post</h2>
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">

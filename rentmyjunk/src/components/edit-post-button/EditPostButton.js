@@ -20,7 +20,7 @@ class EditPostButton extends React.Component {
     }
 
     render() {
-        return <button onClick={() => this.gotoEditPost()}>Edit Post</button>
+        return <button className="btn btn-primary" onClick={() => this.gotoEditPost()}>Edit Post</button>
     }
 }
 

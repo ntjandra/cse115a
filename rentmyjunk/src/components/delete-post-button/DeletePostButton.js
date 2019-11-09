@@ -66,7 +66,7 @@ class DeletePostButton extends React.Component {
     }
 
     render() {
-        return <button onClick={() => this.deletePost()}>Delete Post</button>
+        return <button className="btn btn-primary" onClick={() => this.deletePost()}>Delete Post</button>
     }
 }
 

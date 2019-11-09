@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 class PostForm extends Form {
     render() {
         return (
-            <div className="col-lg-6 offset-2">
+            <div className="col-lg-6">
                 <h2>Create a post</h2>
 
                 <form onSubmit={this.handleSubmit}>
