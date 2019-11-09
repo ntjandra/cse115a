@@ -11,11 +11,11 @@ import EditForm from "./components/EditForm";
 import PostForm from "./components/CreateForm";
 import SearchForm from "./components/SearchForm.js";
 
-import RegisterAccount from "./components/RegisterAccount"
-import LogIn from "./components/LogIn"
-import LogOut from "./components/LogOut"
-import ProfilePage from "./components/ProfilePage"
-import EditProfile from "./components/EditProfile"
+import RegisterAccount from "./components/RegisterAccount";
+import LogIn from "./components/LogIn";
+import LogOut from "./components/LogOut";
+import ProfilePage from "./components/ProfilePage";
+import EditProfile from "./components/EditProfile";
 
 var local_host_url = "http://127.0.0.1:5000/";
 
@@ -50,6 +50,9 @@ export default function App() {
             <li>
               <Link to="/editpost">Edit</Link>
             </li>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
           </ul>
         </nav>
 
@@ -77,6 +80,9 @@ export default function App() {
           </Route>
           <Route path="/delete">
             <Delete />
+          </Route>
+          <Route path="/login">
+            <LogInRoute />
           </Route>
 
           {/* Pages related to accounts */}
@@ -110,9 +116,7 @@ function Home() {
   return (
     <div>
       <h2>Homes</h2>
-      <div>
-        content
-      </div>
+      <div>content</div>
     </div>
   );
 }
@@ -149,7 +153,7 @@ function EditPost() {
  * Create Post Component
  */
 function CreatePost() {
-  let form = new PostForm(local_host_url, '/api/create-post');
+  let form = new PostForm(local_host_url, "/api/create-post");
   return form.render();
 }
 
@@ -188,17 +192,17 @@ function PostInfo() {
 /* -------------------------------
  * Account Pages
  ------------------------------- */
- function RegisterRoute() {
-   let registerAct = new RegisterAccount();
-   return registerAct.render();
- }
+function RegisterRoute() {
+  let registerAct = new RegisterAccount();
+  return registerAct.render();
+}
 
- function LogInRoute() {
-   let logIn = new LogIn();
-   return logIn.render();
- }
+function LogInRoute() {
+  let logIn = new LogIn(local_host_url, "/api/login");
+  return logIn.render();
+}
 
- function LogOutRoute() {
+function LogOutRoute() {
   let logOut = new LogOut();
   return logOut.render();
 }
@@ -237,7 +241,7 @@ function xhrSend(type, route, data) {
   xhr.send(data);
 
   // This will be called after the response is received
-  xhr.onload = function () {
+  xhr.onload = function() {
     if (xhr.status !== 200) {
       // analyze HTTP status of the response
       console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
@@ -248,7 +252,7 @@ function xhrSend(type, route, data) {
     }
   };
 
-  xhr.onerror = function () {
+  xhr.onerror = function() {
     console.log("Request failed");
     console.log(xhr.status);
   };
@@ -256,4 +260,3 @@ function xhrSend(type, route, data) {
   console.log(xhr.response, "|", xhr.status);
   return xhr.response;
 }
-
