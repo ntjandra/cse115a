@@ -8,9 +8,9 @@ import {
  */
 class HeaderMessage extends React.Component {
 
-    constructor() {
-        super();
-    }
+    // constructor() {
+    //     super();
+    // }
 
     render() {
         if (this.getUser() === null) {
