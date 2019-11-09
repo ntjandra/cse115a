@@ -12,7 +12,7 @@ class RegisterAccount extends Form {
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
                         <label>Email: </label>
-                        <input id="title" name="title" type="text" className="form-control" placeholder="Example: yourname@email.com" required />
+                        <input id="email" name="email" type="text" className="form-control" placeholder="Example: yourname@email.com" required />
                     </div>
 
                     <div className="form-group">
@@ -45,14 +45,16 @@ class RegisterAccount extends Form {
     }
 
     /**
-     * Redirects to newly created post page upon a successful post creation
+     * Redirects to login page upon a successful post creation
+     * 
+     * TODO alert user of successful account creation
      */
     onSuccessResponse(xhr) {
         if (isNaN(xhr.response)) {
             alert(xhr.response);
         }
         else {
-            window.location.pathname = "/post" + this.post_id;
+            window.location.pathname = "/login";
         }
     }
 }
