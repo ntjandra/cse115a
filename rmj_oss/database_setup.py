@@ -15,9 +15,10 @@ login_manager = LoginManager()
 
 # Login Cookie at Init
 @login_manager.user_loader
-#Safely cast the user_id to a int
+# Safely cast the user_id to a int
 def load_user(user_id):
     return Account.query.get(int(user_id))
+
 
 # Account class
 class Account(Base, UserMixin):  # Need to add UserMixin
@@ -46,7 +47,7 @@ class Account(Base, UserMixin):  # Need to add UserMixin
     # Session Token for 2 Factor with expiry
     """
     # Required Import
-    from itsdangerous import 
+    from itsdangerous import
     TimedJSONWebSignatureSerializer as Serializer
 
     def get_reset_token(self, expires_sec=1800):
@@ -62,6 +63,7 @@ class Account(Base, UserMixin):  # Need to add UserMixin
             return None
         return User.query.get(user_id)
     """
+
 
 class RentPost(Base):
     __tablename__ = 'rentpost'

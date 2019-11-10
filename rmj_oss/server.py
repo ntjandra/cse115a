@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_login import (LoginManager, login_user, current_user,
-                        logout_user, login_required)
+                            logout_user, login_required)
 from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
@@ -182,17 +182,29 @@ def register():
 # Route to handle User Login
 """
 From Flask Login
-flask_login.login_user(user, remember=False, duration=None, force=False, fresh=True)[source]¶
-Logs a user in. You should pass the actual user object to this. If the user’s is_active property is False, they will not be logged in unless force is True.
+flask_login.login_user(user, remember=False, duration=None, force=False, fresh=True)[source]
+Logs a user in. You should pass the actual user object to this.
+ If the user’s is_active property is False,
+  they will not be logged in unless force is True.
 
-This will return True if the log in attempt succeeds, and False if it fails (i.e. because the user is inactive).
+This will return True if the log in attempt succeeds,
+and False if it fails (i.e. because the user is inactive).
 
 Parameters:	
 user (object) – The user object to log in.
-remember (bool) – Whether to remember the user after their session expires. Defaults to False.
-duration (datetime.timedelta) – The amount of time before the remember cookie expires. If None the value set in the settings is used. Defaults to None.
-force (bool) – If the user is inactive, setting this to True will log them in regardless. Defaults to False.
-fresh (bool) – setting this to False will log in the user with a session marked as not “fresh”. Defaults to True.
+
+remember (bool) – Whether to remember the user after their session expires.
+ Defaults to False.
+
+duration (datetime.timedelta) – The amount of time before 
+the remember cookie expires. 
+If None the value set in the settings is used. Defaults to None.
+
+force (bool) – If the user is inactive, setting this to True
+will log them in regardless. Defaults to False.
+
+fresh (bool) – setting this to False will log in the user 
+with a session marked as not “fresh”. Defaults to True.
 """
 
 @app.route("/api/account/login", methods=['GET', 'POST'])
