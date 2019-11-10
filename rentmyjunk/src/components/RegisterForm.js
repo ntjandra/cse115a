@@ -10,19 +10,19 @@ class RegisterForm extends Form {
             <h1 align="center"><font face="Trebuchet MS"><b>Create An Account</b></font></h1>
             <form action="/action_page.php">
                 <div class="form-group">
-                    <label for="usrname">Username:</label>
+                    <label for="usrname">Username</label>
                     <input type="text" className="form-control" id="usrname" placeholder="Enter username" name="usrname" />
                 </div>
                 <div class="form-group">
-                    <label for="email">Email:</label>
+                    <label for="email">Email</label>
                     <input type="email" className="form-control" id="email" placeholder="Enter email" name="email" />
                 </div>
                 <div class="form-group">
-                    <label for="pwd">Password:</label>
+                    <label for="pwd">Password</label>
                     <input type="password" className="form-control" id="pwd" placeholder="Enter password" name="pwd" />
                 </div>
                 <div class="form-group">
-                    <label for="pwdConf">Confirm Password:</label>
+                    <label for="pwdConf">Confirm Password</label>
                     <input type="password" className="form-control" id="pwdConf" placeholder="Confirm password" name="pwdConf" />
                 </div>
                 <form action="?" method="POST">
