@@ -34,7 +34,7 @@ var local_host_url = "http://127.0.0.1:5000/";
 export default function App() {
   let desktopToggleButton = new DesktopToggleButton(images["arrow"]);
   let mobileToggleButton = new MobileToggleButton(images["arrow"]);
-  let headerMessage = new HeaderMessage();
+  let headerMessage = new HeaderMessage(local_host_url);
 
   return (
 
@@ -46,18 +46,8 @@ export default function App() {
           {/* Header + Banner */}
           <div id="header">
 
-            {/* Profile/Register/Sign In
-            <div id="header-profile">
-              <div id="logged-in">
-                Welcome, <a href="url for profile">user</a>.&nbsp;&nbsp;&nbsp;&nbsp;<a href="url for inbox">Msg
-            Icon</a> / <a href="logout">Log Out</a>
-              </div>
-
-              <div id="logged-out" style={{ display: 'none' }}>
-                Welcome! <a href="url for register">Register</a>/<a href="url for login">Log In</a>
-              </div>
-            </div> */}
-            { headerMessage.render() }
+            {/* Profile/Register/Sign In */}
+            {/* { headerMessage.render() } */}
 
             {/* Banner */}
             <div id="banner-desktop">

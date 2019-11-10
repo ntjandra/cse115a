@@ -6,9 +6,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 class LogIn extends Form {
 
     render() {
-        console.log("Log in status:", this.loggedIn());
+        console.log("Logged in?", this.loggedIn());
 
         if (this.loggedIn()) {
+            return <h2>A user is logged in.</h2>
+        }
+        else {
             return (
                 <div className="col-lg-6">
                     <h2>Log In</h2>
@@ -29,9 +32,6 @@ class LogIn extends Form {
                     </form>
                 </div>
             );
-        }
-        else {
-            return <h2>A user is already logged in.</h2>
         }
     }
 

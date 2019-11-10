@@ -228,7 +228,7 @@ def login():
     user = session.query(Account).filter_by(email=form['email']).first()
     # Account Authenthication
     if user and bcrypt.check_password_hash(user.password, form['password']):
-        login_user(user, remember=True)  # Remember me remember=form['remember'])
+        login_user(user)  # Remember me remember=form['remember'])
         # next_page = request.args.get('next')
         # The next_page sends back a request token that it passed auth
         return ('Login Successful')
