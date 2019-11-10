@@ -94,9 +94,8 @@ def search():
 # Returns all posts who have a particular address
 @app.route("/api/search/place/<string:place>", methods=['GET'])
 def search_place(place):
-    # the in_ method is the wildcard for contains anywhere.
-    places = (session.query(RentPost).filter_by(location=place)
-            .order_by(RentPost.id).all())
+    places = session.query(RentPost).filter_by(location=place).\
+             order_by(RentPost.id).all()
     return jsonify(place=[post.serialize() for post in places])
 
 # Returns all posts who have a particular word in their post title
@@ -113,6 +112,7 @@ def searchPost(column, value):
         (RentPost.description.contains(value)).all()
         return jsonify(results=[post.serialize() for post in results])
     if (column == "id"):
+        # Single page by ID
         result = session.query(RentPost).filter_by(id=value).first()
         if result is None:  # Special Error Handling for Keys
             return "404-Page Result not found"

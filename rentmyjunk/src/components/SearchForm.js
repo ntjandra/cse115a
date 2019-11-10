@@ -1,6 +1,8 @@
 import React from "react";
 import Form from "./Form";
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 class SearchForm extends Form {
   /**
    * @param {string} url base url of the server (API),
@@ -61,12 +63,20 @@ class SearchForm extends Form {
 
   render() {
     return (
-      <div>
+      <div class="col-lg-6 offset-2">
         <h2>Search</h2>
         <form onSubmit={this.handleSubmit}>
-          <input type="text" name="search" placeholder="Search..." required />
-          <input type="text" name="place" placeholder="Place..." />
-          <input type="submit" value="Search" />
+          <div className="form-group">
+            <label>Search:</label>
+            <input id="title" name="title" type="text" className="form-control" placeholder="Search... (required)" required/>
+          </div>
+          <div className="form-group">
+            <label>Location:</label>
+            <input id="title" name="place" type="text" className="form-control" placeholder="Place... (optional)" />
+          </div>
+          <div className="form-group">
+              <input type="submit" name="submit" value="Search" className="btn btn-primary" />
+          </div>
         </form>
       </div>
     );
