@@ -221,6 +221,7 @@ fresh (bool) – setting this to False will log in the user with a session marke
 
 @app.route("/api/account/login", methods=['GET', 'POST'])
 def login():
+    print('before:' + str(current_user.is_authenticated))
     if current_user.is_authenticated:
         return ("Error - User is already logged in")
     form = request.form
@@ -228,7 +229,8 @@ def login():
     user = session.query(Account).filter_by(email=form['email']).first()
     # Account Authenthication
     if user and bcrypt.check_password_hash(user.password, form['password']):
-        login_user(user, remember=True)  # Remember me remember=form['remember'])
+        login_user(user)  # Remember me remember=form['remember'])
+        print('after:' + str(current_user.is_authenticated))
         # next_page = request.args.get('next')
         # The next_page sends back a request token that it passed auth
         return ('Login Successful')
@@ -250,6 +252,18 @@ def isLoggedin():
     if current_user.is_authenticated:
         return ("User logged in")
     return("Please log in")
+
+# Route to get user_id
+@app.route("/api/account/auth/getID", methods=['GET', 'POST'])
+@login_required
+def getUserID():
+    return str(current_user.get_id())
+
+# Returns user information (excluding password) TODO
+# @app.route("/api/account/id/<integer:user_id>", methods=['GET', 'POST'])
+# @login_required
+# def getUserInfo():
+#     pass
 
 
 if __name__ == "__main__":

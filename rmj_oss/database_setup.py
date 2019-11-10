@@ -36,7 +36,6 @@ class Account(Base, UserMixin):  # Need to add UserMixin
             'name': self.name,
             'description': self.description,
             'location': self.location,
-            'password': self.password,
         }
 
     # Overload UserMixin

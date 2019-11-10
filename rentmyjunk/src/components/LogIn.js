@@ -41,10 +41,7 @@ class LogIn extends Form {
      * TODO maybe redirect to profile page? Fail condition as well
      */
     onSuccessResponse(xhr) {
-        if (xhr.response === "Login Unsuccessful. Please check email and password") {
-            alert(xhr.response);
-        }
-        else if (xhr.response === "Login Successful") {
+        if (xhr.response === "Login Successful") {
             // window.location.pathname = "/";
             console.log(xhr.response);
         }
