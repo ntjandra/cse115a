@@ -3,8 +3,9 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from flask_login import (LoginManager, login_user, current_user,
-                        logout_user, login_required)
+from flask_login import (
+    LoginManager, login_user, current_user,
+    logout_user, login_required)
 from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
@@ -162,17 +163,18 @@ def register():
     dne = session.query(Account).filter_by(user_id=user).scalar() is None
     if (dne):
         # Never store passwords in plain text
-        hashed_password = (bcrypt.generate_password_hash(form['password'])
-                            .decode('utf-8'))
-
+        hashed_password = (
+            bcrypt.generate_password_hash(form['password'])
+            .decode('utf-8'))
         # Extract data from form
         username = form['name']
         loc = form['location']
         bio = form['description']
 
         # Add Basic User to database
-        user = Account(email=user, name=username, password=hashed_password,
-                    location=loc, description=bio)
+        user = Account(
+            email=user, name=username, password=hashed_password,
+            location=loc, description=bio)
         session.add(user)
         session.commit()
         return ("200 - OK : Account has been created!")
