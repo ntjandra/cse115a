@@ -3,9 +3,17 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from flask_login import (LoginManager, login_user, current_user,
+                        logout_user, login_required)
+from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
 CORS(app)
+bcrypt = Bcrypt(app)  # Security
+login_manager = LoginManager(app)  # Flask-Login
+login_manager.login_view = 'login'
+
+# Secure Login Sessions by encryption
 
 
 # Helper functions
@@ -29,7 +37,7 @@ session = DBSession()
 def home():
     if request.method == "POST":
         return "Received POST"
-    elif request.method == "GET":
+    if request.method == "GET":
         return "Received GET"
     return "Invalid Method"
 
@@ -86,7 +94,6 @@ def search():
 # Returns all posts who have a particular address
 @app.route("/api/search/place/<string:place>", methods=['GET'])
 def search_place(place):
-    # the in_ method is the wildcard for contains anywhere.
     places = session.query(RentPost).filter_by(location=place).\
              order_by(RentPost.id).all()
     return jsonify(place=[post.serialize() for post in places])
@@ -104,15 +111,13 @@ def searchPost(column, value):
         results = session.query(RentPost).filter
         (RentPost.description.contains(value)).all()
         return jsonify(results=[post.serialize() for post in results])
-
-    elif (column == "id"):
+    if (column == "id"):
         # Single page by ID
         result = session.query(RentPost).filter_by(id=value).first()
         if result is None:  # Special Error Handling for Keys
             return "404-Page Result not found"
         return jsonify(post=result.serialize())
-    else:
-        return "404-Page not Found"
+    return "404-Page not Found"
 
 # Given a post's id, checks for existence and then deletes post
 @app.route("/api/post/delete/<int:post_id>", methods=['POST'])
@@ -126,6 +131,113 @@ def deletepost(post_id):
     session.delete(post_to_delete)
     session.commit()
     return "Deleted ID: " + str(post_id) + ", TITLE: " + post_title
+
+
+# Login API Begins here
+"""
+Login Manager creates a session cookie for the user/caller
+It does not store their account_id
+Using Flask Login allows us to check the cookie with
+current_user, which is created upon access
+Methods
+is_authenticated : Checks if current user is logged in
+is_active : Handles the ban hammer
+is_anonymous: Not logged in
+
+Can do some neat stuff like
+if post.author != current_user:
+    # Cannot edit file
+"""
+
+# Route to handle registration
+@app.route("/api/account/register", methods=['POST'])
+def register():
+    if current_user.is_authenticated:
+        return ("Error - User is already logged in")
+
+    form = request.form
+    user = form['email']
+
+    # Need to check for unique email.
+    dne = session.query(Account).filter_by(user_id=user).scalar() is None
+    if (dne):
+        # Never store passwords in plain text
+        hashed_password = (bcrypt.generate_password_hash(form['password'])
+                            .decode('utf-8'))
+
+        # Extract data from form
+        username = form['name']
+        loc = form['location']
+        bio = form['description']
+
+        # Add Basic User to database
+        user = Account(email=user, name=username, password=hashed_password,
+                    location=loc, description=bio)
+        session.add(user)
+        session.commit()
+        return ("200 - OK : Account has been created!")
+    return ("404 - OK : Email is Taken")
+
+
+# Route to handle User Login
+"""
+From Flask Login
+flask_login.login_user(user, remember=False, duration=None,
+force=False, fresh=True)[source]
+Logs a user in. You should pass the actual user object to this.
+ If the user’s is_active property is False,
+  they will not be logged in unless force is True.
+
+This will return True if the log in attempt succeeds,
+and False if it fails (i.e. because the user is inactive).
+
+Parameters:
+user (object) – The user object to log in.
+
+remember (bool) – Whether to remember the user after their session expires.
+Defaults to False.
+
+duration (datetime.timedelta) – The amount of time before
+the remember cookie expires.
+If None the value set in the settings is used. Defaults to None.
+
+force (bool) – If the user is inactive, setting this to True
+will log them in regardless. Defaults to False.
+
+fresh (bool) – setting this to False will log in the user
+with a session marked as not “fresh”. Defaults to True.
+"""
+
+
+@app.route("/api/account/login", methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return ("Error - User is already logged in")
+    form = request.form
+
+    user = session.query(Account).filter_by(email=form['email']).first()
+    # Account Authenthication
+    if user and bcrypt.check_password_hash(user.password, form['password']):
+        login_user(user)  # Remember me remember=form['remember'])
+        # next_page = request.args.get('next')
+        # The next_page sends back a request token that it passed auth
+        return ('Login Successful')
+    return ('Login Unsuccessful. Please check email and password')
+
+# Route to Logout User
+@app.route("/api/account/logout")
+def logout():
+    # Handled by Flask-Login, Deletes Session Cookie
+    logout_user()
+    return "200 OK-- Logged out"
+
+# Route to see if user is logged
+@app.route("/api/account/auth/")
+@login_required
+def isLoggedin():
+    if current_user.is_authenticated:
+        return ("User logged in")
+    return("Please log in")
 
 
 if __name__ == "__main__":
