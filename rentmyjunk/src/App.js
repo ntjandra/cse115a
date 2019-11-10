@@ -46,7 +46,7 @@ export default function App() {
           <div id="header">
 
             {/* Profile/Register/Sign In */}
-            {/* { headerMessage.render() } */}
+            { headerMessage.render() }
 
             {/* Banner */}
             <div id="banner-desktop">

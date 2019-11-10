@@ -14,7 +14,7 @@ class HeaderMessage extends React.Component {
     }
 
     render() {
-        if (this.loggedIn()) {
+        if (!this.loggedIn()) {
             return this.loggedInHeader();
         }
         else {
@@ -71,7 +71,7 @@ class HeaderMessage extends React.Component {
     notLoggedInHeader() {
         return (
             <div id="header-profile">
-                Welcome! <Link to="register">Register</Link> / <a onClick={() => this.xhrLogOut()}>Log In</a>
+                Welcome! <Link to="register">Register</Link> / <Link to="login">Log In</Link>
             </div>
         );
     }
@@ -80,17 +80,33 @@ class HeaderMessage extends React.Component {
      * Message displayed when a user IS logged in
      */
     loggedInHeader() {
+        const spanStyle = {
+            textDecorationLine: 'underline',
+            cursor: 'pointer'
+          };
+
         return (
             <div id="header-profile">
-                Welcome, <Link to="register">name!</Link> <Link to="logout">Log Out</Link>
+                Welcome, <Link to="register">name!</Link> <span style={spanStyle} onClick={() => this.logOut()}>Log Out</span>
             </div>
         );
+    }
+
+    logOut() {
+        var response = this.xhrLogOut();
+        console.log(response);
+        if (response === "Logged out") {
+            window.location.reload();
+        }
+        else {
+            alert(response);
+        }
     }
 
     xhrLogOut() {
         var type = "GET";
         var route = "api/account/logout";
-        var local_host_url = this.baseURL + "/";
+        var local_host_url = this.baseURL;
         // Create a new XMLHttpRequest object
         let xhr = new XMLHttpRequest();
 
@@ -116,6 +132,8 @@ class HeaderMessage extends React.Component {
             console.log("Request failed");
             console.log(xhr.status);
         }
+
+        return xhr.response;
     }
 }
 
