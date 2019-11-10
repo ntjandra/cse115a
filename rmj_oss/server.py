@@ -191,20 +191,6 @@ def deletepost(post_id):
 # Account-Related API
 # ---------------------------------------------------------
 
-"""
-Login Manager creates a session cookie for the user/caller
-It does not store their account_id
-Using Flask Login allows us to check the cookie with
-current_user, which is created upon access
-Methods
-is_authenticated : Checks if current user is logged in
-is_active : Handles the ban hammer
-is_anonymous: Not logged in
-Can do some neat stuff like
-if post.author != current_user:
-    # Cannot edit file
-"""
-
 # Route to handle registration
 @app.route("/api/account/register", methods=['POST'])
 def register():
@@ -249,42 +235,9 @@ def register():
     session.commit()
     return str(user.user_id)
 
-
-# Route to handle User Login
-"""
-From Flask Login
-flask_login.login_user(user, remember=False, duration=None, force=False, fresh=True)[source]¶
-Logs a user in. You should pass the actual user object to this. If the user’s is_active property is False, they will not be logged in unless force is True.
-This will return True if the log in attempt succeeds, and False if it fails (i.e. because the user is inactive).
-Parameters:	
-user (object) – The user object to log in.
-remember (bool) – Whether to remember the user after their session expires. Defaults to False.
-duration (datetime.timedelta) – The amount of time before the remember cookie expires. If None the value set in the settings is used. Defaults to None.
-force (bool) – If the user is inactive, setting this to True will log them in regardless. Defaults to False.
-fresh (bool) – setting this to False will log in the user with a session marked as not “fresh”. Defaults to True.
-"""
-
-# TODO Return a JWT
-@app.route("/api/account/login_old", methods=['GET', 'POST'])
-def login_old():
-    print('before:' + str(current_user.is_authenticated))
-    if current_user.is_authenticated:
-        return ("Error - User is already logged in")
-    form = request.form
-
-    user = session.query(Account).filter_by(email=form['email']).first()
-    # Account Authenthication
-    if user and bcrypt.check_password_hash(user.password, form['password']):
-        login_user(user)  # Remember me remember=form['remember'])
-        print('after:' + str(current_user.is_authenticated))
-        return ('Login Successful')
-    return ('Login Unsuccessful. Please check email and password')
-
 # JWT login
 @app.route("/api/account/login", methods=['GET', 'POST'])
 def login():
-    # TODO Check if JWT already exists
-
     form = request.form
     user = session.query(Account).filter_by(email=form['email']).first()
 
@@ -299,7 +252,7 @@ def login():
         return ('Login Unsuccessful. Please check email and password')
 
 # Route to Logout User
-# TODO may be unecessary - front-end will just delete token
+# TODO may be unecessary - front-end will just delete token (can probably delete)
 @app.route("/api/account/logout", methods=['GET'])
 def logout():
     # Handled by Flask-Login, Deletes Session Cookie
@@ -308,26 +261,23 @@ def logout():
         return "Logged out"
     return("Cannot logout - No user logged in")
 
-# Route to see if user is logged
+# Decodes the auth token, and returns the appropriate user if valid
 @app.route("/api/account/auth", methods=['GET', 'POST'])
-# @login_required
-def isLoggedin():
-    if current_user.is_authenticated:
-        return ("User logged in")
-    return("Please log in")
+def verifyAuthToken():
+    print(request.form)
+    form = request.form
 
-# Route to get user_id
-@app.route("/api/account/auth/getID", methods=['GET', 'POST'])
-@login_required
-def getUserID():
-    print(dir(login_manager))
-    return str(current_user.get_id())
-
-# Returns user information (excluding password) TODO
-# @app.route("/api/account/id/<integer:user_id>", methods=['GET', 'POST'])
-# @login_required
-# def getUserInfo():
-#     pass
+    # Check if auth_token exists
+    if not "auth_token" in form:
+        return "Not logged in"
+    auth_token = form["auth_token"]
+    
+    result = decode_auth_token(auth_token)
+    if representsInt(result):
+        user = session.query(Account).filter_by(user_id=result).first()
+        return jsonify(user.serialize())
+    else:
+        return result
 
 
 if __name__ == "__main__":

@@ -14,27 +14,36 @@ class HeaderMessage extends React.Component {
         this.baseURL = baseURL;
     }
 
-    render() { // TODO swap this stuff back to normal
-        if (!this.loggedIn()) {
-            return this.loggedInHeader();
+    /**
+     * Checks if a user is currently logged in, returns true or false
+     * If curr_user_JSON is not a JSON, no user is logged in
+     */
+    loggedIn() {
+        console.log(this.curr_user_JSON); // testing only
+
+        try {
+            JSON.parse(this.curr_user_JSON);
+        } catch (e) {
+            return false;
         }
-        else {
-            return this.notLoggedInHeader();
-        }
+        return true;
     }
 
     /**
-     * Checks if a user is currently logged in, returns true or false
+     * Sends the auth token to backend, and saves result
      */
-    loggedIn() {
+    getUser() {
         // Create a new XMLHttpRequest object
         let xhr = new XMLHttpRequest();
 
         // Configure xhr by parameters
-        xhr.open("GET", this.baseUrl + "/api/account/auth", true);
+        console.log(this.baseURL + "api/account/auth");
+        xhr.open("POST", this.baseURL + "api/account/auth", false);
 
         // Send the request over the network
-        xhr.send();
+        var data = new FormData();
+        data.append("auth_token", Cookies.get("auth_token"));
+        xhr.send(data);
 
         // This will be called after the response is received
         xhr.onload = function () {
@@ -52,17 +61,17 @@ class HeaderMessage extends React.Component {
             console.log(xhr.status);
         };
 
-        console.log(xhr.response, "|", xhr.status);
-        return xhr.response === "User logged in";
+        return xhr.response;
     }
 
-    /**
-     * Returns user's name if a user is logged in, or null if no user is logged in
-     * 
-     * TODO implement functionality
-     */
-    getUser() {
-        return null;
+    render() {
+        this.curr_user_JSON = this.getUser();
+        if (this.loggedIn()) {
+            return this.loggedInHeader();
+        }
+        else {
+            return this.notLoggedInHeader();
+        }
     }
 
     /**
@@ -80,6 +89,8 @@ class HeaderMessage extends React.Component {
      * Message displayed when a user IS logged in
      */
     loggedInHeader() {
+        var curr_user = JSON.parse(this.curr_user_JSON);
+
         const spanStyle = {
             textDecorationLine: 'underline',
             cursor: 'pointer'
@@ -87,7 +98,7 @@ class HeaderMessage extends React.Component {
 
         return (
             <div id="header-profile">
-                Welcome, <Link to="register">name!</Link> <span style={spanStyle} onClick={() => this.logOut()}>Log Out</span>
+                Welcome, <Link to="profile">{ curr_user.name }</Link>! <span style={spanStyle} onClick={() => this.logOut()}>Log Out</span>
             </div>
         );
     }

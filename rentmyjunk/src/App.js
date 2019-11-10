@@ -57,9 +57,6 @@ export default function App() {
             <div id="header-mobile-container">
 
               {/* Mobile sidebar toggle */}
-              {/* <div id="sidebarCollapseMobile">
-                <img src={images["arrow"]} alt="toggle"></img>
-              </div> */}
               {mobileToggleButton.render()}
 
               {/* Mobile banner */}

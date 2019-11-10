@@ -36,6 +36,7 @@ class Account(Base, UserMixin):  # Need to add UserMixin
     # For creating JSONs
     def serialize(self):
         return {
+            'user_id': self.user_id,
             'email': self.email,
             'name': self.name,
             'description': self.description,
