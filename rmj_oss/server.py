@@ -278,6 +278,17 @@ def verifyAuthToken():
         return jsonify(user.serialize())
     else:
         return result
+    
+# Returns a user by name
+@app.route("/api/account/get/name/<string:name>", methods=['GET'])
+def getAccountByName(name):
+    # Check for unique name
+    dne_name = session.query(Account).filter_by(name=name).scalar() is None
+    if not dne_name:
+        user = session.query(Account).filter_by(name=name).first()
+        return jsonify(user.serialize_noID())
+    else:
+        return "User not found"
 
 
 if __name__ == "__main__":

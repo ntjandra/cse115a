@@ -151,13 +151,13 @@ export default function App() {
               <Route path="/login">
                 <LogInRoute />
               </Route>
-              <Route path="/profile:profile_id">
+              <Route path="/profile:name">
                 <ProfileRoute />
               </Route>
               <Route path="/profile">
                 <ProfileRedirectRoute />
               </Route>
-              <Route path="/editprofile:profile_id">
+              <Route path="/editprofile:name">
                 <EditProfileRoute />
               </Route>
 
@@ -277,7 +277,8 @@ function LogInRoute() {
 }
 
 function ProfileRoute() {
-  let profilePage = new ProfilePage();
+  let { name } = useParams();
+  let profilePage = new ProfilePage(local_host_url, name);
   return profilePage.render();
 }
 

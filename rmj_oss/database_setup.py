@@ -42,6 +42,12 @@ class Account(Base, UserMixin):  # Need to add UserMixin
             'description': self.description,
             'location': self.location,
         }
+    def serialize_noID(self):
+        return {
+            'name': self.name,
+            'description': self.description,
+            'location': self.location,
+        }
 
     # Overload UserMixin
     def get_id(self):
