@@ -15,7 +15,6 @@ import DeletePostButton from "./components/delete-post-button/DeletePostButton"
 
 import RegisterAccount from "./components/RegisterAccount"
 import LogIn from "./components/LogIn"
-import LogOut from "./components/LogOut"
 import ProfilePage from "./components/ProfilePage"
 import EditProfile from "./components/EditProfile"
 
@@ -154,9 +153,6 @@ export default function App() {
               <Route path="/login">
                 <LogInRoute />
               </Route>
-              <Route path="/logout">
-                <LogOutRoute />
-              </Route>
               <Route path="/profile:profile_id">
                 <ProfileRoute />
               </Route>
@@ -277,11 +273,6 @@ function RegisterRoute() {
 function LogInRoute() {
   let logIn = new LogIn(local_host_url, "/api/account/login");
   return logIn.render();
-}
-
-function LogOutRoute() {
-  let logOut = new LogOut();
-  return logOut.render();
 }
 
 function ProfileRoute() {

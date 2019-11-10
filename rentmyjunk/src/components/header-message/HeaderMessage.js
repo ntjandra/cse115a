@@ -71,7 +71,7 @@ class HeaderMessage extends React.Component {
     notLoggedInHeader() {
         return (
             <div id="header-profile">
-                Welcome! <Link to="register">Register</Link> / <Link to="login">Log In</Link>
+                Welcome! <Link to="register">Register</Link> / <a onClick={() => this.xhrLogOut()}>Log In</a>
             </div>
         );
     }
@@ -85,6 +85,37 @@ class HeaderMessage extends React.Component {
                 Welcome, <Link to="register">name!</Link> <Link to="logout">Log Out</Link>
             </div>
         );
+    }
+
+    xhrLogOut() {
+        var type = "GET";
+        var route = "api/account/logout";
+        var local_host_url = this.baseURL + "/";
+        // Create a new XMLHttpRequest object
+        let xhr = new XMLHttpRequest();
+
+        // Configure xhr by parameters
+        xhr.open(type, local_host_url + route, false);
+
+        // Send the request over the network
+        xhr.send();
+
+        // This will be called after the response is received
+        xhr.onload = function () {
+            if (xhr.status !== 200) {
+                // analyze HTTP status of the response
+                console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
+            } else {
+                // show the result
+                console.log(`Done, got ${xhr.response.length} bytes`); // responseText is the server
+                console.log(xhr.response);
+            }
+        };
+
+        xhr.onerror = function () {
+            console.log("Request failed");
+            console.log(xhr.status);
+        }
     }
 }
 
