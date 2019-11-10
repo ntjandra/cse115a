@@ -15,5 +15,6 @@ matrix:
         - cd rentmyjunk
       install:
         - npm install
+        - npm install react-bootstrap bootstrap
       script:
         - npm run-script build

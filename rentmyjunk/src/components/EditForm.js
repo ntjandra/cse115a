@@ -1,37 +1,37 @@
 import React from "react";
 import Form from "./Form";
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 class EditForm extends Form {
   render() {
     return (
-      <div>
-        <h1>
-          <font face="Trebuchet MS">
-            <b>Edit Post</b>
-          </font>
-        </h1>
+      <div class="col-lg-6 offset-2">
+        <h2>Edit a post</h2>
         <form onSubmit={this.handleSubmit}>
-          <p>Product Title:</p>
-          {/* hard coded an ID w/ value 1 for testing */}
-          <input type="hidden" name="postid" value="1" />
-          <input type="text" name="title" />
-          <p>Product Description:</p>
-          <textarea type="text" name="description" />
-          <p>Contact Information:</p>
-          <input type="text" name="contact" />
-          <p>Location:</p>
-          <input type="text" name="location" />
-          <p>Price:</p>
-          <input type="text" name="price" />
-          <br></br>
-          <br></br>
-          <div className="form-group">
-            <input
-              type="submit"
-              value="Save Changes"
-              className="btn btn-primary"
-            />
-          </div>
+            <div className="form-group">
+                <label>Product Title: </label>
+                <input id="title" name="title" type="text" className="form-control" placeholder="todo: get post title" required />
+            </div>
+            <div className="form-group">
+                <label>Product Description: </label>
+                <textarea id="description" name="description" type="text" rows="5" className="form-control" placeholder="todo: get post description" required />
+            </div>
+            <div className="form-group">
+                <label>Contact Information: </label>
+                <input id="contact" name="contact" type="text" className="form-control" placeholder="todo: get post contact info" required />
+            </div>
+            <div className="form-group">
+                <label>Location: </label>
+                <input id="location" name="location" type="text" className="form-control" placeholder="todo: get post location" required />
+            </div>
+            <div className="form-group">
+                <label>Price: </label>
+                <input id="price" name="price" type="number" className="form-control" placeholder="todo: get post price" required />
+            </div>
+            <div className="form-group">
+                <input type="submit" name="submit" value="Save changes" className="btn btn-primary" />
+            </div>
         </form>
       </div>
     );
