@@ -56,7 +56,7 @@ session = DBSession()
 def encode_auth_token(user_id):
         try:
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=60),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
                 'iat': datetime.datetime.utcnow(),
                 'sub': user_id
             }
@@ -291,13 +291,15 @@ def login():
     # Verify login information
     if user and bcrypt.check_password_hash(user.password, form['password']):
         auth_token = encode_auth_token(user.user_id)
-        print(decode_auth_token(auth_token))
-        return 'Login success? check jwt'
+        # Verify auth_token is a jwt, then return
+        # TODO verification stuff
+        return auth_token
 
     else:
         return ('Login Unsuccessful. Please check email and password')
 
 # Route to Logout User
+# TODO may be unecessary - front-end will just delete token
 @app.route("/api/account/logout", methods=['GET'])
 def logout():
     # Handled by Flask-Login, Deletes Session Cookie

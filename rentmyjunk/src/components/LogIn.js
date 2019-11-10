@@ -1,5 +1,6 @@
 import React from "react";
 import Form from "./Form";
+import Cookies from "js-cookie";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -41,12 +42,14 @@ class LogIn extends Form {
      * TODO maybe redirect to profile page? Fail condition as well
      */
     onSuccessResponse(xhr) {
-        if (xhr.response === "Login Successful") {
-            // window.location.pathname = "/";
-            console.log(xhr.response);
+        if (xhr.response === "Login Unsuccessful. Please check email and password") {
+            alert(xhr.response);
         }
         else {
-            alert(xhr.response);
+            console.log("Login success")
+            // alert(xhr.response);
+            Cookies.set("auth_token", xhr.response)
+            window.location.pathname = "/";
         }
     }
 }

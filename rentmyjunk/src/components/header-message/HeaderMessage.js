@@ -2,6 +2,7 @@ import React from 'react';
 import {
     Link
 } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 /**
  * The message present in the header. Changes depending on the login-status of a user.
@@ -13,7 +14,7 @@ class HeaderMessage extends React.Component {
         this.baseURL = baseURL;
     }
 
-    render() {
+    render() { // TODO swap this stuff back to normal
         if (!this.loggedIn()) {
             return this.loggedInHeader();
         }
@@ -91,48 +92,10 @@ class HeaderMessage extends React.Component {
         );
     }
 
+    // Deletes the JWT used for authenticating login
     logOut() {
-        var response = this.xhrLogOut();
-        console.log(response);
-        if (response === "Logged out") {
-            window.location.reload();
-        }
-        else {
-            alert(response);
-        }
-    }
-
-    xhrLogOut() {
-        var type = "GET";
-        var route = "api/account/logout";
-        var local_host_url = this.baseURL;
-        // Create a new XMLHttpRequest object
-        let xhr = new XMLHttpRequest();
-
-        // Configure xhr by parameters
-        xhr.open(type, local_host_url + route, false);
-
-        // Send the request over the network
-        xhr.send();
-
-        // This will be called after the response is received
-        xhr.onload = function () {
-            if (xhr.status !== 200) {
-                // analyze HTTP status of the response
-                console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
-            } else {
-                // show the result
-                console.log(`Done, got ${xhr.response.length} bytes`); // responseText is the server
-                console.log(xhr.response);
-            }
-        };
-
-        xhr.onerror = function () {
-            console.log("Request failed");
-            console.log(xhr.status);
-        }
-
-        return xhr.response;
+        Cookies.remove("auth_token");
+        window.location.reload();
     }
 }
 
