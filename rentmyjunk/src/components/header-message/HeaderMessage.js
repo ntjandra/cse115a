@@ -19,8 +19,6 @@ class HeaderMessage extends React.Component {
      * If curr_user_JSON is not a JSON, no user is logged in
      */
     loggedIn() {
-        console.log(this.curr_user_JSON); // testing only
-
         try {
             JSON.parse(this.curr_user_JSON);
         } catch (e) {

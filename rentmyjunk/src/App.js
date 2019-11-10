@@ -358,8 +358,6 @@ function xhrSend(type, route, data) {
  * If curr_user_JSON is not a JSON, no user is logged in
  */
 function loggedIn(curr_user_JSON) {
-  console.log(curr_user_JSON); // testing only
-
   try {
     JSON.parse(curr_user_JSON);
   } catch (e) {

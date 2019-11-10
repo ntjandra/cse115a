@@ -1,4 +1,5 @@
 import React from 'react'
+import JWTActions from '../JWTActions'
 
 class ProfilePage extends React.Component {
 
@@ -56,16 +57,36 @@ class ProfilePage extends React.Component {
     renderProfile(user) {
         return (
             <div>
-                <h2>{ user.name }</h2>
-                <p>{ user.description }</p>
-                <p><strong>Location: </strong>{ user.location }</p>
-                { this.editRedirect() }
+                <h2>{user.name}</h2>
+                <p>{user.description}</p>
+                <p><strong>Location: </strong>{user.location}</p>
+                {this.editRedirect(user)}
             </div>
         );
     }
 
-    editRedirect() {
-        
+    editRedirect(user) {
+        var actions = new JWTActions();
+        var curr_user_JSON = actions.getUser(this.baseURL);
+
+        // Check if logged in and this profile page and this user are the same
+        console.log(curr_user_JSON);
+        var curr_user = actions.getParsedJSON(curr_user_JSON);
+        if (!curr_user) {
+            return "";
+        }
+        else {
+            if (user.name === curr_user.name) {
+                return (
+                    <button className="btn btn-primary"
+                        onClick={() => window.location.pathname = "/editprofile" + this.name}>
+                        Edit Profile
+                    </button>
+                );
+            }
+        }
+
+        return "";
     }
 }
 
