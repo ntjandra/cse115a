@@ -1,10 +1,53 @@
-import React from 'react'
+import React from "react";
+import Form from "./Form";
 
-class LogIn extends React.Component {
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+class LogIn extends Form {
 
     render() {
-        return <h1>Not Implemented</h1>;
+        console.log("Log in status:", this.loggedIn());
+
+        if (this.loggedIn()) {
+            return (
+                <div className="col-lg-6">
+                    <h2>Log In</h2>
+                    <form onSubmit={this.handleSubmit}>
+                        <div className="form-group">
+                            <label>Email: </label>
+                            <input id="email" name="email" type="text" className="form-control" placeholder="Your email" required />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Password: </label>
+                            <input id="password" name="password" type="password" className="form-control" placeholder="Your password" required />
+                        </div>
+
+                        <div className="form-group">
+                            <input type="submit" name="submit" value="Log In" className="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+            );
+        }
+        else {
+            return <h2>A user is already logged in.</h2>
+        }
+    }
+
+    /**
+     * Redirects to login page upon a successful post creation
+     * 
+     * TODO maybe redirect to profile page? Fail condition as well
+     */
+    onSuccessResponse(xhr) {
+        if (xhr.response === "Login Unsuccessful. Please check email and password") {
+            alert(xhr.response);
+        }
+        else {
+            window.location.pathname = "/";
+        }
     }
 }
 
-export default LogIn
+export default LogIn;

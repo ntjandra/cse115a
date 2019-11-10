@@ -22,7 +22,7 @@ class RegisterAccount extends Form {
 
                     <div className="form-group">
                         <label>Password: </label>
-                        <input id="password" name="password" type="password" className="form-control" placeholder="Example: YourName123" required />
+                        <input id="password" name="password" type="password" className="form-control" placeholder="Password" required />
                     </div>
 
                     {/* May need to refactor to dropdown/select locations */}

@@ -285,7 +285,7 @@ function RegisterRoute() {
 }
 
 function LogInRoute() {
-  let logIn = new LogIn();
+  let logIn = new LogIn(local_host_url, "/api/account/login");
   return logIn.render();
 }
 
