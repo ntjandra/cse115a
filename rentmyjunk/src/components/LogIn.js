@@ -44,8 +44,12 @@ class LogIn extends Form {
         if (xhr.response === "Login Unsuccessful. Please check email and password") {
             alert(xhr.response);
         }
+        else if (xhr.response === "Login Successful") {
+            // window.location.pathname = "/";
+            console.log(xhr.response);
+        }
         else {
-            window.location.pathname = "/";
+            alert(xhr.response);
         }
     }
 }
