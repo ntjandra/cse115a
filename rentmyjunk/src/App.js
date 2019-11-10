@@ -6,6 +6,7 @@ import {
   Link,
   useParams
 } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 import EditForm from "./components/EditForm";
 import PostForm from "./components/CreateForm";
@@ -46,7 +47,7 @@ export default function App() {
           <div id="header">
 
             {/* Profile/Register/Sign In */}
-            { headerMessage.render() }
+            {headerMessage.render()}
 
             {/* Banner */}
             <div id="banner-desktop">
@@ -152,6 +153,9 @@ export default function App() {
               </Route>
               <Route path="/profile:profile_id">
                 <ProfileRoute />
+              </Route>
+              <Route path="/profile">
+                <ProfileRedirectRoute />
               </Route>
               <Route path="/editprofile:profile_id">
                 <EditProfileRoute />
@@ -277,6 +281,24 @@ function ProfileRoute() {
   return profilePage.render();
 }
 
+/**
+ * If a user is logged in, redirect to their profile. Else, redirect to register.
+ */
+function ProfileRedirectRoute() {
+  var curr_user_JSON = getUser();
+
+  if (loggedIn(curr_user_JSON)) {
+    var curr_user = JSON.parse(curr_user_JSON);
+    window.location.pathname = "profile" + curr_user.name;
+  }
+  else {
+    window.location.pathname = "login";
+  }
+
+  return "";
+
+}
+
 function EditProfileRoute() {
   let editProfile = new EditProfile();
   return editProfile.render();
@@ -323,5 +345,58 @@ function xhrSend(type, route, data) {
   };
 
   console.log(xhr.response, "|", xhr.status);
+  return xhr.response;
+}
+
+/* -------------------------------
+   JWT Functions
+------------------------------- */
+
+/**
+ * Checks if a user is currently logged in, returns true or false
+ * If curr_user_JSON is not a JSON, no user is logged in
+ */
+function loggedIn(curr_user_JSON) {
+  console.log(curr_user_JSON); // testing only
+
+  try {
+    JSON.parse(curr_user_JSON);
+  } catch (e) {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Sends the auth token to backend, and saves result
+ */
+function getUser() {
+  // Create a new XMLHttpRequest object
+  let xhr = new XMLHttpRequest();
+
+  // Configure xhr by parameters
+  xhr.open("POST", local_host_url + "api/account/auth", false);
+
+  // Send the request over the network
+  var data = new FormData();
+  data.append("auth_token", Cookies.get("auth_token"));
+  xhr.send(data);
+
+  // This will be called after the response is received
+  xhr.onload = function () {
+    if (xhr.status !== 200) {
+      // analyze HTTP status of the response
+      console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
+    } else {
+      // show the result
+      console.log(`Done, got ${xhr.response.length} bytes`); // responseText is the server
+    }
+  };
+
+  xhr.onerror = function () {
+    console.log("Request failed");
+    console.log(xhr.status);
+  };
+
   return xhr.response;
 }
