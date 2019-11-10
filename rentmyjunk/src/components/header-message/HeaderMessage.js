@@ -43,7 +43,6 @@ class HeaderMessage extends React.Component {
             } else {
                 // show the result
                 console.log(`Done, got ${xhr.response.length} bytes`); // responseText is the server
-                console.log(xhr.response);
             }
         };
 

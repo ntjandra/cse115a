@@ -2,11 +2,14 @@ import os
 from database_setup import Base, RentPost, Account
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response, redirect
 from flask_cors import CORS
 from flask_login import (LoginManager, login_user, current_user,
                          logout_user, login_required)
 from flask_bcrypt import Bcrypt
+
+import jwt
+import datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -26,8 +29,9 @@ app.secret_key = os.environ.get('RMJ_KEY')
 
 # Secure Login Sessions by encryption
 
-
+# ---------------------------------------------------------
 # Helper functions
+# ---------------------------------------------------------
 def representsInt(s):
     try:
         int(s)
@@ -43,7 +47,41 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-# Home Route - Returns recent posts
+# ---------------------------------------------------------
+# JWT Authentication
+# Credit to https://realpython.com/token-based-authentication-with-flask/
+# for their tutorial!
+# ---------------------------------------------------------
+# Encode JWT
+def encode_auth_token(user_id):
+        try:
+            payload = {
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=60),
+                'iat': datetime.datetime.utcnow(),
+                'sub': user_id
+            }
+            return jwt.encode(
+                payload,
+                app.config.get('SECRET_KEY'),
+                algorithm='HS256'
+            )
+        except Exception as e:
+            return e
+
+# Decode JWT
+def decode_auth_token(auth_token):
+    try:
+        payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
+        return payload['sub']
+    except jwt.ExpiredSignatureError:
+        return 'Login expired'
+    except jwt.InvalidTokenError:
+        return 'Login invalid'
+
+
+# ---------------------------------------------------------
+# Home Route - Returns recent posts TODO
+# ---------------------------------------------------------
 @app.route("/api/default", methods=['GET', 'POST'])
 def home():
     if request.method == "POST":
@@ -51,6 +89,11 @@ def home():
     if request.method == "GET":
         return "Received GET"
     return "Invalid Method"
+
+
+# ---------------------------------------------------------
+# Post-Related API
+# ---------------------------------------------------------
 
 # Given a post's id, checks for existence and then updates all fields
 @app.route("/api/post/update/<int:post_id>", methods=['GET', 'POST'])
@@ -144,7 +187,10 @@ def deletepost(post_id):
     return "Deleted ID: " + str(post_id) + ", TITLE: " + post_title
 
 
-# Login API Begins here
+# ---------------------------------------------------------
+# Account-Related API
+# ---------------------------------------------------------
+
 """
 Login Manager creates a session cookie for the user/caller
 It does not store their account_id
@@ -218,9 +264,9 @@ force (bool) – If the user is inactive, setting this to True will log them in 
 fresh (bool) – setting this to False will log in the user with a session marked as not “fresh”. Defaults to True.
 """
 
-
-@app.route("/api/account/login", methods=['GET', 'POST'])
-def login():
+# TODO Return a JWT
+@app.route("/api/account/login_old", methods=['GET', 'POST'])
+def login_old():
     print('before:' + str(current_user.is_authenticated))
     if current_user.is_authenticated:
         return ("Error - User is already logged in")
@@ -231,10 +277,25 @@ def login():
     if user and bcrypt.check_password_hash(user.password, form['password']):
         login_user(user)  # Remember me remember=form['remember'])
         print('after:' + str(current_user.is_authenticated))
-        # next_page = request.args.get('next')
-        # The next_page sends back a request token that it passed auth
         return ('Login Successful')
     return ('Login Unsuccessful. Please check email and password')
+
+# JWT login
+@app.route("/api/account/login", methods=['GET', 'POST'])
+def login():
+    # TODO Check if JWT already exists
+
+    form = request.form
+    user = session.query(Account).filter_by(email=form['email']).first()
+
+    # Verify login information
+    if user and bcrypt.check_password_hash(user.password, form['password']):
+        auth_token = encode_auth_token(user.user_id)
+        print(decode_auth_token(auth_token))
+        return 'Login success? check jwt'
+
+    else:
+        return ('Login Unsuccessful. Please check email and password')
 
 # Route to Logout User
 @app.route("/api/account/logout", methods=['GET'])
@@ -257,6 +318,7 @@ def isLoggedin():
 @app.route("/api/account/auth/getID", methods=['GET', 'POST'])
 @login_required
 def getUserID():
+    print(dir(login_manager))
     return str(current_user.get_id())
 
 # Returns user information (excluding password) TODO

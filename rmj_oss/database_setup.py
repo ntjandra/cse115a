@@ -7,6 +7,9 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
 from flask_login import LoginManager, UserMixin
 
+import jwt
+import datetime
+
 # create declarative_base instance
 Base = declarative_base()
 login_manager = LoginManager()
@@ -30,6 +33,7 @@ class Account(Base, UserMixin):  # Need to add UserMixin
     location = Column(String(250), nullable=True, default="Unknown")
     password = Column(String(32), nullable=False)
 
+    # For creating JSONs
     def serialize(self):
         return {
             'email': self.email,
