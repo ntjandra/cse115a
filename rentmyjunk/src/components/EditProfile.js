@@ -57,7 +57,7 @@ class EditProfile extends Form {
 
         // Add auth token and name
         data.append("auth_token", Cookies.get("auth_token"));
-        data.append("target_id", this.id);
+        data.append("target_id", this.user.user_id);
 
         var xhr = new XMLHttpRequest();
 
@@ -104,11 +104,11 @@ class EditProfile extends Form {
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
                         <label>Description: </label>
-                        <textarea id="description" name="description" type="text" rows="5" className="form-control" placeholder="todo: get post description" required />
+                        <textarea id="description" name="description" type="text" rows="5" className="form-control" placeholder={this.user.description} required />
                     </div>
                     <div className="form-group">
                         <label>Location: </label>
-                        <input id="location" name="location" type="text" className="form-control" placeholder="todo: get post contact info" required />
+                        <input id="location" name="location" type="text" className="form-control" placeholder={this.user.location} required />
                     </div>
                     <div className="form-group">
                         <input type="submit" name="submit" value="Save changes" className="btn btn-primary" />
@@ -116,6 +116,16 @@ class EditProfile extends Form {
                 </form>
             </div>
         );
+    }
+
+    onSuccessResponse(xhr) {
+        if (xhr.response == "You cannot edit this profile") {
+            alert(xhr.response);
+        }
+        else {
+            alert("Profile updated!")
+            // window.location.pathname = "/profile" + this.name;
+        }
     }
 }
 

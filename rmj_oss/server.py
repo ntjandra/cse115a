@@ -261,9 +261,20 @@ def logout():
         return "Logged out"
     return("Cannot logout - No user logged in")
 
-# Update a profile, if the auth token matches the requested update target TODO
+# Update a profile, if the auth token matches the requested update target
 @app.route("/api/account/update", methods=['POST'])
 def updateAccount():
+    form = request.form
+
+    # Get the current user's id, and compare to the edit target's id
+    auth_token = form["auth_token"]
+    curr_user_id = decode_auth_token(auth_token)
+    target_id = int(form["target_id"]) # Casting is REQUIRED
+    if curr_user_id != target_id:
+        print("bad edit target")
+        return "You cannot edit this profile"
+
+    print("good edit target")
     return ""
 
 # Decodes the auth token, and returns the appropriate user if valid
