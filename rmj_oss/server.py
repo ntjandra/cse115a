@@ -233,24 +233,25 @@ def isLoggedin():
     if current_user.is_authenticated:
         return ("User logged in")
     return("Please log in")
-	
+
 # Update a profile, if the auth token matches the requested update target
 @app.route("/api/account/update", methods=['POST'])
 def updateAccount():
     form = request.form
-
+    
     # Get the current user's id, and compare to the edit target's id
     auth_token = form["auth_token"]
     curr_user_id = decode_auth_token(auth_token)
 
     # Update user's account information
     user = session.query(Account).filter_by(user_id=curr_user_id).first()
-    user.email = form["email"] 
-    user.name = form["name"]
+    user.email = form["email"]
+	user.name = form["name"]
     user.description = form["description"]
     user.location = form["location"]
-    password = form["password"] #temp variable
-    if(password != NULL and password != ""):	# check if password has been edited/is not an empty string
+    password = form["password"]  # temp variable
+    # check if password has been edited/is not an empty string
+    if(password != NULL and password != ""):
         hashed_password = (
             bcrypt.generate_password_hash(password)
             .decode('utf-8'))
