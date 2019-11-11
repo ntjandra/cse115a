@@ -96,7 +96,7 @@ def search():
 @app.route("/api/search/place/<string:place>", methods=['GET'])
 def search_place(place):
     places = session.query(RentPost).filter_by(location=place).\
-             order_by(RentPost.id).all()
+        order_by(RentPost.id).all()
     return jsonify(place=[post.serialize() for post in places])
 
 # Returns all posts who have a particular word in their post title
@@ -245,7 +245,7 @@ def updateAccount():
     # Update user's account information
     user = session.query(Account).filter_by(user_id=curr_user_id).first()
     user.email = form["email"]
-	user.name = form["name"]
+    user.name = form["name"]
     user.description = form["description"]
     user.location = form["location"]
     password = form["password"]  # temp variable
