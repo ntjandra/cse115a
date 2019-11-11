@@ -4,35 +4,53 @@ import Form from "./Form";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class RegisterForm extends Form {
+
     render() {
         return (
-            <div class="container center_div">
-            <h1 align="center"><font face="Trebuchet MS"><b>Create An Account</b></font></h1>
-            <form action="/action_page.php">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" className="form-control" id="username" placeholder="Enter username" name="username" />
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" className="form-control" id="email" placeholder="Enter email" name="email" />
-                </div>
-                <div class="form-group">
-                    <label for="pwd">Password</label>
-                    <input type="password" className="form-control" id="pwd" placeholder="Enter password" name="pwd" />
-                </div>
-                <div class="form-group">
-                    <label for="pwdConf">Confirm Password</label>
-                    <input type="password" className="form-control" id="pwdConf" placeholder="Confirm password" name="pwdConf" />
-                </div>
-                <form action="?" method="POST">
-                    <div class="g-recaptcha" data-sitekey="6Lf0_b4UAAAAAKZX3E_Ec_bqVre6B6Xpn_3Vfd-b"></div>
+            <div className="col-lg-6 offset-2">
+                <h2 class="title">Create an Account</h2>
+                <form onSubmit={this.handleSubmit}>
+                    <div className="form-group">
+                        <label>Email: </label>
+                        <input id="email" name="email" type="text" className="form-control" placeholder="Example: yourname@email.com" required />
+                    </div>
+                    <div className="form-group">
+                        <label>Username: </label>
+                        <input id="name" name="name" type="text" className="form-control" placeholder="Example: YourName123" required />
+                    </div>
+                    <div className="form-group">
+                        <label>Password: </label>
+                        <input id="password" name="password" type="password" className="form-control" placeholder="Password" required />
+                    </div>
+                    <div className="form-group">
+                        <label>Location: </label>
+                        <input id="location" name="location" type="text" className="form-control" placeholder="Example: YourName123" />
+                    </div>
+                    <div className="form-group">
+                        <label>Bio: </label>
+                        <input id="description" name="description" type="text" rows="5" className="form-control" placeholder="Say something about yourself!" />
+                    </div>
+                    <div className="form-group">
+                        <input align="center" type="submit" name="submit" value="Register" className="btn btn-primary" />
+                    </div>
                 </form>
-                <button type="submit">Sign Up</button>
-            </form>
             </div>
         );
     }
+
+    /**
+     * Redirects to login page upon a successful post creation
+     * 
+     * TODO alert user of successful account creation
+     */
+    onSuccessResponse(xhr) {
+        if (isNaN(xhr.response)) {
+            alert(xhr.response);
+        }
+        else {
+            window.location.pathname = "/login";
+        }
+    }
 }
 
-export default RegisterForm; 
+export default RegisterForm;
