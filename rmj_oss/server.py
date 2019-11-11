@@ -274,8 +274,12 @@ def updateAccount():
         print("bad edit target")
         return "You cannot edit this profile"
 
-    print("good edit target")
-    return ""
+    # Update the user's information
+    user = session.query(Account).filter_by(user_id=curr_user_id).first()
+    user.description = form["description"]
+    user.location = form["location"]
+    session.commit()
+    return "Profile successfully edited"
 
 # Decodes the auth token, and returns the appropriate user if valid
 @app.route("/api/account/auth", methods=['GET', 'POST'])

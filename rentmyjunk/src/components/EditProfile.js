@@ -123,8 +123,8 @@ class EditProfile extends Form {
             alert(xhr.response);
         }
         else {
-            alert("Profile updated!")
-            // window.location.pathname = "/profile" + this.name;
+            // alert("Profile updated!")
+            window.location.pathname = "/profile" + this.name;
         }
     }
 }
