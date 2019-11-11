@@ -238,7 +238,6 @@ def isLoggedin():
 @app.route("/api/account/update", methods=['POST'])
 def updateAccount():
     form = request.form
-    
     # Get the current user's id, and compare to the edit target's id
     auth_token = form["auth_token"]
     curr_user_id = decode_auth_token(auth_token)
