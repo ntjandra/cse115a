@@ -119,7 +119,7 @@ class EditProfile extends Form {
     }
 
     onSuccessResponse(xhr) {
-        if (xhr.response == "You cannot edit this profile") {
+        if (xhr.response === "You cannot edit this profile") {
             alert(xhr.response);
         }
         else {
