@@ -50,9 +50,6 @@ export default function App() {
             <li>
               <Link to="/editpost">Edit</Link>
             </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
           </ul>
         </nav>
 
@@ -80,9 +77,6 @@ export default function App() {
           </Route>
           <Route path="/delete">
             <Delete />
-          </Route>
-          <Route path="/login">
-            <LogInRoute />
           </Route>
 
           {/* Pages related to accounts */}
@@ -198,7 +192,7 @@ function RegisterRoute() {
 }
 
 function LogInRoute() {
-  let logIn = new LogIn(local_host_url, "/api/login");
+  let logIn = new LogIn(local_host_url, "/api/account/login");
   return logIn.render();
 }
 

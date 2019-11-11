@@ -1,5 +1,6 @@
 import React from "react";
 import Form from "./Form";
+import Cookies from "js-cookie";
 
 class LogIn extends Form {
   render() {
@@ -41,6 +42,14 @@ class LogIn extends Form {
         </form>
       </div>
     );
+  }
+  onSuccessResponse(xhr) {
+    if (xhr.response === "Incorrect Username or Password") {
+      alert(xhr.response);
+    } else {
+      Cookies.set("auth_token", xhr.response);
+      window.location.pathname = "/"; //redirects to home page on successful login
+    }
   }
 }
 
