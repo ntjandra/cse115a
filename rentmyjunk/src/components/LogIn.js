@@ -1,6 +1,6 @@
 import React from "react";
 import Form from "./Form";
-import Cookies from "js-cookie";
+//import Cookies from "js-cookie";
 
 class LogIn extends Form {
   render() {
@@ -43,6 +43,9 @@ class LogIn extends Form {
       </div>
     );
   }
+
+  // current master branch does not have cookie installed, so commenting it out. Will add it later.
+  /*   
   onSuccessResponse(xhr) {
     if (xhr.response === "Incorrect Username or Password") {
       alert(xhr.response);
@@ -51,6 +54,7 @@ class LogIn extends Form {
       window.location.pathname = "/"; //redirects to home page on successful login
     }
   }
+*/
 }
 
 export default LogIn;
