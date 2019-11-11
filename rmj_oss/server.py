@@ -261,6 +261,11 @@ def logout():
         return "Logged out"
     return("Cannot logout - No user logged in")
 
+# Update a profile, if the auth token matches the requested update target TODO
+@app.route("/api/account/update", methods=['POST'])
+def updateAccount():
+    return ""
+
 # Decodes the auth token, and returns the appropriate user if valid
 @app.route("/api/account/auth", methods=['GET', 'POST'])
 def verifyAuthToken():
@@ -286,7 +291,7 @@ def getAccountByName(name):
     dne_name = session.query(Account).filter_by(name=name).scalar() is None
     if not dne_name:
         user = session.query(Account).filter_by(name=name).first()
-        return jsonify(user.serialize_noID())
+        return jsonify(user.serialize_noEmail())
     else:
         return "User not found"
 

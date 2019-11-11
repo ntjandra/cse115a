@@ -42,8 +42,9 @@ class Account(Base, UserMixin):  # Need to add UserMixin
             'description': self.description,
             'location': self.location,
         }
-    def serialize_noID(self):
+    def serialize_noEmail(self):
         return {
+            'user_id': self.user_id,
             'name': self.name,
             'description': self.description,
             'location': self.location,

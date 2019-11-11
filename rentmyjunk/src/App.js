@@ -301,7 +301,8 @@ function ProfileRedirectRoute() {
 }
 
 function EditProfileRoute() {
-  let editProfile = new EditProfile();
+  let { name } = useParams();
+  let editProfile = new EditProfile(local_host_url, "/api/account/update", name);
   return editProfile.render();
 }
 
