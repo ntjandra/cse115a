@@ -23,7 +23,7 @@ def load_user(user_id):
     return session.query(Account).filter_by(user_id=user_id).first()
 
 
-# Secret Key TODO change when env vars work
+# Secret Key
 app.secret_key = os.environ.get('RMJ_KEY')
 
 

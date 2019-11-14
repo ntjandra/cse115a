@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import Cookies from 'js-cookie';
 
+// Multipart form-data
 import EditForm from "./components/EditForm";
 import PostForm from "./components/CreateForm";
 import SearchForm from "./components/SearchForm.js";
@@ -15,7 +16,9 @@ import EditPostButton from "./components/edit-post-button/EditPostButton";
 import DeletePostButton from "./components/delete-post-button/DeletePostButton"
 
 import RegisterAccount from "./components/RegisterAccount"
+// Add to Side Bar Login/Logout
 import LogIn from "./components/LogIn"
+import LogOut from "./components/LogOut"
 import ProfilePage from "./components/ProfilePage"
 import EditProfile from "./components/EditProfile"
 
@@ -200,6 +203,11 @@ function Search() {
   return form.render();
 }
 
+function Delete() {
+  return <button id="delete">Delete Post</button>;
+  // Should add additional confirmation.
+}
+
 /**
  * About Component
  */
@@ -207,6 +215,7 @@ function About() {
   return <h2>About</h2>;
 }
 
+// What is Users?
 function Users() {
   return <h2>Users</h2>;
 }

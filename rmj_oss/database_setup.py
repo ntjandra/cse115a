@@ -64,6 +64,7 @@ class Account(Base, UserMixin):  # Need to add UserMixin
     def get_reset_token(self, expires_sec=1800):
     s = Serializer(app.config['SECRET_KEY'], expires_sec)
     return s.dumps({'user_id': self.id}).decode('utf-8')
+
     @staticmethod
     def verify_reset_token(token):
         s = Serializer(app.config['SECRET_KEY'])
@@ -98,6 +99,5 @@ class RentPost(Base):
 
 # Creates a create_engine instance at the bottom of the file
 engine = create_engine('sqlite:///site.db')
-
 
 Base.metadata.create_all(engine)
