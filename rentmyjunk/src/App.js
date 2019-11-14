@@ -18,7 +18,6 @@ import DeletePostButton from "./components/delete-post-button/DeletePostButton"
 import RegisterAccount from "./components/RegisterAccount"
 // Add to Side Bar Login/Logout
 import LogIn from "./components/LogIn"
-import LogOut from "./components/LogOut"
 import ProfilePage from "./components/ProfilePage"
 import EditProfile from "./components/EditProfile"
 
@@ -201,11 +200,6 @@ function Home() {
 function Search() {
   let form = new SearchForm(local_host_url);
   return form.render();
-}
-
-function Delete() {
-  return <button id="delete">Delete Post</button>;
-  // Should add additional confirmation.
 }
 
 /**
