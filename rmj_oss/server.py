@@ -52,21 +52,24 @@ session = DBSession()
 # Credit to https://realpython.com/token-based-authentication-with-flask/
 # for their tutorial!
 # ---------------------------------------------------------
+
+
 # Encode JWT
 def encode_auth_token(user_id):
-        try:
-            payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
-                'iat': datetime.datetime.utcnow(),
-                'sub': user_id
-            }
-            return jwt.encode(
-                payload,
-                app.config.get('SECRET_KEY'),
-                algorithm='HS256'
-            )
-        except Exception as e:
-            return e
+    try:
+        payload = {
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
+            'iat': datetime.datetime.utcnow(),
+            'sub': user_id
+        }
+        return jwt.encode(
+            payload,
+            app.config.get('SECRET_KEY'),
+            algorithm='HS256'
+        )
+    except Exception as e:
+        return e
+
 
 # Decode JWT
 def decode_auth_token(auth_token):
@@ -246,7 +249,7 @@ def login():
         auth_token = encode_auth_token(user.user_id)
         # Verify auth_token is a jwt, then return
         # if (type(auth_token) is not bytes):
-            # return ("Error logging in")
+        # return ("Error logging in")
         return bytes(auth_token)
 
     else:
@@ -270,7 +273,7 @@ def updateAccount():
     # Get the current user's id, and compare to the edit target's id
     auth_token = form["auth_token"]
     curr_user_id = decode_auth_token(auth_token)
-    target_id = int(form["target_id"]) # Casting is REQUIRED
+    target_id = int(form["target_id"])  # Casting is REQUIRED
     if curr_user_id != target_id:
         print("bad edit target")
         return "You cannot edit this profile"
@@ -292,14 +295,14 @@ def verifyAuthToken():
     if not "auth_token" in form:
         return "Not logged in"
     auth_token = form["auth_token"]
-    
+
     result = decode_auth_token(auth_token)
     if representsInt(result):
         user = session.query(Account).filter_by(user_id=result).first()
         return jsonify(user.serialize())
     else:
         return result
-    
+
 # Returns a user by name
 @app.route("/api/account/get/name/<string:name>", methods=['GET'])
 def getAccountByName(name):

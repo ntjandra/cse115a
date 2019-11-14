@@ -18,9 +18,10 @@ login_manager = LoginManager()
 
 # Login Cookie at Init
 @login_manager.user_loader
-#Safely cast the user_id to a int
+# Safely cast the user_id to a int
 def load_user(user_id):
     return Account.query.get(int(user_id))
+
 
 # Account class
 class Account(Base, UserMixin):  # Need to add UserMixin
@@ -42,6 +43,7 @@ class Account(Base, UserMixin):  # Need to add UserMixin
             'description': self.description,
             'location': self.location,
         }
+
     def serialize_noEmail(self):
         return {
             'user_id': self.user_id,
@@ -71,6 +73,7 @@ class Account(Base, UserMixin):  # Need to add UserMixin
             return None
         return User.query.get(user_id)
     """
+
 
 class RentPost(Base):
     __tablename__ = 'rentpost'
