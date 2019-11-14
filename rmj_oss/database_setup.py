@@ -59,7 +59,7 @@ class Account(Base, UserMixin):  # Need to add UserMixin
     # Session Token for 2 Factor with expiry
     """
     # Required Import
-    from itsdangerous import 
+    from itsdangerous import
     TimedJSONWebSignatureSerializer as Serializer
     def get_reset_token(self, expires_sec=1800):
     s = Serializer(app.config['SECRET_KEY'], expires_sec)

@@ -256,7 +256,7 @@ def login():
         return ('Login Unsuccessful. Please check email and password')
 
 # Route to Logout User
-# TODO may be unecessary - front-end will just delete token (can probably delete)
+# TODO may be unecessary - front-end will just delete token
 @app.route("/api/account/logout", methods=['GET'])
 def logout():
     # Handled by Flask-Login, Deletes Session Cookie
@@ -292,7 +292,7 @@ def verifyAuthToken():
     form = request.form
 
     # Check if auth_token exists
-    if not "auth_token" in form:
+    if "auth_token" not in form:
         return "Not logged in"
     auth_token = form["auth_token"]
 
