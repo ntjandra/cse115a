@@ -245,9 +245,9 @@ def login():
     if user and bcrypt.check_password_hash(user.password, form['password']):
         auth_token = encode_auth_token(user.user_id)
         # Verify auth_token is a jwt, then return
-        if (type(auth_token) is not bytes):
-            return ("Error logging in")
-        return auth_token
+        # if (type(auth_token) is not bytes):
+            # return ("Error logging in")
+        return bytes(auth_token)
 
     else:
         return ('Login Unsuccessful. Please check email and password')
