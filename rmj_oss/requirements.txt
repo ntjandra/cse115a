@@ -1,5 +1,6 @@
 pep8
 flask
 flask_cors
+flask_login
 sqlalchemy
 pycodestyle
