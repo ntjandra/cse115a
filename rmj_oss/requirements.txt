@@ -2,5 +2,7 @@ pep8
 flask
 flask_cors
 flask_login
+flask_bcrypt
 sqlalchemy
 pycodestyle
+jwt
