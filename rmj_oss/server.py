@@ -1,12 +1,15 @@
+import os
 from database_setup import Base, RentPost, Account
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response, redirect
 from flask_cors import CORS
-from flask_login import (
-    LoginManager, login_user, current_user,
-    logout_user, login_required)
+from flask_login import (LoginManager, login_user, current_user,
+                         logout_user, login_required)
 from flask_bcrypt import Bcrypt
+
+import jwt
+import datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -14,10 +17,21 @@ bcrypt = Bcrypt(app)  # Security
 login_manager = LoginManager(app)  # Flask-Login
 login_manager.login_view = 'login'
 
+# Fix from internet - seems to work TODO verify this is ok
+@login_manager.user_loader
+def load_user(user_id):
+    return session.query(Account).filter_by(user_id=user_id).first()
+
+
+# Secret Key
+app.secret_key = os.environ.get('RMJ_KEY')
+
+
 # Secure Login Sessions by encryption
 
-
+# ---------------------------------------------------------
 # Helper functions
+# ---------------------------------------------------------
 def representsInt(s):
     try:
         int(s)
@@ -33,7 +47,44 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-# Home Route - Returns recent posts
+# ---------------------------------------------------------
+# JWT Authentication
+# Credit to https://realpython.com/token-based-authentication-with-flask/
+# for their tutorial!
+# ---------------------------------------------------------
+
+
+# Encode JWT
+def encode_auth_token(user_id):
+    try:
+        payload = {
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(days=1),
+            'iat': datetime.datetime.utcnow(),
+            'sub': user_id
+        }
+        return jwt.encode(
+            payload,
+            app.config.get('SECRET_KEY'),
+            algorithm='HS256'
+        )
+    except Exception as e:
+        return e
+
+
+# Decode JWT
+def decode_auth_token(auth_token):
+    try:
+        payload = jwt.decode(auth_token, app.config.get('SECRET_KEY'))
+        return payload['sub']
+    except jwt.ExpiredSignatureError:
+        return 'Login expired'
+    except jwt.InvalidTokenError:
+        return 'Login invalid'
+
+
+# ---------------------------------------------------------
+# Home Route - Returns recent posts TODO
+# ---------------------------------------------------------
 @app.route("/api/default", methods=['GET', 'POST'])
 def home():
     if request.method == "POST":
@@ -41,6 +92,11 @@ def home():
     if request.method == "GET":
         return "Received GET"
     return "Invalid Method"
+
+
+# ---------------------------------------------------------
+# Post-Related API
+# ---------------------------------------------------------
 
 # Given a post's id, checks for existence and then updates all fields
 @app.route("/api/post/update/<int:post_id>", methods=['GET', 'POST'])
@@ -82,7 +138,7 @@ def create_post():
     session.commit()
     # print('ID: ' + str(new_post.id)) # Prints this post's ID
 
-    return str(new_post.id) + " 200 OK Success"
+    return str(new_post.id)
 
 # Returns a json contaiining the default of all posts.
 @app.route("/api/search/", methods=['GET'])
@@ -95,8 +151,9 @@ def search():
 # Returns all posts who have a particular address
 @app.route("/api/search/place/<string:place>", methods=['GET'])
 def search_place(place):
-    places = session.query(RentPost).filter_by(location=place).\
-             order_by(RentPost.id).all()
+    # the in_ method is the wildcard for contains anywhere.
+    places = (session.query(RentPost).filter_by(location=place)
+              .order_by(RentPost.id).all())
     return jsonify(place=[post.serialize() for post in places])
 
 # Returns all posts who have a particular word in their post title
@@ -113,7 +170,6 @@ def searchPost(column, value):
         (RentPost.description.contains(value)).all()
         return jsonify(results=[post.serialize() for post in results])
     if (column == "id"):
-        # Single page by ID
         result = session.query(RentPost).filter_by(id=value).first()
         if result is None:  # Special Error Handling for Keys
             return "404-Page Result not found"
@@ -134,21 +190,9 @@ def deletepost(post_id):
     return "Deleted ID: " + str(post_id) + ", TITLE: " + post_title
 
 
-# Login API Begins here
-"""
-Login Manager creates a session cookie for the user/caller
-It does not store their account_id
-Using Flask Login allows us to check the cookie with
-current_user, which is created upon access
-Methods
-is_authenticated : Checks if current user is logged in
-is_active : Handles the ban hammer
-is_anonymous: Not logged in
-
-Can do some neat stuff like
-if post.author != current_user:
-    # Cannot edit file
-"""
+# ---------------------------------------------------------
+# Account-Related API
+# ---------------------------------------------------------
 
 # Route to handle registration
 @app.route("/api/account/register", methods=['POST'])
@@ -156,90 +200,119 @@ def register():
     if current_user.is_authenticated:
         return ("Error - User is already logged in")
 
+    fail_register = False
+    fail_msg = "Error:"
+
     form = request.form
-    user = form['email']
+    email = form['email']
+    name = form['name']
 
-    # Need to check for unique email.
-    dne = session.query(Account).filter_by(user_id=user).scalar() is None
-    if (dne):
-        # Never store passwords in plain text
-        hashed_password = (
-            bcrypt.generate_password_hash(form['password'])
-            .decode('utf-8'))
-        # Extract data from form
-        username = form['name']
-        loc = form['location']
-        bio = form['description']
+    # Check for unique email
+    dne_email = session.query(Account).filter_by(email=email).scalar() is None
+    if not dne_email:
+        fail_register = True
+        fail_msg = fail_msg + " Email is already in use,"
 
-        # Add Basic User to database
-        user = Account(
-            email=user, name=username, password=hashed_password,
-            location=loc, description=bio)
-        session.add(user)
-        session.commit()
-        return ("200 - OK : Account has been created!")
-    return ("404 - OK : Email is Taken")
+    # Check for unique name
+    dne_name = session.query(Account).filter_by(name=name).scalar() is None
+    if not dne_name:
+        fail_register = True
+        fail_msg = fail_msg + " Username is already in use,"
 
+    # Fail if non-unique username or email
+    if fail_register:
+        return fail_msg
 
-# Route to handle User Login
-"""
-From Flask Login
-flask_login.login_user(user, remember=False, duration=None,
-force=False, fresh=True)[source]
-Logs a user in. You should pass the actual user object to this.
- If the user’s is_active property is False,
-  they will not be logged in unless force is True.
+    # Never store passwords in plain text
+    hashed_password = (bcrypt.generate_password_hash(
+        form['password']).decode('utf-8'))
 
-This will return True if the log in attempt succeeds,
-and False if it fails (i.e. because the user is inactive).
+    # Extract data from form
+    loc = form['location']
+    bio = form['description']
 
-Parameters:
-user (object) – The user object to log in.
+    # Add Basic User to database
+    user = Account(email=email, name=name,
+                   password=hashed_password, location=loc, description=bio)
+    session.add(user)
+    session.commit()
+    return str(user.user_id)
 
-remember (bool) – Whether to remember the user after their session expires.
-Defaults to False.
-
-duration (datetime.timedelta) – The amount of time before
-the remember cookie expires.
-If None the value set in the settings is used. Defaults to None.
-
-force (bool) – If the user is inactive, setting this to True
-will log them in regardless. Defaults to False.
-
-fresh (bool) – setting this to False will log in the user
-with a session marked as not “fresh”. Defaults to True.
-"""
-
-
+# JWT login
 @app.route("/api/account/login", methods=['GET', 'POST'])
 def login():
-    if current_user.is_authenticated:
-        return ("Error - User is already logged in")
     form = request.form
-
     user = session.query(Account).filter_by(email=form['email']).first()
-    # Account Authenthication
+
+    # Verify login information
     if user and bcrypt.check_password_hash(user.password, form['password']):
-        login_user(user)  # Remember me remember=form['remember'])
-        # next_page = request.args.get('next')
-        # The next_page sends back a request token that it passed auth
-        return ('Login Successful')
-    return ('Login Unsuccessful. Please check email and password')
+        auth_token = encode_auth_token(user.user_id)
+        # Verify auth_token is a jwt, then return
+        # if (type(auth_token) is not bytes):
+        # return ("Error logging in")
+        return bytes(auth_token)
+
+    else:
+        return ('Login Unsuccessful. Please check email and password')
 
 # Route to Logout User
-@app.route("/api/account/logout")
+# TODO may be unecessary - front-end will just delete token
+@app.route("/api/account/logout", methods=['GET'])
 def logout():
     # Handled by Flask-Login, Deletes Session Cookie
-    logout_user()
-    return "200 OK-- Logged out"
-
-# Route to see if user is logged
-@app.route("/api/account/auth/")
-@login_required
-def isLoggedin():
     if current_user.is_authenticated:
-        return ("User logged in")
-    return("Please log in")
+        logout_user()
+        return "Logged out"
+    return("Cannot logout - No user logged in")
+
+# Update a profile, if the auth token matches the requested update target
+@app.route("/api/account/update", methods=['POST'])
+def updateAccount():
+    form = request.form
+
+    # Get the current user's id, and compare to the edit target's id
+    auth_token = form["auth_token"]
+    curr_user_id = decode_auth_token(auth_token)
+    target_id = int(form["target_id"])  # Casting is REQUIRED
+    if curr_user_id != target_id:
+        print("bad edit target")
+        return "You cannot edit this profile"
+
+    # Update the user's information
+    user = session.query(Account).filter_by(user_id=curr_user_id).first()
+    user.description = form["description"]
+    user.location = form["location"]
+    session.commit()
+    return "Profile successfully edited"
+
+# Decodes the auth token, and returns the appropriate user if valid
+@app.route("/api/account/auth", methods=['GET', 'POST'])
+def verifyAuthToken():
+    print(request.form)
+    form = request.form
+
+    # Check if auth_token exists
+    if "auth_token" not in form:
+        return "Not logged in"
+    auth_token = form["auth_token"]
+
+    result = decode_auth_token(auth_token)
+    if representsInt(result):
+        user = session.query(Account).filter_by(user_id=result).first()
+        return jsonify(user.serialize())
+    else:
+        return result
+
+# Returns a user by name
+@app.route("/api/account/get/name/<string:name>", methods=['GET'])
+def getAccountByName(name):
+    # Check for unique name
+    dne_name = session.query(Account).filter_by(name=name).scalar() is None
+    if not dne_name:
+        user = session.query(Account).filter_by(name=name).first()
+        return jsonify(user.serialize_noEmail())
+    else:
+        return "User not found"
 
 
 if __name__ == "__main__":

@@ -5,6 +5,7 @@
 ### First run
 
 Go to rentmyjunk/ and run `npm install`. It should generate node_modules directory.
+Then run `npm install js-cookie`. This is crucial for tracking login status.
 
 ### Run the website
 
@@ -13,3 +14,4 @@ Go to rentmyjunk/ and run `npm install`. It should generate node_modules directo
   - `pip install flask`
   - `pip install flask_cors`
   - `pip install sqlalchemy`
+  - `pip install pyjwt`

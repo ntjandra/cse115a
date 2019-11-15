@@ -1,0 +1,77 @@
+.profile-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 2px lightgrey;
+    padding: 0px;
+}
+
+.profile-details {
+    margin: 15px;
+}
+
+.profile-container .row {
+    padding: 15px;
+}
+
+.profile-container .profile-header .profile-image {
+    text-align: center;
+    margin-top: 7px;
+}
+
+.profile-container .profile-header .profile-image img {
+    width: 100px;
+}
+
+@media only screen and (max-width: 991px) { /* md and lower */
+    .profile-container .profile-name {
+        text-align: center;
+    }
+
+    .profile-container {
+        margin-left: 50px;
+        margin-right: 50px;
+    }
+}
+
+.profile-container .profile-name h1 {
+    font-size: 25px;
+    padding-top: 40px;
+    padding-bottom: 25px;
+}
+
+.profile-container hr {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.profile-container .progress {
+    margin-top: 4px;
+}
+
+.profile-container h2 {
+    font-size: 20px;
+}
+
+.profile-container .btn {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.profile-container .profile-posts h2 {
+    border-top: 1px solid lightgrey;
+    padding-top: 15px;
+}
+
+.profile-posts img {
+    width: 70px;
+}
+
+.profile-container .profile-posts hr {
+    border-top: 1px dotted lightgray;
+}
+
+.post em{
+    font-size: 12px;
+}

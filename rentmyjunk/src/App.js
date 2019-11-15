@@ -6,20 +6,26 @@ import {
   Link,
   useParams
 } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 // Multipart form-data
 import EditForm from "./components/EditForm";
 import PostForm from "./components/CreateForm";
 import SearchForm from "./components/SearchForm.js";
+import EditPostButton from "./components/edit-post-button/EditPostButton";
+import DeletePostButton from "./components/delete-post-button/DeletePostButton"
 
 import RegisterAccount from "./components/RegisterAccount"
 // Add to Side Bar Login/Logout
 import LogIn from "./components/LogIn"
-import LogOut from "./components/LogOut"
-
-// View and Edit Profile
 import ProfilePage from "./components/ProfilePage"
 import EditProfile from "./components/EditProfile"
+
+import './css_styling/sidebar.css';
+import images from "./ImageLoader";
+import DesktopToggleButton from "./components/sidebar-toggle/DesktopToggleButton";
+import MobileToggleButton from "./components/sidebar-toggle/MobileToggleButton";
+import HeaderMessage from "./components/header-message/HeaderMessage";
 
 var local_host_url = "http://127.0.0.1:5000/";
 
@@ -28,85 +34,155 @@ var local_host_url = "http://127.0.0.1:5000/";
 ------------------------------- */
 
 export default function App() {
-  return (
-    <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-            <li>
-              <Link to="/users">Users</Link>
-            </li>
-            <li>
-              <Link to="/create-post">Create</Link>
-            </li>
-            <li>
-              <Link to="/search">Search</Link>
-            </li>
-            <li>
-              <Link to="/post:postid/delete">Delete</Link>
-            </li>
-            <li>
-              <Link to="/post:postid/update">Edit</Link>
-            </li>
-          </ul>
-        </nav>
+  let desktopToggleButton = new DesktopToggleButton(images["arrow"]);
+  let mobileToggleButton = new MobileToggleButton(images["arrow"]);
+  let headerMessage = new HeaderMessage(local_host_url);
 
-        { /* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */ }
-        <Switch>
-          { /* Pages related to Sidebar */ }
-          <Route path="/about">
-            <About />
-          </Route>
-          <Route path="/users">
-            <Users />
-          </Route>
-          { /* Pages Relating to Post CRUD */ }
-          <Route path="/post:post_id">
-            <PostInfo />
-          </Route>
-          <Route path="/create-post">
-            <CreatePost />
-          </Route>
-          <Route path="/search">
-            <Search />
-          { /* These routes are linked from the prior Post */ }
-          </Route>
-          <Route path="/post:postid/update">
-            <EditPost />
-          </Route>
-          <Route path="/post:postid/delete">
-            <Delete />
-          </Route>
-          { /* Pages related to accounts */ }
-          <Route path="/register">
-            <RegisterRoute />
-          </Route>
-          <Route path="/login">
-            <LogInRoute />
-          </Route>
-          <Route path="/logout">
-            <LogOutRoute />
-          </Route>
-          <Route path="/profile:profile_id">
-            <ProfileRoute />
-          </Route>
-          <Route path="/profile:profile_id/edit">
-            <EditProfileRoute />
-          </Route>
-          {/* Home */}
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
+  return (
+
+    <div id="page-container">
+
+      <Router>
+        <div id="header-container">
+
+          {/* Header + Banner */}
+          <div id="header">
+
+            {/* Profile/Register/Sign In */}
+            {headerMessage.render()}
+
+            {/* Banner */}
+            <div id="banner-desktop">
+              <img src={images["desktop_logo"]} alt="desktop banner"></img>
+            </div>
+
+            {/* Mobile Section */}
+            <div id="header-mobile-container">
+
+              {/* Mobile sidebar toggle */}
+              {mobileToggleButton.render()}
+
+              {/* Mobile banner */}
+              <div id="banner-mobile">
+                <img src={images["mobile_logo"]} alt="banner"></img>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Sidebar */}
+          <nav id="sidebar">
+
+            {/* Sidebar toggle, NOT a Link */}
+            {desktopToggleButton.render()}
+
+            {/* Home */}
+            <Link className="sidebar-element" to="/">
+              <div className="sidebar-text">
+                Home
       </div>
-    </Router>
+              <img src={images["home"]} alt="home"></img>
+            </Link>
+
+            {/* Create Post */}
+            <Link className="sidebar-element" to="createpost">
+              <div className="sidebar-text">
+                Create Post
+      </div>
+              <img src={images["create_post"]} alt="new post"></img>
+            </Link>
+
+            {/* My Profile */}
+            <Link className="sidebar-element" to="profile">
+              <div className="sidebar-text">
+                My Profile
+      </div>
+              <img src={images["profile"]} alt="profile"></img>
+            </Link>
+
+            {/* About Us */}
+            <Link className="sidebar-element" to="aboutus">
+              <div className="sidebar-text">
+                About Us
+      </div>
+              <img src={images["about_us"]} alt="about us"></img>
+            </Link>
+
+            {/* Search */}
+            <Link className="sidebar-element" to="search">
+              <div className="sidebar-text">
+                Search
+      </div>
+              <img src={images["search"]} alt="search"></img>
+            </Link>
+
+          </nav>
+        </div>
+
+        {/* Main Content */}
+        <div id="content-container">
+          <div id="content">
+            {/* INSERT CONTENT */}
+            {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+            <Switch>
+              {/* Pages related to posts */}
+              <Route path="/about">
+                <About />
+              </Route>
+              <Route path="/users">
+                <Users />
+              </Route>
+              <Route path="/editpost:post_id">
+                <EditPost />
+              </Route>
+              <Route path="/post:post_id">
+                <PostInfo />
+              </Route>
+              <Route path="/createpost">
+                <CreatePost />
+              </Route>
+              <Route path="/search">
+                <Search />
+              </Route>
+
+              {/* Pages related to accounts */}
+              <Route path="/register">
+                <RegisterRoute />
+              </Route>
+              <Route path="/login">
+                <LogInRoute />
+              </Route>
+              <Route path="/profile:name">
+                <ProfileRoute />
+              </Route>
+              <Route path="/profile">
+                <ProfileRedirectRoute />
+              </Route>
+              <Route path="/editprofile:name">
+                <EditProfileRoute />
+              </Route>
+
+              {/* Home */}
+              <Route path="/">
+                <Home />
+              </Route>
+            </Switch>
+            {/* /INSERT CONTENT */}
+          </div>
+
+          {/* Footer NECESSARY FOR CREDITING FLATICON */}
+          <hr />
+          <div id="footer">
+            <div id="icon-license">
+              Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a
+                href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+            </div>
+          </div>
+        </div>
+      </Router>
+
+    </div>
   );
 }
 
@@ -126,11 +202,6 @@ function Search() {
   return form.render();
 }
 
-function Delete() {
-  return <button id="delete">Delete Post</button>;
-  // Should add additional confirmation.
-}
-
 /**
  * About Component
  */
@@ -147,7 +218,8 @@ function Users() {
  * Edit Post Component
  */
 function EditPost() {
-  let form = new EditForm(local_host_url, "/api/post/postid:update");
+  let { post_id } = useParams();
+  let form = new EditForm(post_id, local_host_url, "/api/post/update/" + post_id);
   return form.render();
 }
 
@@ -162,33 +234,34 @@ function CreatePost() {
 /**
  * Displays info for specific post, by ID
  *
- * TODO Add styling
+ * TODO Finalize styling
  */
 function PostInfo() {
   let { post_id } = useParams();
+  let editPostBtn = new EditPostButton(post_id);
+  let deletePostBtn = new DeletePostButton(post_id, local_host_url);
 
-  // Put post_id in XHR-sendable form
-  const data = new FormData();
-  data.set("post_id", post_id);
-
-  // Pass variable through XHR-request
-  var post_data = xhrSend("GET", "api/search/post/" + post_id, data);
+  var post_data = xhrSend("GET", "api/search/id/" + post_id, null);
 
   // If post doesn't exist, display error
-  if (post_data === "Error - Requested post ID does not exist.") {
+  if (post_data === "404-Page Result not found") {
     return <h1>{post_data}</h1>;
   }
 
-  // Post exists
-  var post = JSON.parse(post_data);
-  // console.log(post);
+  // // Post exists
+  var post = JSON.parse(post_data).post;
+  console.log(post);
   return (
     <div>
       <h1>{post.title}</h1>
       <p>{post.description}</p>
-      <p>Contact Info: {post.contactinfo}</p>
-      <p>Location: {post.location}</p>
-      <p>Price: {post.price}</p>
+      <p><strong>Contact Info:</strong> {post.contactinfo}</p>
+      <p><strong>Location:</strong> {post.location}</p>
+      <p><strong>Price:</strong> ${post.price}</p>
+      <br />
+      {editPostBtn.render()}
+      <br /><br />
+      {deletePostBtn.render()}
     </div>
   );
 }
@@ -196,28 +269,43 @@ function PostInfo() {
 /* -------------------------------
  * Account Pages
  ------------------------------- */
- function RegisterRoute() {
-   let registerAct = new RegisterAccount();
-   return registerAct.render();
- }
+function RegisterRoute() {
+  let form = new RegisterAccount(local_host_url, "/api/account/register");
+  return form.render();
+}
 
- function LogInRoute() {
-   let logIn = new LogIn();
-   return logIn.render();
- }
-
- function LogOutRoute() {
-  let logOut = new LogOut();
-  return logOut.render();
+function LogInRoute() {
+  let logIn = new LogIn(local_host_url, "/api/account/login");
+  return logIn.render();
 }
 
 function ProfileRoute() {
-  let profilePage = new ProfilePage();
+  let { name } = useParams();
+  let profilePage = new ProfilePage(local_host_url, name);
   return profilePage.render();
 }
 
+/**
+ * If a user is logged in, redirect to their profile. Else, redirect to register.
+ */
+function ProfileRedirectRoute() {
+  var curr_user_JSON = getUser();
+
+  if (loggedIn(curr_user_JSON)) {
+    var curr_user = JSON.parse(curr_user_JSON);
+    window.location.pathname = "profile" + curr_user.name;
+  }
+  else {
+    window.location.pathname = "login";
+  }
+
+  return "";
+
+}
+
 function EditProfileRoute() {
-  let editProfile = new EditProfile();
+  let { name } = useParams();
+  let editProfile = new EditProfile(local_host_url, "/api/account/update", name);
   return editProfile.render();
 }
 
@@ -262,5 +350,56 @@ function xhrSend(type, route, data) {
   };
 
   console.log(xhr.response, "|", xhr.status);
+  return xhr.response;
+}
+
+/* -------------------------------
+   JWT Functions
+------------------------------- */
+
+/**
+ * Checks if a user is currently logged in, returns true or false
+ * If curr_user_JSON is not a JSON, no user is logged in
+ */
+function loggedIn(curr_user_JSON) {
+  try {
+    JSON.parse(curr_user_JSON);
+  } catch (e) {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Sends the auth token to backend, and saves result
+ */
+function getUser() {
+  // Create a new XMLHttpRequest object
+  let xhr = new XMLHttpRequest();
+
+  // Configure xhr by parameters
+  xhr.open("POST", local_host_url + "api/account/auth", false);
+
+  // Send the request over the network
+  var data = new FormData();
+  data.append("auth_token", Cookies.get("auth_token"));
+  xhr.send(data);
+
+  // This will be called after the response is received
+  xhr.onload = function () {
+    if (xhr.status !== 200) {
+      // analyze HTTP status of the response
+      console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
+    } else {
+      // show the result
+      console.log(`Done, got ${xhr.response.length} bytes`); // responseText is the server
+    }
+  };
+
+  xhr.onerror = function () {
+    console.log("Request failed");
+    console.log(xhr.status);
+  };
+
   return xhr.response;
 }

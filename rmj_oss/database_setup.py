@@ -7,6 +7,9 @@ from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
 from flask_login import LoginManager, UserMixin
 
+import jwt
+import datetime
+
 # create declarative_base instance
 Base = declarative_base()
 login_manager = LoginManager()
@@ -31,13 +34,22 @@ class Account(Base, UserMixin):  # Need to add UserMixin
     location = Column(String(250), nullable=True, default="Unknown")
     password = Column(String(32), nullable=False)
 
+    # For creating JSONs
     def serialize(self):
         return {
+            'user_id': self.user_id,
             'email': self.email,
             'name': self.name,
             'description': self.description,
             'location': self.location,
-            'password': self.password,
+        }
+
+    def serialize_noEmail(self):
+        return {
+            'user_id': self.user_id,
+            'name': self.name,
+            'description': self.description,
+            'location': self.location,
         }
 
     # Overload UserMixin
@@ -49,7 +61,6 @@ class Account(Base, UserMixin):  # Need to add UserMixin
     # Required Import
     from itsdangerous import
     TimedJSONWebSignatureSerializer as Serializer
-
     def get_reset_token(self, expires_sec=1800):
     s = Serializer(app.config['SECRET_KEY'], expires_sec)
     return s.dumps({'user_id': self.id}).decode('utf-8')
@@ -88,6 +99,5 @@ class RentPost(Base):
 
 # Creates a create_engine instance at the bottom of the file
 engine = create_engine('sqlite:///site.db')
-
 
 Base.metadata.create_all(engine)
