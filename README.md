@@ -2,5 +2,16 @@
 
 ![travis build](https://travis-ci.org/ntjandra/cse115a.svg?branch=master)
 
-### Sam's Testing Branch
-This branch is for testing out features that have been developed but have not been merged with master, and to see if these features will work together without causing issues. Please do NOT merge this branch into master.
+### First run
+
+Go to rentmyjunk/ and run `npm install`. It should generate node_modules directory.
+Then run `npm install js-cookie`. This is crucial for tracking login status.
+
+### Run the website
+
+- Go to rentmyjunk/ and run `npm start`
+- Go to rmj_oss/ and run `python server.py`. You may need to install some modules:
+  - `pip install flask`
+  - `pip install flask_cors`
+  - `pip install sqlalchemy`
+  - `pip install pyjwt`
