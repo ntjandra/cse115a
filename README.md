@@ -10,8 +10,4 @@ Then run `npm install js-cookie`. This is crucial for tracking login status.
 ### Run the website
 
 - Go to rentmyjunk/ and run `npm start`
-- Go to rmj_oss/ and run `python server.py`. You may need to install some modules:
-  - `pip install flask`
-  - `pip install flask_cors`
-  - `pip install sqlalchemy`
-  - `pip install pyjwt`
+- Go to rmj_oss/ and run once `pip install -r requirements.txt`. Then you can run `python server.py`.
