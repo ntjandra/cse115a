@@ -1,6 +1,7 @@
 import React from "react";
 import Form from "./Form";
-//import Cookies from "js-cookie";
+import Cookies from "js-cookie";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class LogIn extends Form {
   render() {
@@ -43,18 +44,16 @@ class LogIn extends Form {
       </div>
     );
   }
-
-  // current master branch does not have cookie installed, so commenting it out. Will add it later.
-  /*   
+ 
   onSuccessResponse(xhr) {
-    if (xhr.response === "Incorrect Username or Password") {
+    if (xhr.response === "Login Unsuccessful. Please check email and password") {
       alert(xhr.response);
     } else {
+      console.log("Login success")
       Cookies.set("auth_token", xhr.response);
       window.location.pathname = "/"; //redirects to home page on successful login
     }
   }
-*/
 }
 
 export default LogIn;
