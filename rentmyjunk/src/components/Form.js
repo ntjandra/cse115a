@@ -94,6 +94,40 @@ class Form extends React.Component {
      * @param {XMLHttpRequest} xhr XMLHttpRequest object
      */
     onFailureResponse(xhr) { }
+
+    /**
+     * Checks if a user is currently logged in, returns true or false
+     */
+    loggedIn() {
+        // Create a new XMLHttpRequest object
+        let xhr = new XMLHttpRequest();
+
+        // Configure xhr by parameters
+        xhr.open("GET", this.baseUrl + "/api/account/auth", true);
+
+        // Send the request over the network
+        xhr.send();
+
+        // This will be called after the response is received
+        xhr.onload = function () {
+            if (xhr.status !== 200) {
+                // analyze HTTP status of the response
+                console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
+            } else {
+                // show the result
+                console.log(`Done, got ${xhr.response.length} bytes`); // responseText is the server
+                console.log(xhr.response);
+            }
+        };
+
+        xhr.onerror = function () {
+            console.log("Request failed");
+            console.log(xhr.status);
+        };
+
+        console.log(xhr.response, "|", xhr.status);
+        return xhr.response === "User logged in";
+    }
 }
 
 export default Form

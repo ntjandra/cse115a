@@ -63,7 +63,7 @@ class SearchForm extends Form {
 
   render() {
     return (
-      <div class="col-lg-6 offset-2">
+      <div className="col-lg-6">
         <h2>Search</h2>
         <form onSubmit={this.handleSubmit}>
           <div className="form-group">
