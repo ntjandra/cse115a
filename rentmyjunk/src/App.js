@@ -21,6 +21,7 @@ import LogIn from "./components/LogIn"
 import ProfilePage from "./components/ProfilePage"
 import EditProfile from "./components/EditProfile"
 
+import './css_styling/post.css';
 import './css_styling/sidebar.css';
 import images from "./ImageLoader";
 import DesktopToggleButton from "./components/sidebar-toggle/DesktopToggleButton";
