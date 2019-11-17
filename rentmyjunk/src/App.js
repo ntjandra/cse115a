@@ -190,7 +190,9 @@ function Home() {
   return (
     <div>
       <h2>Homes</h2>
-      <div>content</div>
+      <div>
+        content
+      </div>
     </div>
   );
 }
@@ -331,7 +333,7 @@ function xhrSend(type, route, data) {
   xhr.send(data);
 
   // This will be called after the response is received
-  xhr.onload = function() {
+  xhr.onload = function () {
     if (xhr.status !== 200) {
       // analyze HTTP status of the response
       console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
@@ -342,7 +344,7 @@ function xhrSend(type, route, data) {
     }
   };
 
-  xhr.onerror = function() {
+  xhr.onerror = function () {
     console.log("Request failed");
     console.log(xhr.status);
   };
@@ -401,4 +403,3 @@ function getUser() {
 
   return xhr.response;
 }
-
