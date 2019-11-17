@@ -106,6 +106,12 @@ def edit_post(post_id):
         return str('Error - Requested post ID does not exist.')
     form = request.form
     old_post = session.query(RentPost).filter_by(id=post_id).first()
+
+    # Ownership check
+    if int(form['curr_user_id']) is not int(old_post.author_id):
+        print('Bad user edit request')
+        return str('You do not have permission to edit this post')
+
     # Edit Data from form
     old_post.title = form['title']
     old_post.description = form['description']
@@ -191,8 +197,6 @@ def deletepost(post_id):
     post_to_delete = session.query(RentPost).filter_by(id=post_id).one()
 
     # Ownership check
-    print(request.form['curr_user_id'])
-    print(post_to_delete.author_id)
     if int(request.form['curr_user_id']) is not int(post_to_delete.author_id):
         print('Bad user delete request')
         return str('You do not have permission to delete this post')
