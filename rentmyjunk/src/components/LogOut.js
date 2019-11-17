@@ -1,10 +1,10 @@
 import React from 'react'
 
-class RegisterAccount extends React.Component {
+class LogOut extends React.Component {
 
     render() {
         return <h1>Not Implemented</h1>;
     }
 }
 
-export default RegisterAccount
+export default LogOut
