@@ -245,7 +245,7 @@ function PostInfo() {
   }
 
   // // Post exists
-  var post = JSON.parse(post_data).post;
+  var post = JSON.parse(post_data);
   console.log(post);
   return (
     <div>
