@@ -1,5 +1,6 @@
 import React from 'react'
 import Form from './Form'
+import JWTActions from '../JWTActions'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -39,10 +40,63 @@ class PostForm extends Form {
     }
 
     /**
+     * It sends the information to the API at the specified route.
+     * @param {*} event event
+     */
+    handleSubmit(event) {
+        var actions = new JWTActions();
+
+        event.preventDefault();
+        const data = new FormData(event.target);
+        var author_id = actions.getUser();
+        data.append("author_id", author_id);
+
+        var xhr = new XMLHttpRequest();
+
+        // Listeners
+        let self = this; // used to call instance's methods in listener
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 0) {
+                // After you have created the XMLHttpRequest object,
+                // but before you have called the open() method.
+
+            } else if (xhr.readyState === 1) {
+                // After you have called the open() method, but before
+                // you have called send().
+
+            } else if (xhr.readyState === 2) {
+                // After you have called send().
+
+            } else if (xhr.readyState === 3) {
+                // After the browser has established a communication with
+                // the server, but before the server has completed the response.
+
+            } else if (xhr.readyState === 4) {
+                // After the request has been completed, and the response
+                // data has been completely received from the server.
+                if (xhr.status === 200) {
+                    self.onSuccessResponse(xhr);
+                } else {
+                    self.onFailureResponse(xhr);
+                }
+            }
+        };
+
+        xhr.open(this.method, this.baseUrl + this.route, true);
+        xhr.send(data);
+    }
+
+    /**
      * Redirects to newly created post page upon a successful post creation
      */
     onSuccessResponse(xhr) {
-        window.location.pathname = "/post" + xhr.responseText;
+        var response = xhr.responseText;
+        if (isNaN(response)) {
+            alert(response);
+        }
+        else {
+            window.location.pathname = "/post" + xhr.responseText;
+        }
     }
 }
 

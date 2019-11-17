@@ -129,10 +129,12 @@ def create_post():
     contact = form['contact']
     loc = form['location']
     price = form['price']
+    author_id = form['author_id']
 
     # Add post to database
     new_post = RentPost(title=title, description=descr,
-                        contactinfo=contact, location=loc, price=price)
+                        contactinfo=contact, location=loc, price=price,
+                        author_id=author_id)
 
     session.add(new_post)
     session.commit()
