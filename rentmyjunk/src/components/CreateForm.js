@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 class PostForm extends Form {
     render() {
         return (
-            <div className="col-lg-6">
+            <div class="col-lg-6 offset-2">
                 <h2>Create a post</h2>
 
                 <form onSubmit={this.handleSubmit}>
@@ -36,13 +36,6 @@ class PostForm extends Form {
                 </form>
             </div>
         )
-    }
-
-    /**
-     * Redirects to newly created post page upon a successful post creation
-     */
-    onSuccessResponse(xhr) {
-        window.location.pathname = "/post" + xhr.responseText;
     }
 }
 

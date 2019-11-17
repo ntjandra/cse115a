@@ -15,7 +15,6 @@ matrix:
         - cd rentmyjunk
       install:
         - npm install
-        - npm install js-cookie
         - npm install react-bootstrap bootstrap
       script:
         - npm run-script build
