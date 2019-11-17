@@ -11,9 +11,9 @@ import Cookies from 'js-cookie';
 // Multipart form-data
 import EditForm from "./components/EditForm";
 import PostForm from "./components/CreateForm";
-import SearchForm from "./components/SearchForm.js";
 import EditPostButton from "./components/edit-post-button/EditPostButton";
 import DeletePostButton from "./components/delete-post-button/DeletePostButton"
+import SearchPage from "./components/SearchPage"
 
 import RegisterAccount from "./components/RegisterAccount"
 // Add to Side Bar Login/Logout
@@ -143,7 +143,7 @@ export default function App() {
                 <CreatePost />
               </Route>
               <Route path="/search">
-                <Search />
+                <SearchPage url={local_host_url} />
               </Route>
 
               {/* Pages related to accounts */}
@@ -195,11 +195,6 @@ function Home() {
       </div>
     </div>
   );
-}
-
-function Search() {
-  let form = new SearchForm(local_host_url);
-  return form.render();
 }
 
 /**
