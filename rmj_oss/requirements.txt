@@ -2,4 +2,9 @@ pep8
 flask
 flask_cors
 sqlalchemy
+<<<<<<< HEAD
 pycodestyle
+=======
+pycodestyle
+jwt
+>>>>>>> parent of 57917c43... added pyjwt in requirements
