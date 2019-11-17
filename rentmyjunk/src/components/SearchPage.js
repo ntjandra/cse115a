@@ -12,6 +12,7 @@ class SearchPage extends Component {
     }
 
     render() {
+        let r = this.state.searchResults;
         return (
             <div className="col-lg-6">
                 <SearchForm key="-1" url={this.props.url} parentCallback={this.callbackFunction} />
@@ -19,9 +20,9 @@ class SearchPage extends Component {
                 <h2>Results</h2>
                 <div>
                     {
-                        this.state.searchResults.map((post, index) => {
+                        r.length ? this.state.searchResults.map((post, index) => {
                             return <Post key={index} post={post} />
-                        })
+                        }) : <p>No results.</p>
                     }
                 </div>
             </div>
