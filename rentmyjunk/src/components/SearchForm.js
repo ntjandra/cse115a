@@ -15,7 +15,7 @@ class SearchForm extends Component{
   }
 
   sendData(data) {
-    this.props.parentCallback(data);
+    this.props.parentCallback(this.searchInput, data);
   }
 
   onClick() {
