@@ -5,7 +5,15 @@ import JWTActions from '../JWTActions'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class PostForm extends Form {
+
     render() {
+        var actions = new JWTActions();
+        var curr_user_JSON = actions.getUser(url);
+
+        if (!actions.loggedIn(curr_user_JSON)) {
+            return <h2>Please log in before trying to create a post.</h2>
+        }
+
         return (
             <div className="col-lg-6">
                 <h2>Create a post</h2>
@@ -48,7 +56,7 @@ class PostForm extends Form {
 
         event.preventDefault();
         const data = new FormData(event.target);
-        var author_id = actions.getUser();
+        var author_id = actions.getUser(this.baseUrl);
         data.append("author_id", author_id);
 
         var xhr = new XMLHttpRequest();

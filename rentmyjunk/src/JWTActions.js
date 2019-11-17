@@ -11,7 +11,6 @@ class JWTActions {
      * If curr_user_JSON is not a JSON, no user is logged in
      */
     loggedIn(curr_user_JSON) {
-
         try {
             JSON.parse(curr_user_JSON);
         } catch (e) {

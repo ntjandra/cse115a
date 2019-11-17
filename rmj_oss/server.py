@@ -130,6 +130,7 @@ def create_post():
     loc = form['location']
     price = form['price']
     author_id = form['author_id']
+    author_name = session.query(Account).filter_by(name=name).first()
 
     # Add post to database
     new_post = RentPost(title=title, description=descr,
@@ -138,7 +139,8 @@ def create_post():
 
     session.add(new_post)
     session.commit()
-    # print('ID: ' + str(new_post.id)) # Prints this post's ID
+
+    print(new_post.serialize())
 
     return str(new_post.id)
 
