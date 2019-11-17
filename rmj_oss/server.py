@@ -130,12 +130,12 @@ def create_post():
     loc = form['location']
     price = form['price']
     author_id = form['author_id']
-    author_name = session.query(Account).filter_by(name=name).first()
+    author_name = form['author_name']
 
     # Add post to database
     new_post = RentPost(title=title, description=descr,
                         contactinfo=contact, location=loc, price=price,
-                        author_id=author_id)
+                        author_id=author_id, author_name=author_name)
 
     session.add(new_post)
     session.commit()
@@ -187,7 +187,16 @@ def deletepost(post_id):
     dne = session.query(RentPost).filter_by(id=post_id).scalar() is None
     if dne:
         return str('Error - Requested post ID does not exist.')
+
     post_to_delete = session.query(RentPost).filter_by(id=post_id).one()
+
+    # Ownership check
+    print(request.form['curr_user_id'])
+    print(post_to_delete.author_id)
+    if int(request.form['curr_user_id']) is not int(post_to_delete.author_id):
+        print('Bad user delete request')
+        return str('You do not have permission to delete this post')
+
     post_title = post_to_delete.title
     session.delete(post_to_delete)
     session.commit()

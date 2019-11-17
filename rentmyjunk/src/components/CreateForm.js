@@ -9,8 +9,9 @@ class PostForm extends Form {
     render() {
         var actions = new JWTActions();
         var curr_user_JSON = actions.getUser(this.baseUrl + "/");
+        this.curr_user = actions.getParsedJSON(curr_user_JSON);
 
-        if (!actions.loggedIn(curr_user_JSON)) {
+        if (!this.curr_user) {
             return <h2>Please log in before trying to create a post.</h2>
         }
 
@@ -52,12 +53,11 @@ class PostForm extends Form {
      * @param {*} event event
      */
     handleSubmit(event) {
-        var actions = new JWTActions();
 
         event.preventDefault();
         const data = new FormData(event.target);
-        var author_id = actions.getUser(this.baseUrl + "/");
-        data.append("author_id", author_id);
+        data.append("author_id", this.curr_user.user_id);
+        data.append("author_name", this.curr_user.name);
 
         var xhr = new XMLHttpRequest();
 

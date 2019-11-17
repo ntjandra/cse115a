@@ -1,4 +1,5 @@
 import React from 'react'
+import JWTActions from "../../JWTActions"
 
 class DeletePostButton extends React.Component {
 
@@ -28,6 +29,12 @@ class DeletePostButton extends React.Component {
         // Configure xhr by parameters
         xhr.open(type, this.local_host_url + route, false);
 
+        data = new FormData();
+        var actions = new JWTActions();
+        var curr_user_JSON = actions.getUser(this.local_host_url);
+        var curr_user = actions.getParsedJSON(curr_user_JSON);
+        data.append("curr_user_id", curr_user.user_id);
+
         // Send the request over the network
         xhr.send(data);
 
@@ -56,6 +63,7 @@ class DeletePostButton extends React.Component {
      *  Calls xhr for deleting posts 
      */
     deletePost() {
+
         // Send xhr
         var response = this.xhrSend('POST', 'api/post/delete/' + this.post_id, null);
 
@@ -65,7 +73,8 @@ class DeletePostButton extends React.Component {
         return response;
     }
 
-    render() {
+    render(isAuthor) {
+        if (!isAuthor) return;
         return <button className="btn btn-primary" onClick={() => this.deletePost()}>Delete Post</button>
     }
 }

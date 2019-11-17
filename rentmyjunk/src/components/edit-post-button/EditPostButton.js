@@ -19,7 +19,8 @@ class EditPostButton extends React.Component {
         window.location.pathname = "/editpost" + this.post_id;
     }
 
-    render() {
+    render(isAuthor) {
+        if (!isAuthor) return;
         return <button className="btn btn-primary" onClick={() => this.gotoEditPost()}>Edit Post</button>
     }
 }
