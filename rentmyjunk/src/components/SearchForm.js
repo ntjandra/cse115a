@@ -6,7 +6,12 @@ class SearchForm extends Component{
 
   constructor(props){
     super(props)
-    this.baseUrl = this.props.url;
+
+    this.searchInput = "";
+
+    // This is important so that we can use "this" in these functions
+    this.handleChange = this.handleChange.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
 
   sendData(data) {
@@ -14,35 +19,42 @@ class SearchForm extends Component{
   }
 
   onClick() {
-    let data = [{
-        "contactinfo": "email@address.com",
-        "description": "description for the first posting for the demo",
-        "id": 1,
-        "location": "santa cruz",
-        "price": "lotta money",
-        "title": "my first posting"
-    },
-    {
-        "contactinfo": "my info",
-        "description": "a posting",
-        "id": 2,
-        "location": "australia",
-        "price": "a couple bucks",
-        "title": "postA"
-    }]
-    this.sendData(data);
+    let url = this.props.url;
+    if(this.searchInput === "") {
+      url += "api/search/"
+    } else {
+      url += "api/search/item/" + this.searchInput;
+    }
+
+    let self = this;
+    let xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          self.sendData(JSON.parse(xhr.responseText));
+        } else {
+          self.sendData([xhr.statusText]);
+        }
+      }
+    }
+    xhr.open("GET", url, true);
+    xhr.send();
   }
+
+  handleChange(e) {
+    this.searchInput = e.target.value;
+  }
+
 
   render() {
     return (
       <div>
         <h2>Search</h2>
         <div className="form-group">
-          <label>Search:</label>
-          <input id="title" name="title" type="text" className="form-control" placeholder="Search... (required)" required/>
+          <input type="text" className="form-control" placeholder="Search... (required)" onChange={this.handleChange} />
         </div>
         <div className="form-group">
-            <button className="btn btn-primary" onClick={() => this.onClick()}>Search</button>
+            <button className="btn btn-primary" onClick={this.onClick}>Search</button>
         </div>
       </div>
     );

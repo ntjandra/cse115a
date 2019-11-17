@@ -18,9 +18,11 @@ class SearchPage extends Component {
 
                 <h2>Results</h2>
                 <div>
-                    {this.state.searchResults.map((post, index) => {
-                        return <Post key={index} post={post} />
-                    })}
+                    {
+                        this.state.searchResults.map((post, index) => {
+                            return <Post key={index} post={post} />
+                        })
+                    }
                 </div>
             </div>
         );
