@@ -8,11 +8,12 @@ class Post extends Component {
 
     render() {
         let p = this.props.post;
+        let linkToPost = "/post" + p.id;
 
         if (this.isDict(p)) {
             return (
                 <div id={p.id} className="post">
-                    <h4> { p.title } </h4>
+                    <h4> <a href={linkToPost}>{ p.title }</a> </h4>
                     <p>  { p.description } </p>
                     <p className="details">Available at {p.location}, for {p.price}. Contact: {p.contactinfo}</p>
                 </div>
