@@ -24,7 +24,7 @@ class SearchPage extends Component {
 
                 <h2>Results</h2>
                 <div>
-                    {s.searchResults.length ? <em>Results for: "s.query"</em> : ""}
+                    {s.searchResults.length ? <em>Results for: {s.query}</em> : ""}
                     {
                         s.searchResults.length ? s.searchResults.map((post, index) => {
                             return <Post key={index} post={post} />
