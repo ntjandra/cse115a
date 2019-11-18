@@ -55,11 +55,14 @@ class ProfilePage extends React.Component {
     }
 
     renderProfile(user) {
+        var user_id = user.user_id;
+
         return (
             <div>
                 <h2>{user.name}</h2>
                 <p>{user.description}</p>
                 <p><strong>Location: </strong>{user.location}</p>
+                {this.renderPostsContainer(user_id, user.name)}
                 {this.editRedirect(user)}
             </div>
         );
@@ -70,7 +73,7 @@ class ProfilePage extends React.Component {
         var curr_user_JSON = actions.getUser(this.baseURL);
 
         // Check if logged in and this profile page and this user are the same
-        console.log(curr_user_JSON);
+        // console.log(curr_user_JSON);
         var curr_user = actions.getParsedJSON(curr_user_JSON);
         if (!curr_user) {
             return "";
@@ -87,6 +90,72 @@ class ProfilePage extends React.Component {
         }
 
         return "";
+    }
+
+    renderPostsContainer(user_id, user_name) {
+        var posts_raw = this.getPosts(user_id);
+        var posts_JSON = JSON.parse(posts_raw);
+
+        return (
+            <div id="user-posts">
+                <h4>{user_name}'s Posts</h4>
+                {this.renderPosts(posts_JSON)}
+            </div>
+        );
+    }
+
+    renderPosts(posts_JSON) {
+        var posts = new Array(posts_JSON.length);
+        var i;
+        for (i = 0; i < posts_JSON.length; i++) {
+            var post = JSON.parse(posts_JSON[i]);
+            posts[i] = post;
+        }
+
+        return (
+            <ul>
+                {posts.map((post, index) => {
+                    return <li key={index}>
+                        <a href={"./post" + post.id}>
+                            {post.title}
+                        </a>
+                    </li>
+                })}
+            </ul>
+        );
+    }
+
+    /**
+     * Returns a JSON of all of the user's posts
+     */
+    getPosts(user_id) {
+        // Create a new XMLHttpRequest object
+        let xhr = new XMLHttpRequest();
+
+        // Configure xhr by parameters
+        xhr.open("GET", this.baseURL + "api/account/get-posts/" + user_id, false);
+
+        // Send the request over the network
+        var data = new FormData();
+        xhr.send(data);
+
+        // This will be called after the response is received
+        xhr.onload = function () {
+            if (xhr.status !== 200) {
+                // analyze HTTP status of the response
+                console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
+            } else {
+                // show the result
+                console.log(`Done, got ${xhr.response.length} bytes`); // responseText is the server
+            }
+        };
+
+        xhr.onerror = function () {
+            console.log("Request failed");
+            console.log(xhr.status);
+        };
+
+        return xhr.response;
     }
 }
 

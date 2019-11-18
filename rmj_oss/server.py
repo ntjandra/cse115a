@@ -10,6 +10,7 @@ from flask_bcrypt import Bcrypt
 
 import jwt
 import datetime
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -305,7 +306,7 @@ def updateAccount():
 # Decodes the auth token, and returns the appropriate user if valid
 @app.route("/api/account/auth", methods=['GET', 'POST'])
 def verifyAuthToken():
-    print(request.form)
+    # print(request.form)
     form = request.form
 
     # Check if auth_token exists
@@ -332,9 +333,20 @@ def getAccountByName(name):
         return "User not found"
 
 # Returns JSON of all posts owned by a user
-@app.route("api/account/get-posts/<int:user_id>", methods=['GET', 'POST'])
+@app.route("/api/account/get-posts/<int:user_id>", methods=['GET', 'POST'])
 def getPostsOfAccount(user_id):
-    pass
+
+    print('start get posts') # TODO remove
+
+    posts = session.query(RentPost).filter_by(author_id=user_id).all()
+    posts_JSON = []
+
+    for post in posts:
+        posts_JSON.append(json.dumps(post.serialize()))
+
+    print(posts_JSON)
+
+    return jsonify(posts_JSON)
 
 
 if __name__ == "__main__":

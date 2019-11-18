@@ -35,7 +35,7 @@ class HeaderMessage extends React.Component {
         let xhr = new XMLHttpRequest();
 
         // Configure xhr by parameters
-        console.log(this.baseURL + "api/account/auth");
+        // console.log(this.baseURL + "api/account/auth");
         xhr.open("POST", this.baseURL + "api/account/auth", false);
 
         // Send the request over the network
