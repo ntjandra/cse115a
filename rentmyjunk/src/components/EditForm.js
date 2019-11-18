@@ -1,5 +1,6 @@
 import React from "react";
 import Form from "./Form";
+import JWTActions from "../JWTActions"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -15,6 +16,53 @@ class EditForm extends Form {
   constructor(post_id, url, route, get = false) {
     super(url, route);
     this.post_id = post_id;
+  }
+
+  /**
+     * It sends the information to the API at the specified route.
+     * @param {*} event event
+     */
+  handleSubmit(event) {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    var actions = new JWTActions();
+    var curr_user_JSON = actions.getUser(this.baseUrl + "/");
+    var curr_user = actions.getParsedJSON(curr_user_JSON);
+    data.append("curr_user_id", curr_user.user_id);
+
+    var xhr = new XMLHttpRequest();
+
+    // Listeners
+    let self = this; // used to call instance's methods in listener
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 0) {
+        // After you have created the XMLHttpRequest object,
+        // but before you have called the open() method.
+
+      } else if (xhr.readyState === 1) {
+        // After you have called the open() method, but before
+        // you have called send().
+
+      } else if (xhr.readyState === 2) {
+        // After you have called send().
+
+      } else if (xhr.readyState === 3) {
+        // After the browser has established a communication with
+        // the server, but before the server has completed the response.
+
+      } else if (xhr.readyState === 4) {
+        // After the request has been completed, and the response
+        // data has been completely received from the server.
+        if (xhr.status === 200) {
+          self.onSuccessResponse(xhr);
+        } else {
+          self.onFailureResponse(xhr);
+        }
+      }
+    };
+
+    xhr.open(this.method, this.baseUrl + this.route, true);
+    xhr.send(data);
   }
 
   render() {

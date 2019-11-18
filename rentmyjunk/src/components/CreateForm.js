@@ -1,10 +1,20 @@
 import React from 'react'
 import Form from './Form'
+import JWTActions from '../JWTActions'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class PostForm extends Form {
+
     render() {
+        var actions = new JWTActions();
+        var curr_user_JSON = actions.getUser(this.baseUrl + "/");
+        this.curr_user = actions.getParsedJSON(curr_user_JSON);
+
+        if (!this.curr_user) {
+            return <h2>Please log in before trying to create a post.</h2>
+        }
+
         return (
             <div className="col-lg-6">
                 <h2>Create a post</h2>
@@ -39,10 +49,62 @@ class PostForm extends Form {
     }
 
     /**
+     * It sends the information to the API at the specified route.
+     * @param {*} event event
+     */
+    handleSubmit(event) {
+
+        event.preventDefault();
+        const data = new FormData(event.target);
+        data.append("author_id", this.curr_user.user_id);
+        data.append("author_name", this.curr_user.name);
+
+        var xhr = new XMLHttpRequest();
+
+        // Listeners
+        let self = this; // used to call instance's methods in listener
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 0) {
+                // After you have created the XMLHttpRequest object,
+                // but before you have called the open() method.
+
+            } else if (xhr.readyState === 1) {
+                // After you have called the open() method, but before
+                // you have called send().
+
+            } else if (xhr.readyState === 2) {
+                // After you have called send().
+
+            } else if (xhr.readyState === 3) {
+                // After the browser has established a communication with
+                // the server, but before the server has completed the response.
+
+            } else if (xhr.readyState === 4) {
+                // After the request has been completed, and the response
+                // data has been completely received from the server.
+                if (xhr.status === 200) {
+                    self.onSuccessResponse(xhr);
+                } else {
+                    self.onFailureResponse(xhr);
+                }
+            }
+        };
+
+        xhr.open(this.method, this.baseUrl + this.route, true);
+        xhr.send(data);
+    }
+
+    /**
      * Redirects to newly created post page upon a successful post creation
      */
     onSuccessResponse(xhr) {
-        window.location.pathname = "/post" + xhr.responseText;
+        var response = xhr.responseText;
+        if (isNaN(response)) {
+            alert(response);
+        }
+        else {
+            window.location.pathname = "/post" + xhr.responseText;
+        }
     }
 }
 

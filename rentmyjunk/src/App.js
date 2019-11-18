@@ -27,6 +27,7 @@ import images from "./ImageLoader";
 import DesktopToggleButton from "./components/sidebar-toggle/DesktopToggleButton";
 import MobileToggleButton from "./components/sidebar-toggle/MobileToggleButton";
 import HeaderMessage from "./components/header-message/HeaderMessage";
+import JWTActions from "./JWTActions";
 
 var local_host_url = "http://127.0.0.1:5000/";
 
@@ -242,9 +243,19 @@ function PostInfo() {
     return <h1>{post_data}</h1>;
   }
 
-  // // Post exists
+  // Post exists
   var post = JSON.parse(post_data);
-  console.log(post);
+
+  // Compare current user to post's author
+  var actions = new JWTActions();
+  var curr_user_JSON = actions.getUser(local_host_url);
+  var curr_user = actions.getParsedJSON(curr_user_JSON);
+  
+  var isAuthor = true;
+  if (!curr_user || curr_user.user_id !== post.author_id) {
+    isAuthor = false;
+  }
+
   return (
     <div>
       <h1>{post.title}</h1>
@@ -252,10 +263,11 @@ function PostInfo() {
       <p><strong>Contact Info:</strong> {post.contactinfo}</p>
       <p><strong>Location:</strong> {post.location}</p>
       <p><strong>Price:</strong> ${post.price}</p>
+      <p>By <a href={"./profile" + post.author_name}>{post.author_name}</a></p>
       <br />
-      {editPostBtn.render()}
+      {editPostBtn.render(isAuthor)}
       <br /><br />
-      {deletePostBtn.render()}
+      {deletePostBtn.render(isAuthor)}
     </div>
   );
 }
@@ -327,7 +339,7 @@ function xhrSend(type, route, data) {
   xhr.send(data);
 
   // This will be called after the response is received
-  xhr.onload = function() {
+  xhr.onload = function () {
     if (xhr.status !== 200) {
       // analyze HTTP status of the response
       console.log(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
@@ -338,7 +350,7 @@ function xhrSend(type, route, data) {
     }
   };
 
-  xhr.onerror = function() {
+  xhr.onerror = function () {
     console.log("Request failed");
     console.log(xhr.status);
   };

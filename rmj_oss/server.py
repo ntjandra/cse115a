@@ -10,6 +10,7 @@ from flask_bcrypt import Bcrypt
 
 import jwt
 import datetime
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -106,6 +107,12 @@ def edit_post(post_id):
         return str('Error - Requested post ID does not exist.')
     form = request.form
     old_post = session.query(RentPost).filter_by(id=post_id).first()
+
+    # Ownership check
+    if int(form['curr_user_id']) is not int(old_post.author_id):
+        print('Bad user edit request')
+        return str('You do not have permission to edit this post')
+
     # Edit Data from form
     old_post.title = form['title']
     old_post.description = form['description']
@@ -129,14 +136,18 @@ def create_post():
     contact = form['contact']
     loc = form['location']
     price = form['price']
+    author_id = form['author_id']
+    author_name = form['author_name']
 
     # Add post to database
     new_post = RentPost(title=title, description=descr,
-                        contactinfo=contact, location=loc, price=price)
+                        contactinfo=contact, location=loc, price=price,
+                        author_id=author_id, author_name=author_name)
 
     session.add(new_post)
     session.commit()
-    # print('ID: ' + str(new_post.id)) # Prints this post's ID
+
+    print(new_post.serialize())
 
     return str(new_post.id)
 
@@ -183,7 +194,14 @@ def deletepost(post_id):
     dne = session.query(RentPost).filter_by(id=post_id).scalar() is None
     if dne:
         return str('Error - Requested post ID does not exist.')
+
     post_to_delete = session.query(RentPost).filter_by(id=post_id).one()
+
+    # Ownership check
+    if int(request.form['curr_user_id']) is not int(post_to_delete.author_id):
+        print('Bad user delete request')
+        return str('You do not have permission to delete this post')
+
     post_title = post_to_delete.title
     session.delete(post_to_delete)
     session.commit()
@@ -288,7 +306,7 @@ def updateAccount():
 # Decodes the auth token, and returns the appropriate user if valid
 @app.route("/api/account/auth", methods=['GET', 'POST'])
 def verifyAuthToken():
-    print(request.form)
+    # print(request.form)
     form = request.form
 
     # Check if auth_token exists
@@ -313,6 +331,23 @@ def getAccountByName(name):
         return jsonify(user.serialize_noEmail())
     else:
         return "User not found"
+
+# Returns JSON of all posts owned by a user
+@app.route("/api/account/get-posts/<int:user_id>", methods=['GET', 'POST'])
+def getPostsOfAccount(user_id):
+    dne = session.query(RentPost).filter_by(author_id=user_id).scalar() is None
+    if dne:
+        return 'No posts found'
+
+    posts = session.query(RentPost).filter_by(author_id=user_id).all()
+    posts_JSON = []
+
+    for post in posts:
+        posts_JSON.append(json.dumps(post.serialize()))
+
+    print(posts_JSON)
+
+    return jsonify(posts_JSON)
 
 
 if __name__ == "__main__":

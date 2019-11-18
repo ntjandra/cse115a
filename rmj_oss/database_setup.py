@@ -85,6 +85,8 @@ class RentPost(Base):
     location = Column(String(250))
     contactinfo = Column(String(250))
     price = Column(Integer())
+    author_id = Column(Integer(), nullable=False)
+    author_name = Column(String(250), nullable=False)
 
     def serialize(self):
         return {
@@ -94,6 +96,8 @@ class RentPost(Base):
             'location': self.location,
             'contactinfo': self.contactinfo,
             'price': self.price,
+            'author_id': self.author_id,
+            'author_name': self.author_name,
         }
 
 
