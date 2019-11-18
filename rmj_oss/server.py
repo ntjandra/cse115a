@@ -331,6 +331,11 @@ def getAccountByName(name):
     else:
         return "User not found"
 
+# Returns JSON of all posts owned by a user
+@app.route("api/account/get-posts/<int:user_id>", methods=['GET', 'POST'])
+def getPostsOfAccount(user_id):
+    pass
+
 
 if __name__ == "__main__":
     app.run()
