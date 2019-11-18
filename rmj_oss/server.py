@@ -335,9 +335,6 @@ def getAccountByName(name):
 # Returns JSON of all posts owned by a user
 @app.route("/api/account/get-posts/<int:user_id>", methods=['GET', 'POST'])
 def getPostsOfAccount(user_id):
-
-    print('start get posts') # TODO remove
-
     posts = session.query(RentPost).filter_by(author_id=user_id).all()
     posts_JSON = []
 
