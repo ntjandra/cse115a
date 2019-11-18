@@ -11,9 +11,9 @@ import Cookies from 'js-cookie';
 // Multipart form-data
 import EditForm from "./components/EditForm";
 import PostForm from "./components/CreateForm";
-import SearchForm from "./components/SearchForm.js";
 import EditPostButton from "./components/edit-post-button/EditPostButton";
 import DeletePostButton from "./components/delete-post-button/DeletePostButton"
+import SearchPage from "./components/SearchPage"
 
 import RegisterAccount from "./components/RegisterAccount"
 // Add to Side Bar Login/Logout
@@ -21,6 +21,7 @@ import LogIn from "./components/LogIn"
 import ProfilePage from "./components/ProfilePage"
 import EditProfile from "./components/EditProfile"
 
+import './css_styling/post.css';
 import './css_styling/sidebar.css';
 import images from "./ImageLoader";
 import DesktopToggleButton from "./components/sidebar-toggle/DesktopToggleButton";
@@ -143,7 +144,7 @@ export default function App() {
                 <CreatePost />
               </Route>
               <Route path="/search">
-                <Search />
+                <SearchPage url={local_host_url} />
               </Route>
 
               {/* Pages related to accounts */}
@@ -195,11 +196,6 @@ function Home() {
   );
 }
 
-function Search() {
-  let form = new SearchForm(local_host_url);
-  return form.render();
-}
-
 /**
  * About Component
  */
@@ -247,7 +243,7 @@ function PostInfo() {
   }
 
   // // Post exists
-  var post = JSON.parse(post_data).post;
+  var post = JSON.parse(post_data);
   console.log(post);
   return (
     <div>

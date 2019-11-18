@@ -1,0 +1,11 @@
+.post {
+    margin: 5px;
+    padding-left: 10px;
+    padding-top: 10px;
+    border-radius: 10px;
+    background: white;
+}
+
+.post .details {
+    font-size: 14px;
+}
