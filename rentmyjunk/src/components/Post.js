@@ -15,7 +15,7 @@ class Post extends Component {
                 <div id={p.id} className="post">
                     <h4> <a href={linkToPost}>{ p.title }</a> </h4>
                     <p>  { p.description } </p>
-                    <p className="details">Available at {p.location}, for {p.price}. Contact: {p.contactinfo}</p>
+                    <p className="details">Available at {p.location}, for ${p.price}. Contact: {p.contactinfo}</p>
                 </div>
             )
         } else {
