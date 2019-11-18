@@ -94,6 +94,11 @@ class ProfilePage extends React.Component {
 
     renderPostsContainer(user_id, user_name) {
         var posts_raw = this.getPosts(user_id);
+        console.log(posts_raw);
+        if (posts_raw === "No posts found") {
+            console.log("test");
+            return <p>This user hasn't made any posts yet.</p>;
+        }
         var posts_JSON = JSON.parse(posts_raw);
 
         return (
