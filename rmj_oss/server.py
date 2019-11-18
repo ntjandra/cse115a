@@ -155,7 +155,7 @@ def create_post():
 def search():
     # Get all posts
     posts = session.query(RentPost)
-    return jsonify(search=[post.serialize() for post in posts])
+    return jsonify([post.serialize() for post in posts])
 
 # Returns a json of posts that contain a filter
 # Returns all posts who have a particular address
@@ -164,13 +164,13 @@ def search_place(place):
     # the in_ method is the wildcard for contains anywhere.
     places = (session.query(RentPost).filter_by(location=place)
               .order_by(RentPost.id).all())
-    return jsonify(place=[post.serialize() for post in places])
+    return jsonify([post.serialize() for post in places])
 
 # Returns all posts who have a particular word in their post title
 @app.route("/api/search/item/<string:item>", methods=['GET'])
 def search_item(item):
     items = session.query(RentPost).filter(RentPost.title.contains(item))
-    return jsonify(item=[post.serialize() for post in items])
+    return jsonify([post.serialize() for post in items])
 
 # Add DRY here to do (column, search)
 @app.route("/api/search/<string:column>/<string:value>", methods=['GET'])
@@ -178,12 +178,12 @@ def searchPost(column, value):
     if (column == "description"):
         results = session.query(RentPost).filter
         (RentPost.description.contains(value)).all()
-        return jsonify(results=[post.serialize() for post in results])
+        return jsonify([post.serialize() for post in results])
     if (column == "id"):
         result = session.query(RentPost).filter_by(id=value).first()
         if result is None:  # Special Error Handling for Keys
             return "404-Page Result not found"
-        return jsonify(post=result.serialize())
+        return jsonify(result.serialize())
     return "404-Page not Found"
 
 # Given a post's id, checks for existence and then deletes post
