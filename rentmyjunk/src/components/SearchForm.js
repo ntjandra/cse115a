@@ -47,7 +47,7 @@ class SearchForm extends Component{
   }
 
   handleKeyPress(e) {
-    if(e.charCode==13){
+    if(e.charCode === 13){
       // Enter clicked
       this.onClick();
     }
