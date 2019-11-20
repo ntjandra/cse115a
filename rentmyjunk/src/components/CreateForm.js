@@ -34,7 +34,7 @@ class PostForm extends Form {
                     </div>
                     <div className="form-group">
                         <label>Location: </label>
-                        <input id="location" name="location" type="text" className="form-control" placeholder="Santa Cruz Westside" required />
+                        <input id="location" name="location" type="text" className="form-control" placeholder="Location" required />
                     </div>
                     <div className="form-group">
                         <label>Price: </label>
