@@ -31,6 +31,7 @@ class LogIn extends Form {
                             <input type="submit" name="submit" value="Log In" className="btn btn-primary" />
                         </div>
                     </form>
+                    <p>New user? <a href="/register">Create an account!</a></p>
                 </div>
             );
         }
