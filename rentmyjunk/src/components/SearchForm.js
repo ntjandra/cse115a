@@ -10,8 +10,9 @@ class SearchForm extends Component{
     this.searchInput = "";
 
     // This is important so that we can use "this" in these functions
-    this.handleChange = this.handleChange.bind(this);
     this.onClick = this.onClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   sendData(data) {
@@ -45,13 +46,19 @@ class SearchForm extends Component{
     this.searchInput = e.target.value;
   }
 
+  handleKeyPress(e) {
+    if(e.charCode==13){
+      // Enter clicked
+      this.onClick();
+    }
+  }
 
   render() {
     return (
       <div>
         <h2>Search</h2>
         <div className="form-group">
-          <input type="text" className="form-control" placeholder="Search... (required)" onChange={this.handleChange} />
+          <input type="text" className="form-control" placeholder="Search... (required)" onChange={this.handleChange} onKeyPress={this.handleKeyPress}/>
         </div>
         <div className="form-group">
             <button className="btn btn-primary" onClick={this.onClick}>Search</button>
