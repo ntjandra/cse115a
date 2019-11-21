@@ -67,6 +67,7 @@ class SearchForm extends Component{
       // Enter clicked
       this.onClick();
     }
+  }
 
   render() {
     let filters = this.FILTERS;
