@@ -160,32 +160,39 @@ def search():
 
 # Returns a json of posts that contain a filter
 # Returns all posts who have a particular address
-@app.route("/api/search/place/<string:place>", methods=['GET'])
-def search_place(place):
+@app.route("/api/search/location/<string:location>", methods=['GET'])
+def search_location(location):
     # the in_ method is the wildcard for contains anywhere.
-    places = (session.query(RentPost).filter_by(location=place)
-              .order_by(RentPost.id).all())
-    return jsonify([post.serialize() for post in places])
+    posts = session.query(RentPost).filter(RentPost.location.contains(location))
+    return jsonify([post.serialize() for post in posts])
+
+@app.route("/api/search/description/<string:description>", methods=['GET'])
+def search_description(description):
+    posts = session.query(RentPost).filter(RentPost.description.contains(description))
+    return jsonify([post.serialize() for post in posts])
 
 # Returns all posts who have a particular word in their post title
-@app.route("/api/search/item/<string:item>", methods=['GET'])
-def search_item(item):
-    items = session.query(RentPost).filter(RentPost.title.contains(item))
-    return jsonify([post.serialize() for post in items])
+@app.route("/api/search/title/<string:title>", methods=['GET'])
+def search_title(title):
+    posts = session.query(RentPost).filter(RentPost.title.contains(title))
+    return jsonify([post.serialize() for post in posts])
 
 # Add DRY here to do (column, search)
 @app.route("/api/search/<string:column>/<string:value>", methods=['GET'])
 def searchPost(column, value):
-    if (column == "description"):
-        results = session.query(RentPost).filter
-        (RentPost.description.contains(value)).all()
-        return jsonify([post.serialize() for post in results])
+    print(column)
     if (column == "id"):
         result = session.query(RentPost).filter_by(id=value).first()
         if result is None:  # Special Error Handling for Keys
-            return "404-Page Result not found"
+            return "ERROR: wrong post id"
         return jsonify(result.serialize())
-    return "404-Page not Found"
+    if (column == 'title'):
+        return search_title(value)
+    if (column == 'location'):
+        return search_location(value)
+    if (column == "description"):
+        return search_description(value)
+    return "ERROR: wrong column name <" + column + ">."
 
 # Given a post's id, checks for existence and then deletes post
 @app.route("/api/post/delete/<int:post_id>", methods=['POST'])
