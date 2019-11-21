@@ -213,9 +213,14 @@ function Users() {
  * Edit Post Component
  */
 function EditPost() {
-  let { post_id } = useParams();
-  let form = new EditForm(post_id, local_host_url, "/api/post/update/" + post_id);
-  return form.render();
+  let {post_id} = useParams();
+  let post_data = xhrSend("GET", "api/search/id/" + post_id, null);
+
+  if (post_data.startsWith("ERROR")) {
+    return <b>{post_data} - could not get post information</b>;
+  }
+  let post = JSON.parse(post_data);
+  return <EditForm method={"POST"} url={local_host_url} post={post} route={"api/post/update/" + post_id}/>;
 }
 
 /**
@@ -233,13 +238,11 @@ function CreatePost() {
  */
 function PostInfo() {
   let { post_id } = useParams();
-  let editPostBtn = new EditPostButton(post_id);
-  let deletePostBtn = new DeletePostButton(post_id, local_host_url);
 
   var post_data = xhrSend("GET", "api/search/id/" + post_id, null);
 
   // If post doesn't exist, display error
-  if (post_data === "404-Page Result not found") {
+  if (post_data.startsWith("ERROR")) {
     return <h1>{post_data}</h1>;
   }
 
@@ -250,7 +253,7 @@ function PostInfo() {
   var actions = new JWTActions();
   var curr_user_JSON = actions.getUser(local_host_url);
   var curr_user = actions.getParsedJSON(curr_user_JSON);
-  
+
   var isAuthor = true;
   if (!curr_user || curr_user.user_id !== post.author_id) {
     isAuthor = false;
@@ -265,9 +268,12 @@ function PostInfo() {
       <p><strong>Price:</strong> ${post.price}</p>
       <p>By <a href={"./profile" + post.author_name}>{post.author_name}</a></p>
       <br />
-      {editPostBtn.render(isAuthor)}
-      <br /><br />
-      {deletePostBtn.render(isAuthor)}
+      {isAuthor ?
+        <React.Fragment>
+          <EditPostButton post_id={post_id}/>
+          <br/> <br/>
+          <DeletePostButton post_id={post_id} url={local_host_url}/>
+        </React.Fragment> : null}
     </div>
   );
 }
