@@ -41,10 +41,8 @@ class SearchForm extends Component{
     xhr.onreadystatechange = function() {
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {
-          console.log("200" + xhr.responseText);
           self.sendData(JSON.parse(xhr.responseText));
         } else {
-          console.log("!200" + xhr.responseText);
           self.sendData([xhr.statusText]);
         }
       }
@@ -68,22 +66,20 @@ class SearchForm extends Component{
     return (
       <div>
         <h2>Search</h2>
-        <div className="row">
-          <div className="form-group col-lg-8">
+          <div className="form-group">
             <input type="text" className="form-control" placeholder={"Search by " + this.state.filter} onChange={this.handleChange} />
           </div>
-          <DropdownButton className="col-lg-4" id="dropdown-item-button" title="Filter">
+          <DropdownButton id="dropdown-item-button" title="Filter">
             {
               filters.map((filter, index) => {
                 return this.state.filter === filter ?
                   <Dropdown.Item key={index} name={filter} onClick={this.onFilterClick} as="button" active>Search by {filter}</Dropdown.Item>
                   : <Dropdown.Item key={index} name={filter} onClick={this.onFilterClick} as="button">Search by {filter}</Dropdown.Item>
-
               })
             }
           </DropdownButton>
-        </div>
-        <div className="form-group">
+          <br></br>
+          <div className="form-group">
               <button className="btn btn-primary" onClick={this.onClick}>Search</button>
           </div>
       </div>
