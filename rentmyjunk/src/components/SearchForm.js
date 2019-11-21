@@ -21,7 +21,7 @@ class SearchForm extends Component{
     this.onFilterClick = this.onFilterClick.bind(this);
 
     this.FILTERS = ["title", "description", "location"]
-    this.filter = this.FILTERS.TITLE;
+    this.filter = this.FILTERS[0];
   }
 
   sendData(data) {
