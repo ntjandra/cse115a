@@ -163,18 +163,22 @@ def search():
 @app.route("/api/search/location/<string:location>", methods=['GET'])
 def search_location(location):
     # the in_ method is the wildcard for contains anywhere.
-    posts = session.query(RentPost).filter(RentPost.location.contains(location))
+    posts = session.query(RentPost).filter(
+        RentPost.location.contains(location))
     return jsonify([post.serialize() for post in posts])
 
+# Returns all posts who have a particular word(s) in their description
 @app.route("/api/search/description/<string:description>", methods=['GET'])
 def search_description(description):
-    posts = session.query(RentPost).filter(RentPost.description.contains(description))
+    posts = session.query(RentPost).filter(
+        RentPost.description.contains(description))
     return jsonify([post.serialize() for post in posts])
 
 # Returns all posts who have a particular word in their post title
 @app.route("/api/search/title/<string:title>", methods=['GET'])
 def search_title(title):
-    posts = session.query(RentPost).filter(RentPost.title.contains(title))
+    posts = session.query(RentPost).filter(
+        RentPost.title.contains(title))
     return jsonify([post.serialize() for post in posts])
 
 # Add DRY here to do (column, search)
