@@ -104,11 +104,11 @@ class EditProfile extends Form {
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
                         <label>Description: </label>
-                        <textarea id="description" name="description" type="text" rows="5" className="form-control" placeholder={this.user.description} required />
+                        <textarea id="description" name="description" type="text" rows="5" className="form-control" defaultValue={this.user.description} required />
                     </div>
                     <div className="form-group">
                         <label>Location: </label>
-                        <input id="location" name="location" type="text" className="form-control" placeholder={this.user.location} required />
+                        <input id="location" name="location" type="text" className="form-control" defaultValue={this.user.location} required />
                     </div>
                     <div className="form-group">
                         <input type="submit" name="submit" value="Save changes" className="btn btn-primary" />
