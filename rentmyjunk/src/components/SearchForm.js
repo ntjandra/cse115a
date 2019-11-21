@@ -1,8 +1,14 @@
 import React, { Component } from "react";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
 
 class SearchForm extends Component{
+
+
+
+  state = { filter: "title"}
 
   constructor(props){
     super(props)
@@ -12,6 +18,10 @@ class SearchForm extends Component{
     // This is important so that we can use "this" in these functions
     this.handleChange = this.handleChange.bind(this);
     this.onClick = this.onClick.bind(this);
+    this.onFilterClick = this.onFilterClick.bind(this);
+
+    this.FILTERS = ["title", "description", "location"]
+    this.filter = this.FILTERS.TITLE;
   }
 
   sendData(data) {
@@ -23,7 +33,7 @@ class SearchForm extends Component{
     if(this.searchInput === "") {
       url += "api/search/"
     } else {
-      url += "api/search/item/" + this.searchInput;
+      url += "api/search/" + this.state.filter + "/" + this.searchInput;
     }
 
     let self = this;
@@ -31,8 +41,10 @@ class SearchForm extends Component{
     xhr.onreadystatechange = function() {
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {
+          console.log("200" + xhr.responseText);
           self.sendData(JSON.parse(xhr.responseText));
         } else {
+          console.log("!200" + xhr.responseText);
           self.sendData([xhr.statusText]);
         }
       }
@@ -45,17 +57,35 @@ class SearchForm extends Component{
     this.searchInput = e.target.value;
   }
 
+  onFilterClick(e) {
+    this.setState({
+      filter: e.currentTarget.name
+    });
+  }
 
   render() {
+    let filters = this.FILTERS;
     return (
       <div>
         <h2>Search</h2>
-        <div className="form-group">
-          <input type="text" className="form-control" placeholder="Search... (required)" onChange={this.handleChange} />
+        <div className="row">
+          <div className="form-group col-lg-8">
+            <input type="text" className="form-control" placeholder={"Search by " + this.state.filter} onChange={this.handleChange} />
+          </div>
+          <DropdownButton className="col-lg-4" id="dropdown-item-button" title="Filter">
+            {
+              filters.map((filter, index) => {
+                return this.state.filter === filter ?
+                  <Dropdown.Item key={index} name={filter} onClick={this.onFilterClick} as="button" active>Search by {filter}</Dropdown.Item>
+                  : <Dropdown.Item key={index} name={filter} onClick={this.onFilterClick} as="button">Search by {filter}</Dropdown.Item>
+
+              })
+            }
+          </DropdownButton>
         </div>
         <div className="form-group">
-            <button className="btn btn-primary" onClick={this.onClick}>Search</button>
-        </div>
+              <button className="btn btn-primary" onClick={this.onClick}>Search</button>
+          </div>
       </div>
     );
   }
