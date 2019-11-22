@@ -5,5 +5,4 @@ flask_login
 flask_bcrypt
 sqlalchemy
 pycodestyle
-jwt
 pyjwt
