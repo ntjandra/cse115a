@@ -4,16 +4,6 @@ import JWTActions from "../../JWTActions"
 class DeletePostButton extends React.Component {
 
     /**
-     * @param {Integer} post_id The post ID to be deleted
-     * @param {String} local_host_url URL for the server
-     */
-    constructor(post_id, local_host_url) {
-        super();
-        this.post_id = post_id;
-        this.local_host_url = local_host_url;
-    }
-
-    /**
      * Makes generic xhr, defined by parameters.
      *
      * @param {String} type - Type of connection (POST, GET, etc)
@@ -27,11 +17,11 @@ class DeletePostButton extends React.Component {
         let xhr = new XMLHttpRequest();
 
         // Configure xhr by parameters
-        xhr.open(type, this.local_host_url + route, false);
+        xhr.open(type, this.props.url + route, false);
 
         data = new FormData();
         var actions = new JWTActions();
-        var curr_user_JSON = actions.getUser(this.local_host_url);
+        var curr_user_JSON = actions.getUser(this.props.local_host_url);
         var curr_user = actions.getParsedJSON(curr_user_JSON);
         data.append("curr_user_id", curr_user.user_id);
 
@@ -65,16 +55,14 @@ class DeletePostButton extends React.Component {
     deletePost() {
 
         // Send xhr
-        var response = this.xhrSend('POST', 'api/post/delete/' + this.post_id, null);
+        var response = this.xhrSend('POST', 'api/post/delete/' + this.props.post_id, null);
 
         // Redirect and return response
         window.location.pathname = "/";
-        console.log(response)
         return response;
     }
 
-    render(isAuthor) {
-        if (!isAuthor) return;
+    render() {
         return <button className="btn btn-primary" onClick={() => this.deletePost()}>Delete Post</button>
     }
 }
