@@ -117,6 +117,7 @@ class Reputation(Base):
             'evaluation': self.evaluation
         }
 
+
 # Creates a create_engine instance at the bottom of the file
 engine = create_engine('sqlite:///site.db')
 

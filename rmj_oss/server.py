@@ -1,5 +1,5 @@
 import os
-from database_setup import Base, RentPost, Account
+from database_setup import Base, RentPost, Account, Reputation
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from flask import Flask, jsonify, request, make_response, redirect
@@ -359,6 +359,60 @@ def getPostsOfAccount(user_id):
     print(posts_JSON)
 
     return jsonify(posts_JSON)
+
+
+# Updates or add a new review for <target> from <reviewer> with value
+# <evaluation>.
+@app.route("/api/reputation/<int:target>/<int:reviewer>/<int:evaluation>",
+           methods=['POST'])
+def evaluateAccount(target, reviewer, evaluation):
+    if evaluation < 0 or evaluation > 5:
+        return "ERROR: evaluation must be between 0 and 5 included"
+
+    evaluated = \
+        session.query(Reputation).filter_by(
+            user_id=target,
+            reviewer=reviewer).scalar() is not None
+
+    if evaluated:
+        # update
+        rep = session.query(Reputation).filter_by(
+              user_id=target,
+              reviewer=reviewer).first()
+        rep.evaluation = evaluation
+    else:
+        # insert
+        rep = Reputation(
+              user_id=target,
+              reviewer=reviewer,
+              evaluation=evaluation)
+        session.add(rep)
+
+    session.commit()
+
+    return "SUCCESS"
+
+
+# Returns the evaluation of a specific account
+@app.route("/api/reputation/<int:target>", methods=['GET'])
+def getEvaluation(target):
+    rows = session.query(Reputation).filter_by(user_id=target).all()
+
+    total = 0
+    for row in rows:
+        total += row.evaluation
+
+    if not rows:
+        return {"evaluation": -1}
+    else:
+        return {"evaluation": total / len(rows)}
+
+
+# Returns the number of evaluations of a specific account
+@app.route("/api/reputation/count/<int:target>", methods=['GET'])
+def getNbOfEvaluations(target):
+    count = session.query(Reputation).filter_by(user_id=target).count()
+    return {"count": count}
 
 
 if __name__ == "__main__":
