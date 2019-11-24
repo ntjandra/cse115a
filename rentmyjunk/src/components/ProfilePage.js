@@ -1,5 +1,6 @@
 import React from 'react'
 import JWTActions from '../JWTActions'
+import Reputation from './Reputation'
 
 class ProfilePage extends React.Component {
 
@@ -62,6 +63,7 @@ class ProfilePage extends React.Component {
                 <h2>{user.name}</h2>
                 <p>{user.description}</p>
                 <p><strong>Location: </strong>{user.location}</p>
+                <Reputation url={this.baseURL} user_id={user_id} />
                 {this.renderPostsContainer(user_id, user.name)}
                 {this.editRedirect(user)}
             </div>

@@ -101,6 +101,23 @@ class RentPost(Base):
         }
 
 
+class Reputation(Base):
+    __tablename__ = 'reputation'
+
+    key = Column(Integer, autoincrement=True, primary_key=True)
+    user_id = Column(Integer, nullable=False)
+    reviewer = Column(Integer, nullable=False)
+    evaluation = Column(Integer, nullable=False)
+
+    def serialize(self):
+        return {
+            'key': self.key,
+            'user_id': self.user_id,
+            'reviewer': self.reviewer,
+            'evaluation': self.evaluation
+        }
+
+
 # Creates a create_engine instance at the bottom of the file
 engine = create_engine('sqlite:///site.db')
 
