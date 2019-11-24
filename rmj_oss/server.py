@@ -403,16 +403,9 @@ def getEvaluation(target):
         total += row.evaluation
 
     if not rows:
-        return {"evaluation": -1}
+        return {"evaluation": -1, "count": 0}
     else:
-        return {"evaluation": total / len(rows)}
-
-
-# Returns the number of evaluations of a specific account
-@app.route("/api/reputation/count/<int:target>", methods=['GET'])
-def getNbOfEvaluations(target):
-    count = session.query(Reputation).filter_by(user_id=target).count()
-    return {"count": count}
+        return {"evaluation": total / len(rows), "count": len(rows)}
 
 
 if __name__ == "__main__":
