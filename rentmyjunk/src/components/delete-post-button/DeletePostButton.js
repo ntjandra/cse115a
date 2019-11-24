@@ -21,7 +21,7 @@ class DeletePostButton extends React.Component {
 
         data = new FormData();
         var actions = new JWTActions();
-        var curr_user_JSON = actions.getUser(this.props.local_host_url);
+        var curr_user_JSON = actions.getUser(this.props.url);
         var curr_user = actions.getParsedJSON(curr_user_JSON);
         data.append("curr_user_id", curr_user.user_id);
 
