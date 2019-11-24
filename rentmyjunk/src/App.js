@@ -14,6 +14,7 @@ import PostForm from "./components/CreateForm";
 import EditPostButton from "./components/edit-post-button/EditPostButton";
 import DeletePostButton from "./components/delete-post-button/DeletePostButton"
 import SearchPage from "./components/SearchPage"
+import HomePage from "./components/HomePage"
 
 import RegisterAccount from "./components/RegisterAccount"
 // Add to Side Bar Login/Logout
@@ -189,12 +190,8 @@ export default function App() {
 }
 
 function Home() {
-  return (
-    <div>
-      <h2>Homes</h2>
-      <div>content</div>
-    </div>
-  );
+  var homePage = new HomePage(local_host_url);
+  return homePage.render();
 }
 
 /**
