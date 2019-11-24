@@ -58,8 +58,8 @@ class HomePage extends Component {
                 <h2>Recent Posts</h2>
                 <ul id="recent-posts-list">
                     {posts.map((post, index) => {
-                        return <div>
-                            <li key={index}>
+                        return <div key={index}>
+                            <li>
                                 <h4><a href={"./post" + post.id}>
                                     {post.title}
                                 </a></h4>
