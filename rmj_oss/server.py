@@ -119,6 +119,7 @@ def edit_post(post_id):
     old_post.location = form['location']
     old_post.contactinfo = form['contact']
     old_post.price = form['price']
+    old_post.image = form['image']
 
     session.commit()
     return "Edited ID: " + str(post_id) + ", TITLE: " + old_post.title
@@ -138,11 +139,13 @@ def create_post():
     price = form['price']
     author_id = form['author_id']
     author_name = form['author_name']
+    image = form['image']
 
     # Add post to database
     new_post = RentPost(title=title, description=descr,
                         contactinfo=contact, location=loc, price=price,
-                        author_id=author_id, author_name=author_name)
+                        author_id=author_id, author_name=author_name,
+                        image=image)
 
     session.add(new_post)
     session.commit()
@@ -259,10 +262,13 @@ def register():
     # Extract data from form
     loc = form['location']
     bio = form['description']
+    image = form['image']
 
     # Add Basic User to database
     user = Account(email=email, name=name,
-                   password=hashed_password, location=loc, description=bio)
+                   password=hashed_password,
+                   location=loc, description=bio,
+                   image=image)
     session.add(user)
     session.commit()
     return str(user.user_id)
