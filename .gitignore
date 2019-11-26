@@ -3,6 +3,7 @@
 /rentmyjunk/node_modules
 /rentmyjunk/build
 /rmj_oss/__pycache__
+/rentmyjunk/src/firebase-config.js
 
 # dependencies
 /.vscode

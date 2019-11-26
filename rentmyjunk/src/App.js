@@ -10,7 +10,7 @@ import Cookies from 'js-cookie';
 
 // Multipart form-data
 import EditForm from "./components/EditForm";
-import PostForm from "./components/CreateForm";
+import CreateForm from "./components/CreateForm";
 import EditPostButton from "./components/edit-post-button/EditPostButton";
 import DeletePostButton from "./components/delete-post-button/DeletePostButton"
 import SearchPage from "./components/SearchPage"
@@ -143,7 +143,7 @@ export default function App() {
                 <PostInfo />
               </Route>
               <Route path="/createpost">
-                <CreatePost />
+                <CreateForm url={local_host_url}/>
               </Route>
               <Route path="/search">
                 <SearchPage url={local_host_url} />
@@ -218,14 +218,6 @@ function EditPost() {
   }
   let post = JSON.parse(post_data);
   return <EditForm method={"POST"} url={local_host_url} post={post} route={"api/post/update/" + post_id}/>;
-}
-
-/**
- * Create Post Component
- */
-function CreatePost() {
-  let form = new PostForm(local_host_url, '/api/post/new');
-  return form.render();
 }
 
 /**

@@ -1,19 +1,83 @@
-import React from 'react'
-import Form from './Form'
+import React, { Component } from 'react'
 import JWTActions from '../JWTActions'
+import FileUploader from "react-firebase-file-uploader"
+import firebase from "firebase"
+import firebaseConfig from "./../firebase-config"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-class PostForm extends Form {
+firebase.initializeApp(firebaseConfig);
 
-    render() {
-        var actions = new JWTActions();
-        var curr_user_JSON = actions.getUser(this.baseUrl + "/");
+class PostForm extends Component {
+
+    state = {
+        image: '',
+        imageURL: '',
+        progress: 0,
+        userId: -1,
+        filename: ""
+    };
+
+    componentDidMount() {
+        let actions = new JWTActions();
+        let curr_user_JSON = actions.getUser(this.props.url);
         this.curr_user = actions.getParsedJSON(curr_user_JSON);
 
-        if (!this.curr_user) {
-            return <h2>Please log in before trying to create a post.</h2>
+        if (this.curr_user) {
+            this.setState({
+                // If the user changes the image multiple times, then it will
+                // override the one that already exists
+                filename: this.curr_user.user_id + Math.random().toString(36).substring(7),
+                userId: this.curr_user.user_id
+            });
         }
+    }
+
+    handleUploadStart = () => {
+        this.setState({
+            progress: 0
+        })
+    }
+
+    handleUploadSuccess = filename => {
+        this.setState({
+            image: filename,
+            progress: 100
+        })
+
+        firebase.storage().ref("posts").child(filename).getDownloadURL()
+            .then(url => this.setState({
+                imageURL: url
+            }));
+    }
+
+    /**
+     * It sends the information to the API at the specified route.
+     * @param {*} event event
+     */
+    handleSubmit(event) {
+        event.preventDefault();
+        const data = new FormData(event.target);
+        data.append("author_id", this.curr_user.user_id);
+        data.append("author_name", this.curr_user.name);
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    window.location.pathname = "/post" + xhr.responseText;
+                }
+            }
+        };
+
+        xhr.open("POST", this.props.url + "api/post/new", true);
+        xhr.send(data);
+    }
+
+    render() {
+
+        if(this.state.userId === -1)
+            return <h2>Please log in before trying to create a post.</h2>
 
         return (
             <div className="col-lg-6">
@@ -23,6 +87,25 @@ class PostForm extends Form {
                     <div className="form-group">
                         <label>Product Title: </label>
                         <input id="title" name="title" type="text" className="form-control" placeholder="Your junk" required />
+                    </div>
+                    <div className="form-group">
+                        <label>Image: <small>1920x1080 max, preview with height=150px</small></label> <br/>
+                        <img
+                            src={this.state.imageURL !== "" ? this.state.imageURL : "https://via.placeholder.com/150?text=?"}
+                            alt="preview"
+                            height="150"/>
+                        <br/><br/>
+                        <FileUploader
+                            accept="image/*"
+                            name="image"
+                            filename={this.state.filename}
+                            storageRef={firebase.storage().ref("posts")}
+                            onUploadStart={this.handleUploadStart}
+                            onUploadSuccess={this.handleUploadSuccess}
+                            maxWidth="1920"
+                            maxHeight="1080"
+                            />
+                        <input id="image" name="image" type="text" value={this.state.imageURL} hidden/>
                     </div>
                     <div className="form-group">
                         <label>Product Description: </label>
@@ -46,65 +129,6 @@ class PostForm extends Form {
                 </form>
             </div>
         )
-    }
-
-    /**
-     * It sends the information to the API at the specified route.
-     * @param {*} event event
-     */
-    handleSubmit(event) {
-
-        event.preventDefault();
-        const data = new FormData(event.target);
-        data.append("author_id", this.curr_user.user_id);
-        data.append("author_name", this.curr_user.name);
-
-        var xhr = new XMLHttpRequest();
-
-        // Listeners
-        let self = this; // used to call instance's methods in listener
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 0) {
-                // After you have created the XMLHttpRequest object,
-                // but before you have called the open() method.
-
-            } else if (xhr.readyState === 1) {
-                // After you have called the open() method, but before
-                // you have called send().
-
-            } else if (xhr.readyState === 2) {
-                // After you have called send().
-
-            } else if (xhr.readyState === 3) {
-                // After the browser has established a communication with
-                // the server, but before the server has completed the response.
-
-            } else if (xhr.readyState === 4) {
-                // After the request has been completed, and the response
-                // data has been completely received from the server.
-                if (xhr.status === 200) {
-                    self.onSuccessResponse(xhr);
-                } else {
-                    self.onFailureResponse(xhr);
-                }
-            }
-        };
-
-        xhr.open(this.method, this.baseUrl + this.route, true);
-        xhr.send(data);
-    }
-
-    /**
-     * Redirects to newly created post page upon a successful post creation
-     */
-    onSuccessResponse(xhr) {
-        var response = xhr.responseText;
-        if (isNaN(response)) {
-            alert(response);
-        }
-        else {
-            window.location.pathname = "/post" + xhr.responseText;
-        }
     }
 }
 
