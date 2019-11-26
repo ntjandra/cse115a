@@ -2,21 +2,23 @@ import React, { Component } from 'react'
 import JWTActions from '../JWTActions'
 import FileUploader from "react-firebase-file-uploader"
 import firebase from "firebase"
-import firebaseConfig from "./../firebase-config"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-firebase.initializeApp(firebaseConfig);
 
 class PostForm extends Component {
 
     state = {
         image: '',
         imageURL: '',
-        progress: 0,
+        progress: '',
         userId: -1,
-        filename: ""
+        filename: ''
     };
+
+    constructor(props) {
+        super(props);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
 
     componentDidMount() {
         let actions = new JWTActions();
@@ -35,14 +37,14 @@ class PostForm extends Component {
 
     handleUploadStart = () => {
         this.setState({
-            progress: 0
+            progress: "• uploading..."
         })
     }
 
     handleUploadSuccess = filename => {
         this.setState({
             image: filename,
-            progress: 100
+            progress: "• uploaded!"
         })
 
         firebase.storage().ref("posts").child(filename).getDownloadURL()
@@ -89,7 +91,7 @@ class PostForm extends Component {
                         <input id="title" name="title" type="text" className="form-control" placeholder="Your junk" required />
                     </div>
                     <div className="form-group">
-                        <label>Image: <small>1920x1080 max, preview with height=150px</small></label> <br/>
+                        <label>Image: <small>1920x1080 max, preview with height=150px {this.state.progress}</small></label> <br/>
                         <img
                             src={this.state.imageURL !== "" ? this.state.imageURL : "https://via.placeholder.com/150?text=?"}
                             alt="preview"
@@ -105,7 +107,7 @@ class PostForm extends Component {
                             maxWidth="1920"
                             maxHeight="1080"
                             />
-                        <input id="image" name="image" type="text" value={this.state.imageURL} hidden/>
+                        <input id="image" name="image" type="text" value={this.state.imageURL} readOnly hidden/>
                     </div>
                     <div className="form-group">
                         <label>Product Description: </label>

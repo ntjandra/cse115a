@@ -30,7 +30,13 @@ import MobileToggleButton from "./components/sidebar-toggle/MobileToggleButton";
 import HeaderMessage from "./components/header-message/HeaderMessage";
 import JWTActions from "./JWTActions";
 
+import firebase from "firebase"
+import firebaseConfig from "./firebase-config"
+
+firebase.initializeApp(firebaseConfig);
+
 var local_host_url = "http://127.0.0.1:5000/";
+
 
 /* -------------------------------
    HTML Components
@@ -151,7 +157,7 @@ export default function App() {
 
               {/* Pages related to accounts */}
               <Route path="/register">
-                <RegisterRoute />
+                <RegisterAccount url={local_host_url} />
               </Route>
               <Route path="/login">
                 <LogInRoute />
@@ -270,10 +276,6 @@ function PostInfo() {
 /* -------------------------------
  * Account Pages
  ------------------------------- */
-function RegisterRoute() {
-  let form = new RegisterAccount(local_host_url, "/api/account/register");
-  return form.render();
-}
 
 function LogInRoute() {
   let logIn = new LogIn(local_host_url, "/api/account/login");
