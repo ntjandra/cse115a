@@ -256,6 +256,7 @@ function PostInfo() {
 
   return (
     <div>
+      <img height="200px" src={post.image} alt="preview" />
       <h1>{post.title}</h1>
       <p>{post.description}</p>
       <p><strong>Contact Info:</strong> {post.contactinfo}</p>
