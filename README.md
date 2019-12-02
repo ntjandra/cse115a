@@ -6,6 +6,8 @@
 
 Go to rentmyjunk/ and run `npm install`. It should generate node_modules directory.
 Then run `npm install js-cookie`. This is crucial for tracking login status.
+`npm install react-bootstrap bootstrap`. This is for formatting the website
+`npm install firebase react-firebase-file-uploader`. This is for managing the users' images
 
 ### Run the website
 - Go to rmj_oss/ and run once `pip install -r requirements.txt`. Then you can run `python server.py`.
