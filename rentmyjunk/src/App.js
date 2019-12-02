@@ -149,7 +149,7 @@ export default function App() {
                 <PostInfo />
               </Route>
               <Route path="/createpost">
-                <CreateForm url={local_host_url}/>
+                <CreateForm url={local_host_url} />
               </Route>
               <Route path="/search">
                 <SearchPage url={local_host_url} />
@@ -204,7 +204,18 @@ function Home() {
  * About Component
  */
 function About() {
-  return <h2>About</h2>;
+  return (
+    <div>
+      <h2>About</h2>
+      <p>
+        RentMyJunk is a sustainable solution to the growing problem 
+        of our landfills. Rent out your junk and find treasure on 
+        our simple, easy-to-use platform. Clothes, cars, textbooks, 
+        laptops - anything is rentable! Sign up and start renting 
+        today!
+      </p>
+    </div>
+  );
 }
 
 // What is Users?
@@ -216,14 +227,14 @@ function Users() {
  * Edit Post Component
  */
 function EditPost() {
-  let {post_id} = useParams();
+  let { post_id } = useParams();
   let post_data = xhrSend("GET", "api/search/id/" + post_id, null);
 
   if (post_data.startsWith("ERROR")) {
     return <b>{post_data} - could not get post information</b>;
   }
   let post = JSON.parse(post_data);
-  return <EditForm method={"POST"} url={local_host_url} post={post} route={"api/post/update/" + post_id}/>;
+  return <EditForm method={"POST"} url={local_host_url} post={post} route={"api/post/update/" + post_id} />;
 }
 
 /**
@@ -266,9 +277,9 @@ function PostInfo() {
       <br />
       {isAuthor ?
         <React.Fragment>
-          <EditPostButton post_id={post_id}/>
-          <br/> <br/>
-          <DeletePostButton post_id={post_id} url={local_host_url}/>
+          <EditPostButton post_id={post_id} />
+          <br /> <br />
+          <DeletePostButton post_id={post_id} url={local_host_url} />
         </React.Fragment> : null}
     </div>
   );
