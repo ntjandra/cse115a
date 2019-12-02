@@ -4,8 +4,8 @@
 
 ### First run
 
-Go to rentmyjunk/ and run `npm install`. It should generate node_modules directory.
-Run 
+Make sure that you have [node.js](https://nodejs.org/en/) installed on your computer. Go to rentmyjunk/ and run `npm install`. It should generate node_modules directory.
+Run:
 - `npm install js-cookie`. This is crucial for tracking login status.
 - `npm install react-bootstrap bootstrap`. This is for formatting the website
 - `npm install firebase react-firebase-file-uploader`. This is for managing the users' images
