@@ -8,6 +8,5 @@ Go to rentmyjunk/ and run `npm install`. It should generate node_modules directo
 Then run `npm install js-cookie`. This is crucial for tracking login status.
 
 ### Run the website
-
-- Go to rentmyjunk/ and run `npm start`
 - Go to rmj_oss/ and run once `pip install -r requirements.txt`. Then you can run `python server.py`.
+- Go to rentmyjunk/ and run `npm start`
