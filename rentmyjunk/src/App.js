@@ -136,7 +136,7 @@ export default function App() {
             renders the first one that matches the current URL. */}
             <Switch>
               {/* Pages related to posts */}
-              <Route path="/about">
+              <Route path="/aboutus">
                 <About />
               </Route>
               <Route path="/users">
