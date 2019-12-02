@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import JWTActions from "../JWTActions"
+import FileUploader from "react-firebase-file-uploader"
+import firebase from "firebase"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -8,6 +10,38 @@ class EditForm extends Component{
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    // We get the old image name to override it
+    let filename = "";
+    if(this.props.post.image !== "") {
+      let s = this.props.post.image.split("/")
+      filename = s[s.length - 1].split(".")[0].split("%2F")[1]
+    }
+
+    this.state = {
+      image: '',
+      imageURL: this.props.post.image,
+      progress: '',
+      filename: filename
+    }
+  }
+
+  handleUploadStart = () => {
+    this.setState({
+        progress: "• uploading..."
+    })
+  }
+
+  handleUploadSuccess = filename => {
+    this.setState({
+        image: filename,
+        progress: "• uploaded!"
+    })
+
+    firebase.storage().ref("posts").child(filename).getDownloadURL()
+        .then(url => this.setState({
+            imageURL: url
+        }));
   }
 
   /**
@@ -50,6 +84,25 @@ class EditForm extends Component{
           <div className="form-group">
             <label>Product Title: </label>
             <input id="title" name="title" type="text" className="form-control" defaultValue={this.props.post.title} required />
+          </div>
+          <div className="form-group">
+              <label>Image: <small>1920x1080 max, preview with height=150px {this.state.progress}</small></label> <br/>
+              <img
+                  src={this.state.imageURL !== "" ? this.state.imageURL : "https://via.placeholder.com/150?text=?"}
+                  alt="preview"
+                  height="150"/>
+              <br/><br/>
+              <FileUploader
+                  accept="image/*"
+                  name="image"
+                  filename={this.state.filename}
+                  storageRef={firebase.storage().ref("posts")}
+                  onUploadStart={this.handleUploadStart}
+                  onUploadSuccess={this.handleUploadSuccess}
+                  maxWidth="1920"
+                  maxHeight="1080"
+                  />
+              <input id="image" name="image" type="text" value={this.state.imageURL} readOnly hidden/>
           </div>
           <div className="form-group">
             <label>Product Description: </label>

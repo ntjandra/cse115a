@@ -1,9 +1,65 @@
-import React from "react";
-import Form from "./Form";
+import React, { Component } from "react";
+import FileUploader from "react-firebase-file-uploader"
+import firebase from "firebase"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-class RegisterAccount extends Form {
+class RegisterAccount extends Component {
+
+    state = {
+        image: '',
+        imageURL: '',
+        progress: '',
+        filename: ''
+    };
+
+    constructor(props) {
+        super(props);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentDidMount() {
+        this.setState({
+            // If the user changes the image multiple times, then it will
+            // override the one that already exists
+            filename: Math.random().toString(36).substring(7),
+        });
+    }
+
+    handleUploadStart = () => {
+        this.setState({
+            progress: "• uploading..."
+        })
+    }
+
+    handleUploadSuccess = filename => {
+        this.setState({
+            image: filename,
+            progress: "• uploaded!"
+        })
+
+        firebase.storage().ref("avatars").child(filename).getDownloadURL()
+            .then(url => this.setState({
+                imageURL: url
+            }));
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        const data = new FormData(event.target);
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    window.location.pathname = "/login";
+                }
+            }
+        };
+
+        xhr.open("POST", this.props.url + "api/account/register", true);
+        xhr.send(data);
+    }
 
     render() {
         return (
@@ -25,7 +81,26 @@ class RegisterAccount extends Form {
                         <input id="password" name="password" type="password" className="form-control" placeholder="Password" required />
                     </div>
 
-                    {/* May need to refactor to dropdown/select locations */}
+                    <div className="form-group">
+                        <label>Image: <small>200x200 max {this.state.progress}</small></label> <br/>
+                        <img
+                            src={this.state.imageURL !== "" ? this.state.imageURL : "https://via.placeholder.com/200?text=?"}
+                            alt="preview"
+                            height="200"/>
+                        <br/><br/>
+                        <FileUploader
+                            accept="image/*"
+                            name="image"
+                            filename={this.state.filename}
+                            storageRef={firebase.storage().ref("avatars")}
+                            onUploadStart={this.handleUploadStart}
+                            onUploadSuccess={this.handleUploadSuccess}
+                            maxWidth="200"
+                            maxHeight="200"
+                            />
+                        <input id="image" name="image" type="text" value={this.state.imageURL} readOnly hidden/>
+                    </div>
+
                     <div className="form-group">
                         <label>Location: </label>
                         <input id="location" name="location" type="text" className="form-control" placeholder="Example: YourName123" />
@@ -42,20 +117,6 @@ class RegisterAccount extends Form {
                 </form>
             </div>
         );
-    }
-
-    /**
-     * Redirects to login page upon a successful post creation
-     * 
-     * TODO alert user of successful account creation
-     */
-    onSuccessResponse(xhr) {
-        if (isNaN(xhr.response)) {
-            alert(xhr.response);
-        }
-        else {
-            window.location.pathname = "/login";
-        }
     }
 }
 

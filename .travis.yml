@@ -17,5 +17,6 @@ matrix:
         - npm install
         - npm install js-cookie
         - npm install react-bootstrap bootstrap
+        - npm install firebase react-firebase-file-uploader
       script:
         - npm run-script build

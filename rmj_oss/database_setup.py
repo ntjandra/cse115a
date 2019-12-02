@@ -33,6 +33,7 @@ class Account(Base, UserMixin):  # Need to add UserMixin
     description = Column(String, nullable=True, default="No bio")
     location = Column(String(250), nullable=True, default="Unknown")
     password = Column(String(32), nullable=False)
+    image = Column(String())
 
     # For creating JSONs
     def serialize(self):
@@ -42,6 +43,7 @@ class Account(Base, UserMixin):  # Need to add UserMixin
             'name': self.name,
             'description': self.description,
             'location': self.location,
+            'image': self.image
         }
 
     def serialize_noEmail(self):
@@ -50,6 +52,7 @@ class Account(Base, UserMixin):  # Need to add UserMixin
             'name': self.name,
             'description': self.description,
             'location': self.location,
+            'image': self.image
         }
 
     # Overload UserMixin
@@ -87,6 +90,7 @@ class RentPost(Base):
     price = Column(Integer())
     author_id = Column(Integer(), nullable=False)
     author_name = Column(String(250), nullable=False)
+    image = Column(String())
 
     def serialize(self):
         return {
@@ -98,6 +102,7 @@ class RentPost(Base):
             'price': self.price,
             'author_id': self.author_id,
             'author_name': self.author_name,
+            'image': self.image
         }
 
 

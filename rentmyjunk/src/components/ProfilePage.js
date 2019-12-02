@@ -60,6 +60,8 @@ class ProfilePage extends React.Component {
 
         return (
             <div>
+                <img src={user.image} alt="avatar"/>
+                <br/><br/>
                 <h2>{user.name}</h2>
                 <p>{user.description}</p>
                 <p><strong>Location: </strong>{user.location}</p>
