@@ -11,5 +11,6 @@ Run:
 - `npm install firebase react-firebase-file-uploader`. This is for managing the users' images
 
 ### Run the website
+- Make sure to fill `rentmyjunk/src/firebase-config.js` with your Firebase storage credentials.
 - Go to rmj_oss/ and run once `pip install -r requirements.txt`. Then you can run `python3 server.py`.
 - Go to rentmyjunk/ and run `npm start`
